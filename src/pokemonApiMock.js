@@ -5840,6 +5840,6 @@ const pokemonApiMockList = [
 	},
 ];
 
-const pokemonAnswers = ["pikachu", "charizard", "charmeleon", "eevee"];
+const POKEMON_ANSWERS_MOCK = ["raichu", "charmeleon", "tyranitar"];
 
-export { pokemonApiMockList, pokemonAnswers };
+export { pokemonApiMockList, POKEMON_ANSWERS_MOCK };
