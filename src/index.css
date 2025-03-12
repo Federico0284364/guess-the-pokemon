@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body{
+  background-color: #263238;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button{
+  cursor: pointer;
+}
