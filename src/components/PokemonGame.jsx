@@ -1,6 +1,7 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { DifficultyContext } from "../context/difficulty";
-import { pokemonApiMockList, Pokemon } from "../pokemonApiMock.js";
+import { POKEMON_LIST_MOCK, Pokemon } from "../pokemonApiMock.js";
+import { getColorByType } from "../utils/functions.js";
 import Answers from "./Answers.jsx";
 
 export default function PokemonGame() {
@@ -15,8 +16,9 @@ export default function PokemonGame() {
 	const pokemon = pokemonList[game.round];
 
 	useEffect(() => {
+		let tempList;
 		async function fetchData() {
-			const tempList = await fetchInitialList();
+			tempList = await fetchInitialList();
 			setPokemonList([...tempList]);
 		}
 		fetchData();
@@ -24,78 +26,112 @@ export default function PokemonGame() {
 		return () => setPokemonList([]);
 	}, []);
 
-	async function fetchInitialList() {
-		let tempList = [];
-
-		tempList = [...pokemonApiMockList];
-
-		for (let i = 1; i <= 3; i++) {
-			const randomNum = Number((Math.random() * 1000 + 1).toFixed(0));
-			/*const fetchedPokemon = await fetch(
-				`https://pokeapi.co/api/v2/pokemon/${randomNum}`
-			)
-				.then((response) => {
-					return response.json();
-				})
-				.then((pokemonJson) => {
-					console.log(pokemonJson.name);
-					return pokemonJson;
-				})
-				.then((pokemonJson) => pokemonJson)
-				.catch(new Error("errore"));
-
-				tempList.push(fetchedPokemon);*/
+	async function fetchInitialList(useMock = true) {
+		if (useMock) {
+			console.log("Using mock Pokémon list");
+			return [...POKEMON_LIST_MOCK]; // Restituisce i dati di test
 		}
-		return [...tempList];
+
+		const randomNumbers = Array.from(
+			{ length: 3 },
+			() => Math.floor(Math.random() * 1000) + 1
+		);
+
+		try {
+			const responses = await Promise.all(
+				randomNumbers.map((num) =>
+					fetch(`https://pokeapi.co/api/v2/pokemon/${num}`).then(
+						(response) => response.json()
+					)
+				)
+			);
+
+			console.log("Fetched Pokémon List:", responses);
+			return responses;
+		} catch (error) {
+			console.error("Errore nel fetch dei Pokémon:", error);
+			return [];
+		}
 	}
 
 	function handleAnswer() {
-		if (game.hasAnswered === false) {
+		if (game.hasAnswered === false && !game.hasAnswered) {
 			setGame((prevState) => {
 				return {
 					...prevState,
 					hasAnswered: true,
 				};
 			});
-		} else {
-			setGame((prevState) => {
-				return {
-					...prevState,
-					hasAnswered: false,
-					round: prevState.round + 1,
-				};
-			});
 		}
+	}
+
+	function handleNextQuestion() {
+		setGame((prevState) => {
+			return {
+				...prevState,
+				hasAnswered: false,
+				round: prevState.round + 1,
+			};
+		});
 	}
 
 	//render
 	if (pokemon) {
 		return (
 			<div className="flex mt-8 gap-8">
-				<div className="relative flex flex-col h-60 w-100 cursor-pointer ">
-					<div className="flex flex-col rounded-2xl bg-orange-400 min-h-60 relative">
+				<div className="flex flex-col">
+					<p></p>
+				</div>
+
+				<div className="relative flex flex-col h-60 w-100 ">
+					<div className="flex flex-col items-center rounded-3xl bg-orange-400 min-h-60 relative">
+						<div className="primary-color absolute right-1 top-1 rounded-full w-10 h-10">
+							<p className="text-white  text-xl text-center mt-1">
+								{game.hasAnswered ? pokemon.id : '?'}
+							</p>
+						</div>
+
 						<img
-							className="h-35 m-auto"
+							className="w-50 block mt-2 fill-black"
 							src={pokemon.sprites.front_default}
 						/>
-						<p className="text-center text-2xl py-3 absolute bottom-1 right-0 left-0">
-							{game.hasAnswered && pokemon.name}
-						</p>
+						<div className="flex gap-1">
+							<p>
+								
+							</p>
+							{game.hasAnswered &&
+								pokemon.types ?
+								pokemon.types.map((type) => {
+									let typeClass = getColorByType(
+										type.type.name
+									);
+
+									return (
+										<p
+											className={
+												"inline-block text-center text-md rounded-sm px-2 py-0.5" +
+												typeClass
+											}
+										>
+											{type.type.name}
+										</p>
+									);
+								}) : 'Type: ?'}
+						</div>
 					</div>
 
-					<ul className="w-full text-center">
+					<div className="w-full text-center">
 						<Answers
 							game="pokemon"
 							gameState={game}
 							onAnswer={handleAnswer}
+							onNext={handleNextQuestion}
 							pokemon={pokemon.name}
 						/>
-					</ul>
+					</div>
 				</div>
 
-				<div className="flex flex-col">
-					<button>Hint {game.hints + 1}</button>
-				</div>
+				<div className="flex flex-col"></div>
 			</div>
 		);
 	}

@@ -4,6 +4,10 @@
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
+.primary-color{
+  background-color: #263238;
+}
+
 body{
   background-color: #263238;
   color: white;
@@ -13,5 +17,5 @@ body{
 }
 
 button{
-  cursor: pointer;
+  
 }

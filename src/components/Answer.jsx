@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 export default function Answer({
 	children,
@@ -7,19 +7,21 @@ export default function Answer({
 	hasAnswered = false,
 	isCorrect = false,
 }) {
-	const standardClass = "w-full rounded-xl py-2.5";
+	const standardClass = "w-full rounded-3xl py-2.5";
 	const [buttonClass, setButtonClass] = useState(standardClass);
 	const [isSelected, setIsSelected] = useState(false);
 
 	function handleButtonClass() {
 		if (hasAnswered && isSelected && !isCorrect) {
-			setButtonClass(standardClass + " bg-red-500");
+			setButtonClass(standardClass + " bg-red-500 cursor-not-allowed");
 		}
 		else if (hasAnswered && isCorrect) {
-			setButtonClass(standardClass + " bg-green-500");
-		} else {
+			setButtonClass(standardClass + " bg-green-500 cursor-not-allowed");
+		} else if (!hasAnswered){
 			setButtonClass(standardClass + " bg-orange-400 hover:opacity-80 active:opacity-60");
-		}		
+		}	else {
+			setButtonClass(standardClass + " bg-orange-400 cursor-not-allowed");
+		}
 	}
 
 	useEffect(() => {

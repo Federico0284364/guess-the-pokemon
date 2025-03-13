@@ -1,16 +1,18 @@
 export class Pokemon {
-	constructor(name, id, type, sprite) {
+	constructor(name='', id=0, types=[], sprite) {
 		this.name = name;
 		this.id = id;
-		this.type = type;
+		this.types = types.map(type => ({
+			type: { name: type }
+		}));
+		
 		this.sprites = { front_default: sprite };
 	}
 }
 
-const pokemonApiMockList = [
-	new Pokemon("Charizard", 1, ["fire"], "/charizard.png"),
+const POKEMON_LIST_MOCK = [
+	new Pokemon("Charizard", 1, ["fire", "flying"], "/charizard.png"),
 	new Pokemon("Eevee", 8, ["normal"], "/eevee.jpg"),
-	new Pokemon("Pikachu", 15, ["electric"], "/pikachu.png"),
 	{
 		abilities: [
 			{
@@ -5838,8 +5840,9 @@ const pokemonApiMockList = [
 		],
 		weight: 500,
 	},
+	new Pokemon("Pikachu", 15, ["electric"], "/pikachu.png"),
 ];
 
 const POKEMON_ANSWERS_MOCK = ["raichu", "charmeleon", "tyranitar"];
 
-export { pokemonApiMockList, POKEMON_ANSWERS_MOCK };
+export { POKEMON_LIST_MOCK, POKEMON_ANSWERS_MOCK };

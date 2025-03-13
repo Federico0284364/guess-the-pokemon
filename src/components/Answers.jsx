@@ -1,16 +1,21 @@
 import { POKEMON_ANSWERS_MOCK } from "../pokemonApiMock";
-import { shuffle } from "../utils/shuffle";
+import { shuffle } from "../utils/functions";
 import { useRef, useState, useEffect } from "react";
 import Answer from "./Answer";
 
-export default function Answers({ game, gameState, pokemon, onAnswer }) {
+export default function Answers({
+	gameState,
+	pokemon,
+	onAnswer,
+	onNext,
+}) {
 	const [answersList, setAnswersList] = useState([]);
 	let answers = [];
 
 	useEffect(() => {
 		async function fetchData() {
 			const tempList = await fetchAnswers();
-			
+
 			answers = [
 				...tempList.map((answer) => {
 					return {
@@ -33,52 +38,57 @@ export default function Answers({ game, gameState, pokemon, onAnswer }) {
 		return () => setAnswersList([]);
 	}, [pokemon]);
 
-	async function fetchAnswers() {
-		let tempList = [];
+	async function fetchAnswers(useMock = true) {
+    if (useMock) {
+        console.log("Using mock answers:", POKEMON_ANSWERS_MOCK);
+        return [...POKEMON_ANSWERS_MOCK]; // Restituisce i dati di test
+    }
 
-		tempList = [...POKEMON_ANSWERS_MOCK];
+    const randomNumbers = Array.from({ length: 3 }, () => Math.floor(Math.random() * 1000) + 1);
 
-		for (let i = 1; i <= 3; i++) {
-			const randomNum = Number((Math.random() * 1000 + 1).toFixed(0));
-			/*const fetchedAnswer = await fetch(
-				`https://pokeapi.co/api/v2/pokemon/${randomNum}`
-			)
-				.then((response) => {
-					return response.json();
-				})
-				.then((pokemonJson) => {
-					console.log("fetched", pokemonJson.name);
-					return pokemonJson;
-				})
-				.then((pokemonJson) => pokemonJson)
-				.catch(new Error("errore"));
+    try {
+        const responses = await Promise.all(
+            randomNumbers.map(num =>
+                fetch(`https://pokeapi.co/api/v2/pokemon-species/${num}`)
+                    .then(response => response.json())
+                    .then(pokemon => pokemon.name)
+            )
+        );
 
-			tempList.push(fetchedAnswer.name);*/
-		}
-		return [...tempList];
-	}
-
-	if (!gameState.hasAnswered) {
-		
-		console.log("list shuffled", answersList);
-	}
+        console.log("Fetched Answers:", responses);
+        return responses;
+    } catch (error) {
+        console.error("Errore nel fetch delle risposte:", error);
+        return [];
+    }
+}
 
 	return (
 		<>
-			{answersList.map((answer, index) => {
-				console.log(answer.isCorrect);
-				return (
-					<Answer
-						key={index}
-						onSelect={onAnswer}
-						pokemon={pokemon}
-						isCorrect={answer.isCorrect}
-						hasAnswered={gameState.hasAnswered}
-					>
-						{answer.text}
-					</Answer>
-				);
-			})}
+			<ul className="w-full text-center">
+				{answersList.map((answer, index) => {
+					console.log(answer.isCorrect);
+					return (
+						<Answer
+							key={index}
+							onSelect={onAnswer}
+							pokemon={pokemon}
+							isCorrect={answer.isCorrect}
+							hasAnswered={gameState.hasAnswered}
+						>
+							{answer.text}
+						</Answer>
+					);
+				})}
+			</ul>
+			{gameState.hasAnswered && (
+				<button
+					onClick={onNext}
+					className="cursor-pointer text-lg mt-2 bg-stone-600 py-2 px-8 rounded-sm"
+				>
+					Next
+				</button>
+			)}
 		</>
 	);
 }
