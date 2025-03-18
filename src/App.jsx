@@ -18,7 +18,7 @@ function App() {
 	const [mainState, setMainState] = useState("main-menu");
 
 	function handleStartGame(gameName){
-		setMainState(gameName);		
+		setMainState(gameName);
 	}
 
 	return (

@@ -3,12 +3,7 @@ import { shuffle } from "../utils/functions";
 import { useRef, useState, useEffect } from "react";
 import Answer from "./Answer";
 
-export default function Answers({
-	gameState,
-	pokemon,
-	onAnswer,
-	onNext,
-}) {
+export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) {
 	const [answersList, setAnswersList] = useState([]);
 	let answers = [];
 
@@ -38,36 +33,36 @@ export default function Answers({
 		return () => setAnswersList([]);
 	}, [pokemon]);
 
-	async function fetchAnswers(useMock = true) {
-    if (useMock) {
-        console.log("Using mock answers:", POKEMON_ANSWERS_MOCK);
-        return [...POKEMON_ANSWERS_MOCK]; // Restituisce i dati di test
-    }
+	async function fetchAnswers(useMock = MOCK) {
+		if (useMock) {
+			return [...POKEMON_ANSWERS_MOCK]; // Restituisce i dati di test
+		}
 
-    const randomNumbers = Array.from({ length: 3 }, () => Math.floor(Math.random() * 1000) + 1);
+		const randomNumbers = Array.from(
+			{ length: 3 },
+			() => Math.floor(Math.random() * 1000) + 1
+		);
 
-    try {
-        const responses = await Promise.all(
-            randomNumbers.map(num =>
-                fetch(`https://pokeapi.co/api/v2/pokemon-species/${num}`)
-                    .then(response => response.json())
-                    .then(pokemon => pokemon.name)
-            )
-        );
+		try {
+			const responses = await Promise.all(
+				randomNumbers.map((num) =>
+					fetch(`https://pokeapi.co/api/v2/pokemon-species/${num}`)
+						.then((response) => response.json())
+						.then((pokemon) => pokemon.name)
+				)
+			);
 
-        console.log("Fetched Answers:", responses);
-        return responses;
-    } catch (error) {
-        console.error("Errore nel fetch delle risposte:", error);
-        return [];
-    }
-}
+			return responses;
+		} catch (error) {
+			console.error("Errore nel fetch delle risposte:", error);
+			return [];
+		}
+	}
 
 	return (
 		<>
 			<ul className="w-full text-center">
 				{answersList.map((answer, index) => {
-					console.log(answer.isCorrect);
 					return (
 						<Answer
 							key={index}

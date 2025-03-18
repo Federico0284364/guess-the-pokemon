@@ -7,7 +7,7 @@ export default function Answer({
 	hasAnswered = false,
 	isCorrect = false,
 }) {
-	const standardClass = "w-full rounded-3xl py-2.5";
+	const standardClass = "w-full rounded-2xl py-2.5 border-4 border-neutral-700";
 	const [buttonClass, setButtonClass] = useState(standardClass);
 	const [isSelected, setIsSelected] = useState(false);
 
@@ -39,7 +39,7 @@ export default function Answer({
 				className={buttonClass}
 				onClick={(event) => {
 					setIsSelected(true);
-					onSelect(event);
+					onSelect(isCorrect, event);
 				}}
 			>
 				{children && pokemon

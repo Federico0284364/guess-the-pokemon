@@ -1,18 +1,37 @@
 export class Pokemon {
-	constructor(name='', id=0, types=[], sprite) {
+	constructor(name = "", id = 0, types = [], sprite, stats, color = 'white', generation = 'I') {
 		this.name = name;
 		this.id = id;
-		this.types = types.map(type => ({
-			type: { name: type }
+		this.types = types.map((type) => ({
+			type: { name: type },
 		}));
-		
-		this.sprites = { front_default: sprite };
+		this.sprites = { front_default: sprite, back_default: null };
+		this.stats = [
+			{
+				base_stat: 72,
+				effort: 0,
+				stat: {
+					name: "hp",
+					url: "https://pokeapi.co/api/v2/stat/1/",
+				},
+			},
+			{
+				base_stat: 85,
+				effort: 2,
+				stat: {
+					name: "attack",
+					url: "https://pokeapi.co/api/v2/stat/2/",
+				},
+			},
+		];
+
+		this.color = { name: color },
+		this.generation = {name: generation},
+		this.flavor_text_entries = []
 	}
 }
 
 const POKEMON_LIST_MOCK = [
-	new Pokemon("Charizard", 1, ["fire", "flying"], "/charizard.png"),
-	new Pokemon("Eevee", 8, ["normal"], "/eevee.jpg"),
 	{
 		abilities: [
 			{
@@ -5782,7 +5801,7 @@ const POKEMON_LIST_MOCK = [
 				},
 			},
 			{
-				base_stat: 85,
+				base_stat: 25,
 				effort: 2,
 				stat: {
 					name: "attack",
@@ -5790,7 +5809,7 @@ const POKEMON_LIST_MOCK = [
 				},
 			},
 			{
-				base_stat: 70,
+				base_stat: 10,
 				effort: 0,
 				stat: {
 					name: "defense",
@@ -5840,6 +5859,9 @@ const POKEMON_LIST_MOCK = [
 		],
 		weight: 500,
 	},
+	new Pokemon("Charizard", 1, ["fire", "flying"], "/charizard.png"),
+	new Pokemon("Eevee", 8, ["normal"], "/eevee.jpg"),
+
 	new Pokemon("Pikachu", 15, ["electric"], "/pikachu.png"),
 ];
 

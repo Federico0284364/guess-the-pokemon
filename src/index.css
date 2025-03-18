@@ -16,6 +16,18 @@ body{
   align-items: center;
 }
 
-button{
-  
+@keyframes customBounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-50px); /* Aumenta l'altezza del salto */
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.custom-bounce {
+  animation: customBounce 0.1s ease-in-out infinite;
 }
