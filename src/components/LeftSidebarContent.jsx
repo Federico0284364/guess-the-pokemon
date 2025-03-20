@@ -21,7 +21,7 @@ export default function LeftSidebarContent({pokemon}) {
   
 	return (
     
-		<div className="ml-2 mt-4 flex flex-col gap-y-3 overflow-auto">
+		<div className="ml-2 mt-4 flex flex-col h-full gap-y-2.5 overflow-y-auto">
       <h1 className="font-semibold uppercase text-3xl self-center mt-[-6px]">
         Stats
       </h1>
@@ -30,10 +30,10 @@ export default function LeftSidebarContent({pokemon}) {
 				const barLength = stat.base_stat / 2.5;
 
 				return (
-					<div className="ml-1">
+					<div key={stat} className="ml-1">
 						<label className={`font-semibold ${stat.stat.name === 'hp' ? 'uppercase' : ''}`}>{capitalize(removeDashes(stat.stat.name))}</label>
-						<div className="flex items-center h-6 m-0 mt-0">
-							<p className="m-0 w-6">{stat.base_stat}</p>
+						<div className="flex items-center h-5 m-0">
+							<p className="m-0 w-6 text-[15px]">{stat.base_stat}</p>
 							<div className="ml-1.5 h-full relative w-[72%] bg-neutral-700 rounded-sm">
 								<div
 									style={ stat.stat.name != 'total-base-stats' ? {width: barLength + "%"} : {width: barLength/6 + "%"} }

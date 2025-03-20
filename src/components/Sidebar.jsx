@@ -3,12 +3,18 @@ import LeftSidebarContent from "./LeftSidebarContent";
 import RightSidebarContent from './RightSidebarContent';
 
 export default function Sidebar({
-	side = "left",
+	isOver = false,
+	side = null,
 	hasAnswered = false,
 	pokemon = new Pokemon(),
 }) {
+	let isOverClass = 'sm:h-117 ';
+	if (isOver){
+		isOverClass = 'sm:h-136 '
+	}
+
 	return (
-		<aside className="flex flex-col overflow-hidden rounded-2xl bg-neutral-500 border-8 border-neutral-700 lg:w-68 h-126">
+		<aside className={isOverClass + "mb-6 pb-2 md:pb-0 md:mb-0 md:mt-0 flex flex-col overflow-hidden rounded-2xl bg-neutral-500 border-8 border-neutral-700 md:w-38 lg:w-68"}>
 			{!hasAnswered ? (
 				<img
 					className="object-cover w-full h-full rounded-lg"
@@ -19,12 +25,12 @@ export default function Sidebar({
 					hasAnswered={hasAnswered}
 					pokemon={pokemon}
 				/>
-			) : (
+			) : side === 'right' ? (
 				<RightSidebarContent
 					hasAnswered={hasAnswered}
 					pokemon={pokemon}
 				/>
-			)}
+			) : ''}
 		</aside>
 	);
 }

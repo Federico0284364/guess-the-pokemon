@@ -1,6 +1,7 @@
 import { POKEMON_ANSWERS_MOCK } from "../pokemonApiMock";
 import { shuffle } from "../utils/functions";
 import { useRef, useState, useEffect } from "react";
+import { removeDashes } from "../utils/functions";
 import Answer from "./Answer";
 
 export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) {
@@ -71,7 +72,7 @@ export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) 
 							isCorrect={answer.isCorrect}
 							hasAnswered={gameState.hasAnswered}
 						>
-							{answer.text}
+							{removeDashes(answer.text)}
 						</Answer>
 					);
 				})}
@@ -79,7 +80,7 @@ export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) 
 			{gameState.hasAnswered && (
 				<button
 					onClick={onNext}
-					className="cursor-pointer text-lg mt-2 bg-stone-600 py-2 px-8 rounded-sm"
+					className="cursor-pointer text-lg mt-2 mb-5 md:mb-0 bg-stone-600 py-2 px-8 rounded-sm"
 				>
 					Next
 				</button>

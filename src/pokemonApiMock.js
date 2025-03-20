@@ -27,7 +27,8 @@ export class Pokemon {
 
 		this.color = { name: color },
 		this.generation = {name: generation},
-		this.flavor_text_entries = []
+		this.flavor_text_entries = [],
+		this.generation = {name: generation}
 	}
 }
 

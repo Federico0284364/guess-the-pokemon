@@ -1,16 +1,22 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { DifficultyContext } from "../context/difficulty";
+import { WindowSizeContext } from "../context/window-size.jsx";
 import { POKEMON_LIST_MOCK, Pokemon } from "../pokemonApiMock.js";
+import { capitalize } from "../utils/functions.js";
+import GameHeader from "./GameHeader.jsx";
 import Answers from "./Answers.jsx";
 import Sidebar from "./Sidebar.jsx";
-import MainWindow from "./MainWindow.jsx";
+import MainWindow from "./mainWindow.jsx";
+import Scoreboard from "./Scoreboard.jsx";
 
 const MOCK = false;
-const numberOfPokemon = 3;
+const numberOfPokemon = 10;
 
 export default function PokemonGame() {
 	//setup
-	const { difficulty } = useContext(DifficultyContext);
+	const { windowSize, device } = useContext(WindowSizeContext);
+	const { currentDifficulty } = useContext(DifficultyContext);
+
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
 	const [gameState, setGameState] = useState({
@@ -20,7 +26,12 @@ export default function PokemonGame() {
 		score: 0,
 	});
 
-	const pokemon = pokemonList[gameState.round];
+	let isOver = false;
+	if (gameState.round === numberOfPokemon) {
+		isOver = true;
+	}
+	console.log(isOver, gameState.round);
+	const pokemon = pokemonList[gameState.round] || new Pokemon();
 
 	const leftSidebarProps = {
 		pokemon: pokemon,
@@ -35,6 +46,8 @@ export default function PokemonGame() {
 	//fetch pokemon
 	useEffect(() => {
 		let tempList = [];
+		if (gameState.round < numberOfPokemon) fetchData();
+
 		async function fetchData() {
 			if (pokemonList.length <= 1) {
 				tempList = await fetchPokemonList();
@@ -42,9 +55,9 @@ export default function PokemonGame() {
 				tempList = [...pokemonList];
 			}
 			const pokemonSpecies = await fetchPokemonSpecies(
-				tempList[gameState.round].name
+				tempList[gameState.round].id
 			);
-			console.log("le info sul pokemon sono", pokemonSpecies);
+
 			tempList[gameState.round] = {
 				...tempList[gameState.round],
 				...pokemonSpecies,
@@ -52,12 +65,21 @@ export default function PokemonGame() {
 			console.log(tempList);
 			setPokemonList([...tempList]);
 		}
-
-		fetchData();
 	}, [gameState.round]);
 
-	//fetch pokemon-species
+	function handleNewGame() {
+		setPokemonList([new Pokemon()]);
+		setGuessedPokemonList([]);
+		setGameState({
+			hasAnswered: false,
+			round: 0,
+			hints: 0,
+			score: 0,
+			isOver: false,
+		});
+	}
 
+	//fetch pokemon-species
 	async function fetchPokemonList(useMock = MOCK) {
 		if (useMock) {
 			return [...POKEMON_LIST_MOCK]; // Restituisce i dati di test
@@ -87,16 +109,17 @@ export default function PokemonGame() {
 		}
 	}
 
-	async function fetchPokemonSpecies(pokemonName, useMock = MOCK) {
+	async function fetchPokemonSpecies(pokemonId, useMock = MOCK) {
 		if (useMock) {
 			return;
 		}
 
 		try {
 			const response = await fetch(
-				`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`
+				`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`
 			);
 			const data = await response.json();
+			data.name = capitalize(data.name);
 			return data;
 		} catch (error) {
 			console.error("Errore nel fetch dei Pokémon:", error);
@@ -151,36 +174,66 @@ export default function PokemonGame() {
 	}
 
 	//render
-	if (pokemon) {
+	if (pokemon && currentDifficulty === "Easy") {
 		return (
 			<>
-				<h1 className="mt-4 text-4xl text-white font-semibold text-center uppercase">
-					score: {gameState.score}
-				</h1>
-				<ul>
-					{pokemonList.map((guessedPokemon, index) => {
-						let isCorrect = guessedPokemonList[index];
-						return (
-							<img src={pokemon.sprites.front_default}/>
-						)
-					})}
-				</ul>
-				<main className="flex mt-8 gap-8">
-					<Sidebar {...leftSidebarProps} side="left" />
-					<div className="relative flex flex-col h-60 w-100 ">
-						<MainWindow gameState={gameState} pokemon={pokemon} />
-						<Answers
-							MOCK={MOCK}
-							game="pokemon"
-							gameState={gameState}
-							onAnswer={handleAnswer}
-							onNext={handleNextQuestion}
-							pokemon={pokemon.name}
-						/>
+				{!isOver && (
+					<GameHeader
+						gameState={gameState}
+						pokemonList={pokemonList}
+						guessedPokemonList={guessedPokemonList}
+					/>
+				)}
+				<main className="flex mt-4 gap-8">
+					{(device === "medium" || device === "large") && (
+						<Sidebar {...leftSidebarProps} side="left" />
+					)}
+					<div className="relative flex flex-col min-h-128 w-[99vw] max-w-[85vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+						{!isOver ? (
+							<>
+								<MainWindow
+									gameState={gameState}
+									pokemon={pokemon}
+								/>
+								<Answers
+									MOCK={MOCK}
+									game="pokemon"
+									gameState={gameState}
+									onAnswer={handleAnswer}
+									onNext={handleNextQuestion}
+									pokemon={pokemon.name}
+								/>
+								{device === "small" &&
+									gameState.hasAnswered && (
+										<>
+											<Sidebar
+											isOver={isOver}
+												{...rightSidebarProps}
+												side="right"
+											/>
+											<Sidebar
+											isOver={isOver}
+												{...rightSidebarProps}
+												side="left"
+											/>
+										</>
+									)}
+							</>
+						) : (
+							<Scoreboard
+								totalScore={gameState.score}
+								pokemonList={pokemonList}
+								guessedPokemonList={guessedPokemonList}
+								startNewGame={handleNewGame}
+							/>
+						)}
 					</div>
-					<Sidebar {...rightSidebarProps} side="right" />
+					{(device === "medium" || device === "large") && (
+						<Sidebar {...rightSidebarProps} side="right" />
+					)}
 				</main>
 			</>
 		);
+	} else {
 	}
 }
