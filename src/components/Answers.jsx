@@ -1,8 +1,9 @@
-import { POKEMON_ANSWERS_MOCK } from "../pokemonApiMock";
+import { POKEMON_ANSWERS_MOCK } from "../utils/pokemonApiMock";
 import { shuffle } from "../utils/functions";
 import { useRef, useState, useEffect } from "react";
 import { removeDashes } from "../utils/functions";
 import Answer from "./Answer";
+import NextButton from "./NextButton";
 
 export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) {
 	const [answersList, setAnswersList] = useState([]);
@@ -78,12 +79,7 @@ export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) 
 				})}
 			</ul>
 			{gameState.hasAnswered && (
-				<button
-					onClick={onNext}
-					className="cursor-pointer text-lg mt-2 mb-5 md:mb-0 bg-stone-600 py-2 px-8 rounded-sm"
-				>
-					Next
-				</button>
+				<NextButton onClick={onNext}/>
 			)}
 		</>
 	);

@@ -30,7 +30,7 @@ export default function WindowSizeContextProvider({ children }) {
 
 	if (windowSize.width >= 1024) {
 		device = "large";
-	} else if (windowSize.width >= 640) {
+	} else if (windowSize.width >= 768) {
 		device = "medium";
 	} else {
 		device = "small";

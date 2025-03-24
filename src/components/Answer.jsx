@@ -7,7 +7,7 @@ export default function Answer({
 	hasAnswered = false,
 	isCorrect = false,
 }) {
-	const standardClass = "w-full rounded-2xl py-3 sm:py-2 border-4 border-neutral-700";
+	const standardClass = "w-full rounded-2xl py-2 border-4 border-neutral-700";
 	const [buttonClass, setButtonClass] = useState(standardClass);
 	const [isSelected, setIsSelected] = useState(false);
 

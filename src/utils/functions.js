@@ -75,25 +75,94 @@ export function getColorByStat(stat) {
 }
 
 export function capitalize(string) {
-	return string.length > 1 ? string[0].toUpperCase() + string.slice(1) : "";
+	return string.length > 1
+		? string[0].toUpperCase() + string.slice(1)
+		: string.toUpperCase();
 }
 
-export function removeDashes(string){
-	return string.replaceAll('-', ' ');
+export function removeDashes(string) {
+	return string.replaceAll("-", " ");
 }
 
-export function extractRoman(string){
-	let newString = '';
-	let dash = false;
+export function extractRoman(string) {
+	let newString = "";
+	let isDash = false;
 	for (const char of string) {
-		if (dash){
+		if (isDash) {
 			newString += char;
 		}
 
-		if (char === '-'){
-			dash = true;
+		if (char === "-") {
+			isDash = true;
 		}
 	}
 
 	return newString;
+}
+
+export function calculateTotalScore(score) {
+	console.log(score);
+	let totalScore = 0;
+	Object.values(score).forEach((entry) => {
+		totalScore += entry;
+	});
+
+	return totalScore;
+}
+
+function compareTypes(answer) {
+	pokemon.types.forEach((type) => {
+		if (
+			pokemon.types.length === 1 &&
+			answer.types[0].toLowerCase() === type.type.name &&
+			answer.types[1] === "No type"
+		) {
+			typeScore += 50;
+		} else if (answer.types.includes(type.type.name)) {
+			typeScore += 25;
+		}
+	});
+}
+
+export function checkMispelling(string, correctString) {
+	if (
+		string === correctString ||
+		Math.abs(string.length - correctString) > 1
+	) {
+		return false;
+	}
+
+	let diffCount = 0;
+	if (string.length === correctString.length) {
+		for (let i = 0; i < string.length; i++) {
+			if (string[i] != correctString[i]) {
+				diffCount++;
+			}
+		}
+		return diffCount === 1;
+	}
+
+	let i = 0;
+	let j = 0;
+	diffCount = 0;
+
+	while (i < string.length && j < correctString.length) {
+		if (string[i] !== correctString[j]) {
+			diffCount++;
+			if (string.length > correctString.length) {
+				i++; 
+			} else if (string.length < correctString.length) {
+				j++; 
+			}
+		} else {
+			i++;
+			j++;
+		}
+
+		if (diffCount > 1) {
+			return false;
+		}
+	}
+
+	return true;
 }

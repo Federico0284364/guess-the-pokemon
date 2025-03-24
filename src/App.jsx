@@ -20,18 +20,22 @@ function selectGame(gameName) {
 function App() {
 	const [mainState, setMainState] = useState("main-menu");
 
-	function handleStartGame(gameName) {
-		setMainState(gameName);
+	function handleStartGame() {
+		setMainState('playing');
+	}
+
+	function handleGoToMenu(){
+		setMainState('main-menu');
 	}
 
 	return (
 		<WindowSizeContextProvider>
 			<DifficultyContextProvider>
-				<main className="flex flex-col">
+				<main>
 					{mainState === "main-menu" && (
 						<MainMenu startGame={handleStartGame} />
 					)}
-					{mainState === "pokemon" && <PokemonGame />}
+					{mainState === "playing" && <PokemonGame goToMenu={handleGoToMenu}/>}
 				</main>
 			</DifficultyContextProvider>
 		</WindowSizeContextProvider>

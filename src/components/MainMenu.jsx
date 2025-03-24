@@ -2,8 +2,6 @@ import GameOption from "./GameOption";
 import { games } from "../games.js";
 import DifficultyButton from "./Difficultybutton.jsx";
 
-
-
 export default function MainMenu({startGame}) {
 	
 	return (
@@ -20,8 +18,8 @@ export default function MainMenu({startGame}) {
 			</div>
 			<div className="flex flex-col text-xl mt-34 ml-10">
 				Difficulty:
-				<DifficultyButton difficulty={"Easy"} />
-				<DifficultyButton difficulty={"Hard"} />
+				<DifficultyButton chosenDifficulty={"Easy"} />
+				<DifficultyButton chosenDifficulty={"Hard"} />
 			</div>
 		</div>
 	);

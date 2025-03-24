@@ -1,21 +1,23 @@
 import { useState, useContext, useEffect, useRef } from "react";
 import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
-import { POKEMON_LIST_MOCK, Pokemon } from "../pokemonApiMock.js";
-import { capitalize } from "../utils/functions.js";
+import { POKEMON_LIST_MOCK, Pokemon } from "../utils/pokemonApiMock.js";
+import { capitalize, extractRoman, removeDashes } from "../utils/functions.js";
+import { calculateScore } from '../utils/gameFunctions.js';
 import GameHeader from "./GameHeader.jsx";
 import Answers from "./Answers.jsx";
 import Sidebar from "./Sidebar.jsx";
 import MainWindow from "./mainWindow.jsx";
 import Scoreboard from "./Scoreboard.jsx";
+import InputArea from "./InputArea.jsx";
 
 const MOCK = false;
 const numberOfPokemon = 10;
 
-export default function PokemonGame() {
+export default function PokemonGame({ goToMenu }) {
 	//setup
 	const { windowSize, device } = useContext(WindowSizeContext);
-	const { currentDifficulty } = useContext(DifficultyContext);
+	const { difficulty } = useContext(DifficultyContext);
 
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
@@ -23,14 +25,13 @@ export default function PokemonGame() {
 		hasAnswered: false,
 		round: 0,
 		hints: 0,
-		score: 0,
+		score: [],
 	});
 
 	let isOver = false;
 	if (gameState.round === numberOfPokemon) {
 		isOver = true;
 	}
-	console.log(isOver, gameState.round);
 	const pokemon = pokemonList[gameState.round] || new Pokemon();
 
 	const leftSidebarProps = {
@@ -62,7 +63,6 @@ export default function PokemonGame() {
 				...tempList[gameState.round],
 				...pokemonSpecies,
 			};
-			console.log(tempList);
 			setPokemonList([...tempList]);
 		}
 	}, [gameState.round]);
@@ -74,7 +74,7 @@ export default function PokemonGame() {
 			hasAnswered: false,
 			round: 0,
 			hints: 0,
-			score: 0,
+			score: [],
 			isOver: false,
 		});
 	}
@@ -87,7 +87,7 @@ export default function PokemonGame() {
 
 		const randomNumbers = Array.from(
 			{ length: numberOfPokemon },
-			() => Math.floor(Math.random() * 1000) + 1
+			() => Math.floor(Math.random() * 1025) + 1
 		);
 
 		try {
@@ -127,7 +127,7 @@ export default function PokemonGame() {
 		}
 	}
 
-	function handleAnswer(isCorrect, event) {
+	function handleEasyAnswer(isCorrect, event) {
 		if (!gameState.hasAnswered) {
 			if (isCorrect) {
 				handleCorrectAnswer(event);
@@ -142,6 +142,37 @@ export default function PokemonGame() {
 				};
 			});
 		}
+	}
+
+	function handleHardAnswer(answer) {
+		let nameScore = 0;
+		let generationScore = 0;
+		let typeScore = 0;
+		let statScore = 0;
+
+		nameScore = calculateScore.name(answer.name, pokemon.name);
+		generationScore = calculateScore.generation(answer.generation, pokemon.generation.name);
+		typeScore = calculateScore.type(answer.types, pokemon.types);
+		statScore = calculateScore.stat(answer.stat, pokemon.stats);
+
+		const tempScore = {
+			nameScore,
+			generationScore,
+			typeScore,
+			statScore,
+		}
+
+		const totalScore = Object.values(tempScore).reduce((sum, num) => sum + num, 0);
+		console.log(tempScore);
+		console.log(totalScore);
+
+		setGameState((prevState) => {
+			return {
+				...prevState,
+				score: [...prevState.score, totalScore],
+				hasAnswered: true,
+			};
+		});
 	}
 
 	function handleNextQuestion() {
@@ -162,7 +193,7 @@ export default function PokemonGame() {
 		setGameState((prevState) => {
 			return {
 				...prevState,
-				score: prevState.score + 50,
+				score: [...prevState.score, 50],
 			};
 		});
 	}
@@ -174,45 +205,57 @@ export default function PokemonGame() {
 	}
 
 	//render
-	if (pokemon && currentDifficulty === "Easy") {
+	if (pokemon) {
 		return (
 			<>
 				{!isOver && (
 					<GameHeader
+						goToMenu={goToMenu}
 						gameState={gameState}
 						pokemonList={pokemonList}
 						guessedPokemonList={guessedPokemonList}
 					/>
 				)}
-				<main className="flex mt-4 gap-8">
+				<section className="flex mt-4 gap-8">
 					{(device === "medium" || device === "large") && (
-						<Sidebar {...leftSidebarProps} side="left" />
+						<Sidebar
+							isOver={isOver}
+							{...leftSidebarProps}
+							side="left"
+						/>
 					)}
-					<div className="relative flex flex-col min-h-128 w-[99vw] max-w-[85vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+					<div className="relative flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
 						{!isOver ? (
 							<>
 								<MainWindow
 									gameState={gameState}
 									pokemon={pokemon}
 								/>
-								<Answers
-									MOCK={MOCK}
-									game="pokemon"
-									gameState={gameState}
-									onAnswer={handleAnswer}
-									onNext={handleNextQuestion}
-									pokemon={pokemon.name}
-								/>
+								{difficulty === "Easy" ? (
+									<Answers
+										MOCK={MOCK}
+										gameState={gameState}
+										onAnswer={handleEasyAnswer}
+										onNext={handleNextQuestion}
+										pokemon={pokemon.name}
+									/>
+								) : (
+									<InputArea
+										gameState={gameState}
+										onAnswer={handleHardAnswer}
+										onNext={handleNextQuestion}
+									/>
+								)}
 								{device === "small" &&
 									gameState.hasAnswered && (
 										<>
 											<Sidebar
-											isOver={isOver}
+												isOver={isOver}
 												{...rightSidebarProps}
 												side="right"
 											/>
 											<Sidebar
-											isOver={isOver}
+												isOver={isOver}
 												{...rightSidebarProps}
 												side="left"
 											/>
@@ -221,19 +264,23 @@ export default function PokemonGame() {
 							</>
 						) : (
 							<Scoreboard
-								totalScore={gameState.score}
+								score={gameState.score}
 								pokemonList={pokemonList}
 								guessedPokemonList={guessedPokemonList}
 								startNewGame={handleNewGame}
+								goToMenu={goToMenu}
 							/>
 						)}
 					</div>
 					{(device === "medium" || device === "large") && (
-						<Sidebar {...rightSidebarProps} side="right" />
+						<Sidebar
+							{...rightSidebarProps}
+							side="right"
+							isOver={isOver}
+						/>
 					)}
-				</main>
+				</section>
 			</>
 		);
-	} else {
 	}
 }

@@ -7,15 +7,10 @@ export default function MainWindow({ pokemon, gameState }) {
 
 	return (
 		<div className="flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative">
-			<div className="bg-neutral-700 absolute right-1 top-1 rounded-full w-10 h-10">
-				<p className="text-white  text-xl text-center mt-1">
-					{gameState.hasAnswered ? pokemon.id : "?"}
-				</p>
-			</div>
 
 			<div className="flex justify-center items-center h-full">
 				{console.log(pokemon)}
-				{pokemon.sprites.back_default && device != 'small' && (
+				{pokemon.sprites.back_default && device != "small" && (
 					<img
 						onClick={(event) => handleSpriteClick(event)}
 						className="w-[90%] h-[90%] mt-[-7px]"
@@ -28,23 +23,28 @@ export default function MainWindow({ pokemon, gameState }) {
 				/>
 			</div>
 
-			<div className="w-[101%] mb-[-4px] bg-neutral-700 flex justify-center items-center gap-1 h-10">
-				{gameState.hasAnswered && pokemon.types
-					? pokemon.types.map((type) => {
-							let typeClass = getColorByType(type.type.name);
+			<div className="w-[101%] mb-[-4px] bg-neutral-700 flex justify-around sm:justify-center items-center gap-1 h-10 relative">
+				{gameState.hasAnswered && <p className="text-lg">{pokemon.id + " - " + pokemon.name}</p>}
+				<div className="flex sm:absolute right-2 ">
+					{gameState.hasAnswered && pokemon.types
+						? 
+						pokemon.types.map((type) => {
+								let typeClass = getColorByType(type.type.name);
 
-							return (
-								<p
-									className={
-										"inline-block text-center text-md rounded-sm px-2 py-0.5 mt-1.5" +
-										typeClass
-									}
-								>
-									{capitalize(type.type.name)}
-								</p>
-							);
-					  })
-					: ""}
+								return (
+									<p
+									key={type.type.name}
+										className={
+											"inline-block text-center text-xs rounded-sm px-2 py-0.5 mt-0.5" +
+											typeClass
+										}
+									>
+										{capitalize(type.type.name)}
+									</p>
+								);
+						  })
+						: ""}
+				</div>
 			</div>
 		</div>
 	);

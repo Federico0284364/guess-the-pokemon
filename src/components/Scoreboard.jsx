@@ -1,17 +1,21 @@
 import { useEffect } from "react";
-import { capitalize, removeDashes } from "../utils/functions.js";
+import { capitalize, removeDashes, calculateTotalScore } from "../utils/functions.js";
 
 export default function Scoreboard({
-	totalScore = 100,
+	score,
 	pokemonList,
 	guessedPokemonList,
 	startNewGame,
 	goToMenu
 }) {
+	
+
+	const totalScore = calculateTotalScore(score);
+
 	let bestScore = 0;
 	bestScore = JSON.parse(localStorage.getItem("best-score"));
 
-	const buttonClass = "bg-neutral-600 rounded-sm px-2 py-1";
+	const buttonClass = "bg-neutral-600 rounded-sm px-2 py-1 hover:opacity-90 active:opacity-70";
 
 	if (totalScore > bestScore) {
 		bestScore = totalScore;
@@ -23,7 +27,7 @@ export default function Scoreboard({
 
 	return (
 		<>
-			<div className="w-100 h-150 z-50 flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700">
+			<div className="w-[90vw] max-w-100 min-h-150 h-[90dvh] z-50 flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700">
 				<h1 className="text-5xl uppercase mt-4">Your score:</h1>
 				<h1 className="text-8xl uppercase">{totalScore}</h1>
 				<p className="mb-4">
@@ -34,28 +38,32 @@ export default function Scoreboard({
 					<button className={buttonClass} onClick={goToMenu}>Main Menu</button>
 				</div>
 				<table>
+					<tbody>
+						
+					
 					{pokemonList.map((pokemon, index) => {
 						const isCorrect = guessedPokemonList[index];
 						const symbol = isCorrect ? "\u2713" : "\u274C";
             const points = isCorrect ? '+50' : '0';
 						return (
-							<tr>
+							<tr className="max-h-1">
 								<td className="w-9">
 									<img
 										className="w-[92%] h-[90%] object-cover hover:scale-200 transition-[2s]"
 										src={pokemon.sprites.front_default}
 									/>
 								</td>
-								<th className="w-22 text-start">
+								<tb className="w-22 text-start">
 									<p className="ml-2">
 										{removeDashes(capitalize(pokemon.name))}
 									</p>
-								</th>
+								</tb>
 								<td className="w-10 text-center"><p className="w-10">{symbol}</p></td>
-                <td className={"w-10 text-center rounded-sm bg-opacity-10" + (isCorrect ? ' bg-green-400' : ' bg-red-700')}>{points}</td>
+                <td className={" w-10 text-center rounded-sm bg-opacity-10" + (isCorrect ? ' bg-green-400' : ' bg-red-700')}>{points}</td>
 							</tr>
 						);
 					})}
+					</tbody>
 				</table>
 			</div>
 		</>

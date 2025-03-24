@@ -16,7 +16,7 @@ export default function DifficultyContextProvider({children}) {
     }
 
     const context = {
-        currentDifficulty: difficulty,
+        difficulty: difficulty,
         setEasy: handleSetEasy,
         setHard: handleSetHard
     }

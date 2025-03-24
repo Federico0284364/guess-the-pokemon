@@ -5,7 +5,7 @@ import {
 	extractRoman,
 } from "../utils/functions";
 
-import { Pokemon } from "../pokemonApiMock";
+import { Pokemon } from "../utils/pokemonApiMock";
 
 export default function RightSidebarContent({ pokemon = new Pokemon()}) {
 	function getDescriptionByLanguage(language) {
@@ -20,15 +20,14 @@ export default function RightSidebarContent({ pokemon = new Pokemon()}) {
 	}
 
 	const dotSymbol = '- ';
-	console.log(pokemon);
 
 	return (
-		<div className="mx-2 mt-4 flex flex-col gap-2 h-full overflow-auto text-neutral-100">
+		<div className="mx-2 mt-4 w-[95%] text-wrap wrap flex flex-col gap-2 h-full overflow-auto text-neutral-100">
 			<h1 className="font-semibold uppercase mb-2 text-3xl text-white self-center mt-[-6px]">
 				Info
 			</h1>
 
-			<div className="flex gap-1">
+			<div className="flex flex-wrap gap-1">
 				<label className="font-semibold uppercase text-white">
 					{"Generation:"}
 				</label>
@@ -43,8 +42,8 @@ export default function RightSidebarContent({ pokemon = new Pokemon()}) {
 					{pokemon.abilities.map((ability) => {
 						return (
 							<>
-								<li key={ability}>
-									{dotSymbol + capitalize(ability.ability.name)}
+								<li key={ability.ability.name + 'sidebar'}>
+									{dotSymbol + removeDashes(capitalize(ability.ability.name))}
 								</li>
 							</>
 						);
