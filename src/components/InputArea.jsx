@@ -3,7 +3,7 @@ import SelectInput from "./SelectInput";
 import Input from "./Input";
 import NextButton from "./NextButton";
 
-export default function InputArea({ gameState, onAnswer, onNext }) {
+export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 	const GENERATIONS = [
 		"I",
 		"II",
@@ -52,6 +52,11 @@ export default function InputArea({ gameState, onAnswer, onNext }) {
 	const statInput = useRef();
 
 	function handleConfirm() {
+		if(type1Input.current.value.toLowerCase() === 
+		type2Input.current.value.toLowerCase()){
+			alert('Invalid input, choose two different types');
+			return;
+		}
 		const answer = {
 			name: nameInput.current.value,
 			generation: generationInput.current.value,
@@ -65,41 +70,54 @@ export default function InputArea({ gameState, onAnswer, onNext }) {
 	}
 
 	return (
-		<section className="flex flex-wrap gap-x-2">
-			<Input ref={nameInput} label="Name" widthClass={"w-[70%]"} />
+		<section className="flex flex-wrap gap-x-1 gap-y-2">
+			<Input
+				gameState={gameState}
+				ref={nameInput}
+				label="Name"
+				widthClass={"w-[70%]"}
+			/>
 			<SelectInput
+				pokemon={pokemon}
+				gameState={gameState}
 				ref={generationInput}
 				optionArray={GENERATIONS}
 				label="Generation"
 				widthClass={"flex-1"}
 			/>
 			<SelectInput
+				pokemon={pokemon}
+				gameState={gameState}
 				ref={type1Input}
 				optionArray={TYPES1}
 				label="Type 1"
 				widthClass={"w-[30%]"}
 			/>
 			<SelectInput
+				pokemon={pokemon}
+				gameState={gameState}
 				ref={type2Input}
 				optionArray={TYPES2}
 				label="Type 2"
 				widthClass={"w-[30%]"}
 			/>
 			<SelectInput
+				pokemon={pokemon}
+				gameState={gameState}
 				ref={statInput}
 				optionArray={STATS}
 				label="Best stat"
 				widthClass={"flex-1"}
 			/>
 
-			<button
+			{!gameState.hasAnswered && <button
 				onClick={() => {
 					handleConfirm();
 				}}
-				className="hover:opacity-85 active:opacity-75 w-full bg-orange-400 rounded-2xl py-2 border-4 border-neutral-700"
+				className="hover:opacity-85 h-14 mt-4 active:opacity-75 w-full text-lg bg-green-700 rounded-sm border-4 border-neutral-700"
 			>
 				Confirm
-			</button>
+			</button>}
 
 			{gameState.hasAnswered && <NextButton onClick={onNext} />}
 		</section>

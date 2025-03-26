@@ -3,7 +3,7 @@ import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { POKEMON_LIST_MOCK, Pokemon } from "../utils/pokemonApiMock.js";
 import { capitalize, extractRoman, removeDashes } from "../utils/functions.js";
-import { calculateScore } from '../utils/gameFunctions.js';
+import { calculateScore } from "../utils/gameFunctions.js";
 import GameHeader from "./GameHeader.jsx";
 import Answers from "./Answers.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -27,7 +27,7 @@ export default function PokemonGame({ goToMenu }) {
 		hints: 0,
 		score: [],
 	});
-
+	console.log(gameState);
 	let isOver = false;
 	if (gameState.round === numberOfPokemon) {
 		isOver = true;
@@ -85,10 +85,13 @@ export default function PokemonGame({ goToMenu }) {
 			return [...POKEMON_LIST_MOCK]; // Restituisce i dati di test
 		}
 
-		const randomNumbers = Array.from(
-			{ length: numberOfPokemon },
-			() => Math.floor(Math.random() * 1025) + 1
-		);
+		const uniqueNumbers = new Set();
+
+		while (uniqueNumbers.size < numberOfPokemon) {
+			uniqueNumbers.add(Math.floor(Math.random() * 1025) + 1);
+		}
+
+		const randomNumbers = [...uniqueNumbers];
 
 		try {
 			const responses = await Promise.all(
@@ -105,10 +108,9 @@ export default function PokemonGame({ goToMenu }) {
 			return responses;
 		} catch (error) {
 			console.error("Errore nel fetch dei Pokémon:", error);
-			return [];
+			return [POKEMON_LIST_MOCK[0]];
 		}
 	}
-
 	async function fetchPokemonSpecies(pokemonId, useMock = MOCK) {
 		if (useMock) {
 			return;
@@ -118,6 +120,10 @@ export default function PokemonGame({ goToMenu }) {
 			const response = await fetch(
 				`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`
 			);
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
+			}
+
 			const data = await response.json();
 			data.name = capitalize(data.name);
 			return data;
@@ -151,7 +157,10 @@ export default function PokemonGame({ goToMenu }) {
 		let statScore = 0;
 
 		nameScore = calculateScore.name(answer.name, pokemon.name);
-		generationScore = calculateScore.generation(answer.generation, pokemon.generation.name);
+		generationScore = calculateScore.generation(
+			answer.generation,
+			pokemon.generation.name
+		);
 		typeScore = calculateScore.type(answer.types, pokemon.types);
 		statScore = calculateScore.stat(answer.stat, pokemon.stats);
 
@@ -160,16 +169,14 @@ export default function PokemonGame({ goToMenu }) {
 			generationScore,
 			typeScore,
 			statScore,
-		}
+		};
 
-		const totalScore = Object.values(tempScore).reduce((sum, num) => sum + num, 0);
 		console.log(tempScore);
-		console.log(totalScore);
 
 		setGameState((prevState) => {
 			return {
 				...prevState,
-				score: [...prevState.score, totalScore],
+				score: [...prevState.score, { ...tempScore }],
 				hasAnswered: true,
 			};
 		});
@@ -193,7 +200,7 @@ export default function PokemonGame({ goToMenu }) {
 		setGameState((prevState) => {
 			return {
 				...prevState,
-				score: [...prevState.score, 50],
+				score: [...prevState.score, { gameScore: 50 }],
 			};
 		});
 	}
@@ -224,7 +231,7 @@ export default function PokemonGame({ goToMenu }) {
 							side="left"
 						/>
 					)}
-					<div className="relative flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+					<div className="h-full relative flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
 						{!isOver ? (
 							<>
 								<MainWindow
@@ -244,6 +251,7 @@ export default function PokemonGame({ goToMenu }) {
 										gameState={gameState}
 										onAnswer={handleHardAnswer}
 										onNext={handleNextQuestion}
+										pokemon={pokemon}
 									/>
 								)}
 								{device === "small" &&

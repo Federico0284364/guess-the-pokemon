@@ -5,7 +5,13 @@ import { removeDashes } from "../utils/functions";
 import Answer from "./Answer";
 import NextButton from "./NextButton";
 
-export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) {
+export default function Answers({
+	gameState,
+	pokemon,
+	onAnswer,
+	onNext,
+	MOCK,
+}) {
 	const [answersList, setAnswersList] = useState([]);
 	let answers = [];
 
@@ -40,10 +46,16 @@ export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) 
 			return [...POKEMON_ANSWERS_MOCK]; // Restituisce i dati di test
 		}
 
-		const randomNumbers = Array.from(
-			{ length: 3 },
-			() => Math.floor(Math.random() * 1000) + 1
-		);
+		const uniqueNumbers = new Set();
+
+		while (uniqueNumbers.size < 3) {
+			let randomId = Math.floor(Math.random() * 1000) + 1;
+			if (randomId !== pokemon.id) {
+				uniqueNumbers.add(randomId);
+			}
+		}
+
+		const randomNumbers = [...uniqueNumbers];
 
 		try {
 			const responses = await Promise.all(
@@ -78,9 +90,7 @@ export default function Answers({ gameState, pokemon, onAnswer, onNext, MOCK }) 
 					);
 				})}
 			</ul>
-			{gameState.hasAnswered && (
-				<NextButton onClick={onNext}/>
-			)}
+			{gameState.hasAnswered && <NextButton onClick={onNext} />}
 		</>
 	);
 }

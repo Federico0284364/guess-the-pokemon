@@ -8,8 +8,6 @@ export default function Scoreboard({
 	startNewGame,
 	goToMenu
 }) {
-	
-
 	const totalScore = calculateTotalScore(score);
 
 	let bestScore = 0;
@@ -24,6 +22,17 @@ export default function Scoreboard({
 	useEffect(() => {
 		localStorage.setItem("best-score", JSON.stringify(bestScore));
 	}, []);
+
+	
+
+	function calculatePokemonScore(index) {
+		let pokemonScore = 0;
+		Object.values(score[index]).forEach((entry) => {
+			console.log('entryyyy',entry);
+			pokemonScore += entry;
+		})
+		return pokemonScore;
+	}
 
 	return (
 		<>
@@ -44,7 +53,8 @@ export default function Scoreboard({
 					{pokemonList.map((pokemon, index) => {
 						const isCorrect = guessedPokemonList[index];
 						const symbol = isCorrect ? "\u2713" : "\u274C";
-            const points = isCorrect ? '+50' : '0';
+						const totalPokemonScore = calculatePokemonScore(index);
+            
 						return (
 							<tr className="max-h-1">
 								<td className="w-9">
@@ -53,13 +63,13 @@ export default function Scoreboard({
 										src={pokemon.sprites.front_default}
 									/>
 								</td>
-								<tb className="w-22 text-start">
+								<td className="w-26 text-start">
 									<p className="ml-2">
 										{removeDashes(capitalize(pokemon.name))}
 									</p>
-								</tb>
+								</td>
 								<td className="w-10 text-center"><p className="w-10">{symbol}</p></td>
-                <td className={" w-10 text-center rounded-sm bg-opacity-10" + (isCorrect ? ' bg-green-400' : ' bg-red-700')}>{points}</td>
+                <td className={" w-10 text-center text-white rounded-sm bg-opacity-10" + (totalPokemonScore ? ' bg-green-500' : ' bg-red-700')}>{'+' + totalPokemonScore}</td>
 							</tr>
 						);
 					})}

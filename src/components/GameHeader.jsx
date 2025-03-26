@@ -9,13 +9,13 @@ export default function GameHeader({
 	pokemonList,
 	guessedPokemonList,
 }) {
-	const { windowSize, device } = useContext(WindowSizeContext);
+	const { device } = useContext(WindowSizeContext);
 	const totalScore = calculateTotalScore(gameState.score);
 
 	return (
 		<header className="flex justify-between md:justify-normal items-center gap-6 sm:gap-0 ">
 			<button onClick={goToMenu} className="active:opacity-70 hover:bg-neutral-300 hover:text-neutral-700 font-extrabold text-xl text-center pb-1 mt-4 w-10 aspect-square items-center rounded-xl bg-neutral-700 border-4 border-neutral-300">{'<'}</button>
-			<h1 className="mt-3 ml-3 text-3xl sm:text-4xl sm:w-45 text-nowrap text-white font-semibold text-center uppercase">
+			<h1 className="mt-3 ml-3 text-3xl sm:text-3xl sm:w-45 text-nowrap text-white font-semibold text-center uppercase">
 				score: {totalScore}
 			</h1>
 			{device === "small" && (

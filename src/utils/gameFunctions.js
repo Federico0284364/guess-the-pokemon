@@ -6,7 +6,7 @@ import {
 
 const calculateScore = {
 	name(answer, name) {
-		const isMispelled = checkMispelling(answer.toLowerCase(), name.toLowerCase());
+		const isMispelled = checkMispelling(removeDashes(answer.toLowerCase()), removeDashes(name.toLowerCase()));
 		if (isMispelled) {
 			return 50;
 		}

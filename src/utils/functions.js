@@ -103,31 +103,19 @@ export function extractRoman(string) {
 export function calculateTotalScore(score) {
 	console.log(score);
 	let totalScore = 0;
-	Object.values(score).forEach((entry) => {
-		totalScore += entry;
-	});
+	score.forEach((round) => {
+		Object.values(round).forEach((entry) => {
+			totalScore += entry;
+		})
+	})
 
 	return totalScore;
-}
-
-function compareTypes(answer) {
-	pokemon.types.forEach((type) => {
-		if (
-			pokemon.types.length === 1 &&
-			answer.types[0].toLowerCase() === type.type.name &&
-			answer.types[1] === "No type"
-		) {
-			typeScore += 50;
-		} else if (answer.types.includes(type.type.name)) {
-			typeScore += 25;
-		}
-	});
 }
 
 export function checkMispelling(string, correctString) {
 	if (
 		string === correctString ||
-		Math.abs(string.length - correctString) > 1
+		Math.abs(string.length - correctString.length) > 1
 	) {
 		return false;
 	}

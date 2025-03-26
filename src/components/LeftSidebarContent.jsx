@@ -30,7 +30,7 @@ export default function LeftSidebarContent({ pokemon }) {
 				return (
 					<div key={Math.random()} className="ml-1">
 						<label
-							className={`font-semibold ${
+							className={` ${
 								stat.stat.name === "hp" ? "uppercase" : ""
 							}`}
 						>
