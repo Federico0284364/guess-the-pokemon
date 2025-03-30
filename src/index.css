@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Cantora+One&display=swap");
+
+:root {
+  font-family: "Cantora One", system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.primary-color{
+  background-color: #263238;
+}
+
+
+
+header h1{
+  text-shadow: 2px 4px 5px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+body{
+  
+  background-color: #263238;
+  padding: 10px;
+  
+  background-size: cover; /* Copre tutta la pagina */
+  background-position: center; /* Centra l'immagine */
+  background-repeat: no-repeat; /* Evita ripetizioni */
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes customBounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-50px); /* Aumenta l'altezza del salto */
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.custom-bounce {
+  animation: customBounce 0.1s ease-in-out infinite;
+}
