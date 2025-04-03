@@ -1,7 +1,8 @@
 import { POKEMON_ANSWERS_MOCK } from "../utils/pokemonApiMock";
 import { shuffle } from "../utils/functions";
-import { useRef, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { removeDashes } from "../utils/functions";
+import {fetchAnswers} from '../utils/fetchFunctions';
 import Answer from "./Answer";
 import NextButton from "./NextButton";
 
@@ -17,7 +18,9 @@ export default function Answers({
 
 	useEffect(() => {
 		async function fetchData() {
-			const tempList = await fetchAnswers();
+			const tempList = await fetchAnswers(MOCK, pokemon);
+
+			console.log('fetching answers');
 
 			answers = [
 				...tempList.map((answer) => {
@@ -27,7 +30,7 @@ export default function Answers({
 					};
 				}),
 				{
-					text: pokemon,
+					text: pokemon.name,
 					isCorrect: true,
 				},
 			];
@@ -39,39 +42,9 @@ export default function Answers({
 		fetchData();
 
 		return () => setAnswersList([]);
-	}, [pokemon]);
+	}, [pokemon.id]);
 
-	async function fetchAnswers(useMock = MOCK) {
-		if (useMock) {
-			return [...POKEMON_ANSWERS_MOCK]; // Restituisce i dati di test
-		}
-
-		const uniqueNumbers = new Set();
-
-		while (uniqueNumbers.size < 3) {
-			let randomId = Math.floor(Math.random() * 1000) + 1;
-			if (randomId !== pokemon.id) {
-				uniqueNumbers.add(randomId);
-			}
-		}
-
-		const randomNumbers = [...uniqueNumbers];
-
-		try {
-			const responses = await Promise.all(
-				randomNumbers.map((num) =>
-					fetch(`https://pokeapi.co/api/v2/pokemon-species/${num}`)
-						.then((response) => response.json())
-						.then((pokemon) => pokemon.name)
-				)
-			);
-
-			return responses;
-		} catch (error) {
-			console.error("Errore nel fetch delle risposte:", error);
-			return [];
-		}
-	}
+	
 
 	return (
 		<>

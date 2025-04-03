@@ -30,7 +30,8 @@ export default function Scoreboard({
 
 	function calculatePokemonScore(index) {
 		let pokemonScore = 0;
-		Object.values(score[index]).forEach((entry) => {
+		debugger;
+		(Object.values(score[index])).forEach((entry) => {
 			pokemonScore += entry;
 		});
 		return pokemonScore;

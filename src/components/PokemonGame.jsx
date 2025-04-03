@@ -1,9 +1,10 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect, memo } from "react";
 import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { POKEMON_LIST_MOCK, Pokemon } from "../utils/pokemonApiMock.js";
 import { capitalize, extractRoman, removeDashes } from "../utils/functions.js";
 import { calculateScore } from "../utils/gameFunctions.js";
+import { fetchPokemonList, fetchPokemonSpecies } from '../utils/fetchFunctions.js';
 import GameHeader from "./GameHeader.jsx";
 import Answers from "./Answers.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -51,11 +52,11 @@ export default function PokemonGame({ goToMenu }) {
 
 		async function fetchData() {
 			if (pokemonList.length <= 1) {
-				tempList = await fetchPokemonList();
+				tempList = await fetchPokemonList(MOCK, numberOfPokemon);
 			} else {
 				tempList = [...pokemonList];
 			}
-			const pokemonSpecies = await fetchPokemonSpecies(
+			const pokemonSpecies = await fetchPokemonSpecies(MOCK,
 				tempList[gameState.round].id
 			);
 
@@ -77,60 +78,6 @@ export default function PokemonGame({ goToMenu }) {
 			score: [],
 			isOver: false,
 		});
-	}
-
-	//fetch pokemon-species
-	async function fetchPokemonList(useMock = MOCK) {
-		if (useMock) {
-			return [...POKEMON_LIST_MOCK]; // Restituisce i dati di test
-		}
-
-		const uniqueNumbers = new Set();
-
-		while (uniqueNumbers.size < numberOfPokemon) {
-			uniqueNumbers.add(Math.floor(Math.random() * 1025) + 1);
-		}
-
-		const randomNumbers = [...uniqueNumbers];
-
-		try {
-			const responses = await Promise.all(
-				randomNumbers.map(async (num) => {
-					const response = await fetch(
-						`https://pokeapi.co/api/v2/pokemon/${num}`
-					);
-					const data = await response.json();
-
-					return data;
-				})
-			);
-
-			return responses;
-		} catch (error) {
-			console.error("Errore nel fetch dei Pokémon:", error);
-			return [POKEMON_LIST_MOCK[0]];
-		}
-	}
-	async function fetchPokemonSpecies(pokemonId, useMock = MOCK) {
-		if (useMock) {
-			return;
-		}
-
-		try {
-			const response = await fetch(
-				`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`
-			);
-			if (!response.ok) {
-				throw new Error("Network response was not ok");
-			}
-
-			const data = await response.json();
-			data.name = capitalize(data.name);
-			return data;
-		} catch (error) {
-			console.error("Errore nel fetch dei Pokémon:", error);
-			return [];
-		}
 	}
 
 	function handleEasyAnswer(isCorrect, event) {
@@ -249,7 +196,7 @@ export default function PokemonGame({ goToMenu }) {
 										gameState={gameState}
 										onAnswer={handleEasyAnswer}
 										onNext={handleNextQuestion}
-										pokemon={pokemon.name}
+										pokemon={pokemon}
 									/>
 								) : (
 									<InputArea
