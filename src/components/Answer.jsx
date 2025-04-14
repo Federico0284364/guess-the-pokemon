@@ -18,7 +18,7 @@ export default function Answer({
 		else if (hasAnswered && isCorrect) {
 			setButtonClass(standardClass + " bg-green-500 cursor-not-allowed");
 		} else if (!hasAnswered){
-			setButtonClass(standardClass + " bg-orange-400 hover:opacity-80 active:opacity-60");
+			setButtonClass(standardClass + " bg-orange-400 hover:bg-orange-400/90 active:bg-orange-400/75");
 		}	else {
 			setButtonClass(standardClass + " bg-orange-400 cursor-not-allowed");
 		}
@@ -34,7 +34,7 @@ export default function Answer({
 	}, [hasAnswered]);
 
 	return (
-		<li className="text-xl my-2 sm:my-2.5 rounded-2xl ">
+		<li className="text-xl my-2 sm:my-2.5 rounded-2xl hover:scale-105 transition">
 			<button
 				className={buttonClass}
 				onClick={(event) => {

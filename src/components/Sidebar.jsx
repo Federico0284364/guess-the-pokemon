@@ -36,6 +36,8 @@ export default function Sidebar({
 				{!hasAnswered ? (
 					<motion.img
 						key={sidebarImg}
+						initial={{opacity: 0, x: side === "left" ? -100 : 100,}}
+						animate={{opacity: 1, x: 0, transition: {duration: 0.4, type: 'spring', bounce: 0.25}}}
 						exit={{ x: side === "left" ? -200 : 200, transition: { duration: 0.6 } }}
 						className="absolute object-cover w-full h-full rounded-lg"
 						src={sidebarImg}

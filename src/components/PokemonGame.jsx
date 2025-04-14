@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect, memo } from "react";
 import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
-import {  Pokemon } from "../utils/pokemonApiMock.js";
+import { Pokemon } from "../utils/pokemonApiMock.js";
 import { calculateScore } from "../utils/gameFunctions.js";
 import {
 	fetchPokemonList,
@@ -14,16 +14,18 @@ import MainWindow from "./mainWindow.jsx";
 import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "./InputArea.jsx";
 
-
 const MOCK = false;
-const numberOfPokemon = 10;
+const numberOfPokemon = 2;
 
 export default function PokemonGame({ goToMenu }) {
 	//setup
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
 
-	const [isFetching, setIsFetching] = useState({pokemonList: false, answers: false});
+	const [isFetching, setIsFetching] = useState({
+		pokemonList: false,
+		answers: false,
+	});
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
 	const [gameState, setGameState] = useState({
@@ -53,8 +55,8 @@ export default function PokemonGame({ goToMenu }) {
 		setIsFetching((prevState) => {
 			return {
 				...prevState,
-				answers: true
-			}
+				answers: true,
+			};
 		});
 	}
 
@@ -62,8 +64,8 @@ export default function PokemonGame({ goToMenu }) {
 		setIsFetching((prevState) => {
 			return {
 				...prevState,
-				answers: false
-			}
+				answers: false,
+			};
 		});
 	}
 
@@ -76,9 +78,9 @@ export default function PokemonGame({ goToMenu }) {
 			setIsFetching((prevState) => {
 				return {
 					...prevState,
-					pokemon: true
-				}
-			})
+					pokemon: true,
+				};
+			});
 
 			if (pokemonList.length <= 1) {
 				tempList = await fetchPokemonList(MOCK, numberOfPokemon);
@@ -99,9 +101,9 @@ export default function PokemonGame({ goToMenu }) {
 			setIsFetching((prevState) => {
 				return {
 					...prevState,
-					pokemon: false
-				}
-			})
+					pokemon: false,
+				};
+			});
 		}
 	}, [gameState.round]);
 
@@ -200,10 +202,8 @@ export default function PokemonGame({ goToMenu }) {
 		});
 	}
 
-	if(isFetching.pokemon && gameState.round < 1){
-		return (
-			<p className="h-full text-6xl">loading...</p>
-		)
+	if (isFetching.pokemon && gameState.round < 1) {
+		return <p className="h-full text-6xl">loading...</p>;
 	}
 
 	//render
