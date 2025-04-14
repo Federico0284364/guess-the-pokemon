@@ -199,6 +199,12 @@ export default function PokemonGame({ goToMenu }) {
 		});
 	}
 
+	if(isFetching.pokemon){
+		return (
+			<p className="h-full text-6xl">loading...</p>
+		)
+	}
+
 	//render
 	if (pokemon && isFetching.pokemon != true) {
 		return (
@@ -219,7 +225,7 @@ export default function PokemonGame({ goToMenu }) {
 							side="left"
 						/>
 					)}
-					<div className="h-full relative flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+					<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
 						{!isOver ? (
 							<>
 								<MainWindow
