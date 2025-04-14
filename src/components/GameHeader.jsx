@@ -13,7 +13,7 @@ export default function GameHeader({
 	const totalScore = calculateTotalScore(gameState.score);
 
 	return (
-		<header className="flex justify-between md:justify-normal items-center gap-6 sm:gap-0 ">
+		<header className="flex justify-between md:justify-normal items-center gap-6 sm:gap-0 mb-4">
 			<button onClick={goToMenu} className="active:opacity-70 hover:bg-neutral-300 hover:text-neutral-700 font-extrabold text-xl text-center pb-1 mt-4 w-10 aspect-square items-center rounded-xl bg-neutral-700 border-4 border-neutral-300">{'<'}</button>
 			<h1 className="mt-3 ml-3 text-3xl sm:text-3xl sm:w-45 text-nowrap text-white font-semibold text-center uppercase">
 				score: {totalScore}
@@ -32,7 +32,7 @@ export default function GameHeader({
 							return (
 								<div key={[pokemonList[index].id + 'header']} className="flex flex-col items-center relative w-13 lg:w-17">
 									<img
-										className="w-13 lg:w-17 hover:scale-125 transition-[2s]"
+										className="w-13 lg:w-15 hover:scale-125 transition-[2s]"
 										src={
 											guessedPokemon.sprites.front_default
 										}

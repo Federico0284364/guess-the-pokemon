@@ -1,26 +1,59 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { getColorByType, capitalize } from "../utils/functions.js";
 import { WindowSizeContext } from "../context/window-size.jsx";
 
+import { motion, AnimatePresence, useAnimate } from "framer-motion";
+
 export default function MainWindow({ pokemon, gameState }) {
 	const { windowSize, device } = useContext(WindowSizeContext);
+	const [scope, animate] = useAnimate();
+
+	function handleSpriteJump(event = null) {
+		if (event) {
+			animate(event.target, {
+				y: [0, -50, 0, -20, 0, -10, 0],
+				transition: { duration: 0.6, ease: "easeInOut" },
+			});
+		} else {
+			animate("img", {
+				y: [0, -15, 0, -10, 0, -5, 0],
+				transition: { duration: 0.6, ease: "easeInOut" },
+			});
+		}
+	}
+
+	useEffect(() => {
+		if (!gameState.hasAnswered) {
+			return;
+		}
+
+		handleSpriteJump();
+	}, [gameState.hasAnswered]);
 
 	return (
 		<div className="flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative">
-			<div className="flex justify-center items-center h-full">
-				
-				{pokemon.sprites.back_default && device != "small" && (
-					<img
-						onHover={(event) => handleSpriteClick(event)}
-						className="w-[90%] h-[90%] mt-[-7px]"
-						src={pokemon.sprites.back_default}
-					/>
-				)}
-				<img
+			<motion.div
+				ref={scope}
+				className="flex justify-center items-center h-full"
+			>
+				<AnimatePresence>
+					{pokemon.sprites.back_default && device != "small" && (
+						<motion.img
+							onClick={(event) => handleSpriteJump(event)}
+							key={pokemon.id}
+							className="w-[90%] h-[90%] mt-[-7px]"
+							src={pokemon.sprites.back_default}
+						/>
+					)}
+				</AnimatePresence>
+				<motion.img
+					onClick={(event) => handleSpriteJump(event)}
+					key={pokemon.id + "2"}
+					ref={scope}
 					className="w-[90%] h-[90%]  mt-[-7px]"
 					src={pokemon.sprites.front_default}
 				/>
-			</div>
+			</motion.div>
 
 			<div className="w-[101%] mb-[-4px] bg-neutral-700 flex justify-around sm:justify-center items-center gap-1 h-10 relative">
 				{gameState.hasAnswered && (

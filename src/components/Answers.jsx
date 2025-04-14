@@ -11,13 +11,20 @@ export default function Answers({
 	pokemon,
 	onAnswer,
 	onNext,
+	onStartFetch,
+	onStopFetch,
+	isFetching,
 	MOCK,
 }) {
 	const [answersList, setAnswersList] = useState([]);
 	let answers = [];
 
 	useEffect(() => {
+		if (pokemon.id === 0){
+			return;
+		}
 		async function fetchData() {
+			onStartFetch()
 			const tempList = await fetchAnswers(MOCK, pokemon);
 
 			console.log('fetching answers');
@@ -38,6 +45,7 @@ export default function Answers({
 			answers = shuffle(answers);
 
 			setAnswersList([...answers]);
+			onStopFetch();
 		}
 		fetchData();
 
@@ -48,7 +56,7 @@ export default function Answers({
 
 	return (
 		<>
-			<ul className="w-full text-center">
+			{!isFetching.answers && <ul className="w-full text-center">
 				{answersList.map((answer, index) => {
 					return (
 						<Answer
@@ -62,7 +70,7 @@ export default function Answers({
 						</Answer>
 					);
 				})}
-			</ul>
+			</ul>}
 			{gameState.hasAnswered && <NextButton onClick={onNext} />}
 		</>
 	);

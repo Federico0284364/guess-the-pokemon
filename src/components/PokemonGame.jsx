@@ -1,10 +1,12 @@
 import { useState, useContext, useEffect, memo } from "react";
 import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
-import { POKEMON_LIST_MOCK, Pokemon } from "../utils/pokemonApiMock.js";
-import { capitalize, extractRoman, removeDashes } from "../utils/functions.js";
+import {  Pokemon } from "../utils/pokemonApiMock.js";
 import { calculateScore } from "../utils/gameFunctions.js";
-import { fetchPokemonList, fetchPokemonSpecies } from '../utils/fetchFunctions.js';
+import {
+	fetchPokemonList,
+	fetchPokemonSpecies,
+} from "../utils/fetchFunctions.js";
 import GameHeader from "./GameHeader.jsx";
 import Answers from "./Answers.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -13,13 +15,14 @@ import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "./InputArea.jsx";
 
 const MOCK = false;
-const numberOfPokemon = 10;
+const numberOfPokemon = 2;
 
 export default function PokemonGame({ goToMenu }) {
 	//setup
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
 
+	const [isFetching, setIsFetching] = useState({pokemon: false, answers: false});
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
 	const [gameState, setGameState] = useState({
@@ -45,18 +48,44 @@ export default function PokemonGame({ goToMenu }) {
 		hasAnswered: gameState.hasAnswered,
 	};
 
+	function handleStartFetchAnswers() {
+		setIsFetching((prevState) => {
+			return {
+				...prevState,
+				answers: true
+			}
+		});
+	}
+
+	function handleStopFetchAnswers() {
+		setIsFetching((prevState) => {
+			return {
+				...prevState,
+				answers: false
+			}
+		});
+	}
+
 	//fetch pokemon
 	useEffect(() => {
 		let tempList = [];
 		if (gameState.round < numberOfPokemon) fetchData();
 
 		async function fetchData() {
+			setIsFetching((prevState) => {
+				return {
+					...prevState,
+					pokemon: true
+				}
+			})
+
 			if (pokemonList.length <= 1) {
 				tempList = await fetchPokemonList(MOCK, numberOfPokemon);
 			} else {
 				tempList = [...pokemonList];
 			}
-			const pokemonSpecies = await fetchPokemonSpecies(MOCK,
+			const pokemonSpecies = await fetchPokemonSpecies(
+				MOCK,
 				tempList[gameState.round].id
 			);
 
@@ -65,6 +94,13 @@ export default function PokemonGame({ goToMenu }) {
 				...pokemonSpecies,
 			};
 			setPokemonList([...tempList]);
+
+			setIsFetching((prevState) => {
+				return {
+					...prevState,
+					pokemon: false
+				}
+			})
 		}
 	}, [gameState.round]);
 
@@ -164,7 +200,7 @@ export default function PokemonGame({ goToMenu }) {
 	}
 
 	//render
-	if (pokemon) {
+	if (pokemon && isFetching.pokemon != true) {
 		return (
 			<>
 				{!isOver && (
@@ -175,7 +211,7 @@ export default function PokemonGame({ goToMenu }) {
 						guessedPokemonList={guessedPokemonList}
 					/>
 				)}
-				<section className="flex mt-4 gap-8">
+				<section className="flex gap-8">
 					{(device === "medium" || device === "large") && (
 						<Sidebar
 							isOver={isOver}
@@ -196,6 +232,9 @@ export default function PokemonGame({ goToMenu }) {
 										gameState={gameState}
 										onAnswer={handleEasyAnswer}
 										onNext={handleNextQuestion}
+										onStartFetch={handleStartFetchAnswers}
+										onStopFetch={handleStopFetchAnswers}
+										isFetching={isFetching}
 										pokemon={pokemon}
 									/>
 								) : (
