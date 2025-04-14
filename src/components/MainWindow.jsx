@@ -35,7 +35,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 
 	if (pokemon.sprites.front_default) {
 		return (
-			<div className="w-full flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative">
+			<div className="shadow-lg shadow-black/30 w-full flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative">
 				<motion.div
 					ref={jumpScope}
 					initial={{ scale: 0.1 }}

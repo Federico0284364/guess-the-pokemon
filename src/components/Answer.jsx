@@ -34,7 +34,7 @@ export default function Answer({
 	}, [hasAnswered]);
 
 	return (
-		<li className="text-xl my-2 sm:my-2.5 rounded-2xl hover:scale-105 transition">
+		<li className=" shadow-lg shadow-black/20 text-xl my-2 sm:my-2.5 rounded-2xl hover:scale-105 transition">
 			<button
 				className={buttonClass}
 				onClick={(event) => {

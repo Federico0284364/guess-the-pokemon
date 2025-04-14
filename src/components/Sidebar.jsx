@@ -29,7 +29,7 @@ export default function Sidebar({
 			animate={{ x: 0 }}
 			className={
 				isOverClass +
-				" w-full z-150 relative mb-6 pb-2 md:pb-0 md:mb-0 md:mt-0 flex flex-col overflow-hidden rounded-2xl bg-neutral-500 border-8 border-neutral-700 md:w-38 lg:w-68"
+				" shadow-lg shadow-black/30 w-full z-150 relative mb-6 pb-2 md:pb-0 md:mb-0 md:mt-0 flex flex-col overflow-hidden rounded-2xl bg-neutral-500 border-8 border-neutral-700 md:w-38 lg:w-68"
 			}
 		>
 			<AnimatePresence>

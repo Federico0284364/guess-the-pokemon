@@ -6,13 +6,13 @@ export default function MainMenu({ startGame }) {
 	return (
 		<>
 			<header className="mt-8 flex justify-center">
-				<h1 className="w-60 sm:w-150 text-6xl bold text-center mb-8">
+				<h1 className="drop-shadow-lg drop-shadow-black w-60 sm:w-150 text-6xl bold text-center mb-8">
 					Guess the Pokémon
 				</h1>
 			</header>
 			<div className="flex flex-col sm:flex-row">
 				
-				<div className="flex gap-4 flex-col w-80 mt-2 m-auto items-center">
+				<div className="flex gap-4 flex-col w-80 mt-2 m-auto items-center ">
 					{games.map((game) => {
 						return (
 							<GameOption
