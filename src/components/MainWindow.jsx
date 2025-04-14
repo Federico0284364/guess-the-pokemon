@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { getColorByType, capitalize } from "../utils/functions.js";
 import { WindowSizeContext } from "../context/window-size.jsx";
 
-import { motion, AnimatePresence, useAnimate } from "framer-motion";
+import { motion, useAnimate } from "framer-motion";
 
 export default function MainWindow({ pokemon, gameState, isFetching }) {
 	const { windowSize, device } = useContext(WindowSizeContext);
@@ -57,7 +57,6 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 							animate={{ scale: 1, transition: {duration: 0.18} }}
 							onClick={(event) => handleSpriteJump(event)}
 							key={pokemon.id + "2"}
-							ref={jumpScope}
 							className="w-[90%] h-[90%]  mt-[-7px]"
 							src={pokemon.sprites.front_default}
 						/>

@@ -16,14 +16,14 @@ import InputArea from "./InputArea.jsx";
 
 
 const MOCK = false;
-const numberOfPokemon = 2;
+const numberOfPokemon = 10;
 
 export default function PokemonGame({ goToMenu }) {
 	//setup
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
 
-	const [isFetching, setIsFetching] = useState({pokemon: false, answers: false});
+	const [isFetching, setIsFetching] = useState({pokemonList: false, answers: false});
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
 	const [gameState, setGameState] = useState({
@@ -200,14 +200,14 @@ export default function PokemonGame({ goToMenu }) {
 		});
 	}
 
-	if(isFetching.pokemon){
+	if(isFetching.pokemon && gameState.round < 1){
 		return (
 			<p className="h-full text-6xl">loading...</p>
 		)
 	}
 
 	//render
-	if (pokemon && isFetching.pokemon != true) {
+	if (pokemon) {
 		return (
 			<>
 				{!isOver && (

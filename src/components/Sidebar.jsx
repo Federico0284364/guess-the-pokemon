@@ -1,9 +1,9 @@
 import { Pokemon } from "../utils/pokemonApiMock";
 import LeftSidebarContent from "./LeftSidebarContent";
-import RightSidebarContent from './RightSidebarContent';
-import sidebarImg from '../assets/vertical.jpg';
+import RightSidebarContent from "./RightSidebarContent";
+import sidebarImg from "../assets/vertical.jpg";
 
-import { motion } from 'motion/react';
+import { motion, AnimatePresence } from "motion/react";
 
 export default function Sidebar({
 	isOver = false,
@@ -11,36 +11,49 @@ export default function Sidebar({
 	hasAnswered = false,
 	pokemon = new Pokemon(),
 }) {
-	let isOverClass = 'sm:h-117 ';
-	if (isOver){
-		isOverClass = 'sm:h-155 '
+	let isOverClass = "sm:h-117 ";
+	if (isOver) {
+		isOverClass = "sm:h-155 ";
 	}
 
 	let initialX;
-	if (side === 'right'){
+	if (side === "right") {
 		initialX = 100;
 	} else {
 		initialX = -100;
 	}
 
 	return (
-		<motion.aside initial={{x: initialX}} animate={{x: 0}} className={isOverClass + " mb-6 pb-2 md:pb-0 md:mb-0 md:mt-0 flex flex-col overflow-hidden rounded-2xl bg-neutral-500 border-8 border-neutral-700 md:w-38 lg:w-68"}>
-			{!hasAnswered ? (
-				<img
-					className="object-cover w-full h-full rounded-lg"
-					src={sidebarImg}
-				/>
-			) : side === "left" ? (
-				<LeftSidebarContent
-					hasAnswered={hasAnswered}
-					pokemon={pokemon}
-				/>
-			) : side === 'right' ? (
-				<RightSidebarContent
-					hasAnswered={hasAnswered}
-					pokemon={pokemon}
-				/>
-			) : ''}
+		<motion.aside
+			initial={{ x: initialX }}
+			animate={{ x: 0 }}
+			className={
+				isOverClass +
+				" w-full z-150 relative mb-6 pb-2 md:pb-0 md:mb-0 md:mt-0 flex flex-col overflow-hidden rounded-2xl bg-neutral-500 border-8 border-neutral-700 md:w-38 lg:w-68"
+			}
+		>
+			<AnimatePresence>
+				{!hasAnswered ? (
+					<motion.img
+						key={sidebarImg}
+						exit={{ x: side === "left" ? -200 : 200, transition: { duration: 0.6 } }}
+						className="absolute object-cover w-full h-full rounded-lg"
+						src={sidebarImg}
+					/>
+				) : side === "left" ? (
+					<LeftSidebarContent
+						hasAnswered={hasAnswered}
+						pokemon={pokemon}
+					/>
+				) : side === "right" ? (
+					<RightSidebarContent
+						hasAnswered={hasAnswered}
+						pokemon={pokemon}
+					/>
+				) : (
+					""
+				)}
+			</AnimatePresence>
 		</motion.aside>
 	);
 }

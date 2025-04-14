@@ -40,7 +40,7 @@ export default function LeftSidebarContent({ pokemon }) {
 							<p className="m-0 w-6 text-[15px]">
 								{stat.base_stat}
 							</p>
-							<div className="ml-1.5 h-full relative w-[72%] bg-neutral-700 rounded-sm">
+							<div className="ml-1.5 h-full w-[72%] bg-neutral-700 rounded-sm">
 								<div
 									style={
 										stat.stat.name != "total-base-stats"
@@ -48,7 +48,7 @@ export default function LeftSidebarContent({ pokemon }) {
 											: { width: barLength / 6 + "%" }
 									}
 									className={
-										`h-full rounded-sm absolute left-0 m-0 ` +
+										`z-10 h-full rounded-sm left-0 m-0 ` +
 										statClass
 									}
 								/>
