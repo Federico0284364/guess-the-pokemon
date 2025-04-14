@@ -42,7 +42,7 @@ export default function Scoreboard({
 		<>
 			<motion.div transition={{duration: 1}} initial={{y: -1000}} animate={{y: 0}} className="w-[90vw] max-w-100 min-h-155 h-[90dvh] z-50 flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700">
 				<h1 className="text-5xl uppercase mt-4">Your score:</h1>
-				<motion.h1 transition={{type: "spring", bounce: 0.7, duration: 1.5}} initial={{opacity: 0.5, y: -1000}} animate={{opacity: 1, y: 0}} className="text-8xl uppercase">{totalScore}</motion.h1>
+				<motion.h1 className="text-8xl uppercase">{totalScore}</motion.h1>
 				<p className="mb-4">
 					Your personal best: <span>{bestScore}</span>
 				</p>

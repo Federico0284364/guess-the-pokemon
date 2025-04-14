@@ -14,6 +14,7 @@ import MainWindow from "./mainWindow.jsx";
 import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "./InputArea.jsx";
 
+
 const MOCK = false;
 const numberOfPokemon = 2;
 
@@ -231,6 +232,7 @@ export default function PokemonGame({ goToMenu }) {
 								<MainWindow
 									gameState={gameState}
 									pokemon={pokemon}
+									isFetching={isFetching}
 								/>
 								{difficulty === "Easy" ? (
 									<Answers
