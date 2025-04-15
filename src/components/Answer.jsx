@@ -20,7 +20,7 @@ export default function Answer({
 		} else if (!hasAnswered){
 			setButtonClass(standardClass + " bg-orange-400 hover:bg-orange-400/90 active:bg-orange-400/75");
 		}	else {
-			setButtonClass(standardClass + " bg-orange-400 cursor-not-allowed");
+			setButtonClass(standardClass + " bg-neutral-500 cursor-not-allowed");
 		}
 	}
 

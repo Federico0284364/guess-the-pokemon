@@ -55,6 +55,49 @@ export function getColorByType(type) {
 	}
 }
 
+export function getInlineColorByType(type) {
+	switch (type.toLowerCase()) {
+		case "normal":
+			return "#a3a3a3"; // bg-gray-400
+		case "fire":
+			return "#f87171"; // bg-red-500
+		case "water":
+			return "#3b82f6"; // bg-blue-500
+		case "electric":
+			return "#facc15"; // bg-yellow-400
+		case "grass":
+			return "#22c55e"; // bg-green-500
+		case "ice":
+			return "#67e8f9"; // bg-cyan-300
+		case "fighting":
+			return "#c2410c"; // bg-orange-700
+		case "poison":
+			return "#a855f7"; // bg-purple-500
+		case "ground":
+			return "#a16207"; // bg-yellow-700
+		case "flying":
+			return "#818cf8"; // bg-indigo-400
+		case "psychic":
+			return "#ec4899"; // bg-pink-500
+		case "bug":
+			return "#84cc16"; // bg-lime-500
+		case "rock":
+			return "#78350f"; // bg-yellow-800
+		case "ghost":
+			return "#4338ca"; // bg-indigo-700
+		case "dragon":
+			return "#3730a3"; // bg-indigo-800
+		case "dark":
+			return "#1f2937"; // bg-gray-800
+		case "steel":
+			return "#6b7280"; // bg-gray-500
+		case "fairy":
+			return "#f9a8d4"; // bg-pink-300
+		default:
+			return "#e5e7eb"; // bg-gray-200 (default)
+	}
+}
+
 export function getColorByStat(stat) {
 	switch (stat.toLowerCase()) {
 		case "hp":
