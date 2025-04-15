@@ -49,7 +49,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 							exit={{ scale: 0, transition: { duration: 0.01 } }}
 							onClick={(event) => handleSpriteJump(event)}
 							key={pokemon.sprites.back_default}
-							className="w-[90%] h-[90%] mt-[-7px]"
+							className="w-[90%] h-[90%] mt-[-7px] cursor-pointer"
 							src={pokemon.sprites.back_default}
 						/>
 					)}
@@ -65,7 +65,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 							exit={{ scale: 0, transition: { duration: 0.01 } }}
 							onClick={(event) => handleSpriteJump(event)}
 							key={pokemon.sprites.front_default}
-							className="w-[90%] h-[90%]  mt-[-7px]"
+							className="w-[90%] h-[90%]  mt-[-7px] cursor-pointer"
 							src={pokemon.sprites.front_default}
 						/>
 					)}

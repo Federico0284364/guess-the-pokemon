@@ -1,7 +1,8 @@
 import { Pokemon } from "../utils/pokemonApiMock";
 import LeftSidebarContent from "./LeftSidebarContent";
 import RightSidebarContent from "./RightSidebarContent";
-import sidebarImg from "../assets/vertical.jpg";
+import sidebarImg from "../assets/sidebar-wallpapers/vertical.jpg";
+import { selectRandomImage } from "../utils/selectImage";
 
 import { motion, AnimatePresence } from "motion/react";
 
@@ -18,9 +19,9 @@ export default function Sidebar({
 
 	let initialX;
 	if (side === "right") {
-		initialX = 100;
+		initialX = 200;
 	} else {
-		initialX = -100;
+		initialX = -200;
 	}
 
 	return (
@@ -36,11 +37,11 @@ export default function Sidebar({
 				{!hasAnswered ? (
 					<motion.img
 						key={sidebarImg}
-						initial={{opacity: 0, x: side === "left" ? -100 : 100,}}
-						animate={{opacity: 1, x: 0, transition: {duration: 0.4, type: 'spring', bounce: 0.25}}}
-						exit={{ x: side === "left" ? -200 : 200, transition: { duration: 0.6 } }}
+						initial={{opacity: 0, scale: 0}}
+						animate={{opacity: 1, scale: [1.5, 1], transition: {duration: 0.4, type: 'spring', bounce: 0.25}}}
+						exit={{ x: side === "left" ? -300 : 300, transition: { duration: 0.6 } }}
 						className="absolute object-cover w-full h-full rounded-lg"
-						src={sidebarImg}
+						src={!isOver ? sidebarImg : selectRandomImage()}
 					/>
 				) : side === "left" ? (
 					<LeftSidebarContent
