@@ -35,7 +35,10 @@ function App() {
 					{mainState === "main-menu" && (
 						<MainMenu startGame={handleStartGame} />
 					)}
+					
 					{mainState === "playing" && <PokemonGame goToMenu={handleGoToMenu}/>}
+
+					
 				</main>
 			</DifficultyContextProvider>
 		</WindowSizeContextProvider>

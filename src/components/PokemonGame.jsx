@@ -14,8 +14,10 @@ import MainWindow from "./mainWindow.jsx";
 import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "./InputArea.jsx";
 
+import { motion, AnimatePresence } from "framer-motion";
+
 const MOCK = false;
-const numberOfPokemon = 2;
+const numberOfPokemon = 10;
 
 export default function PokemonGame({ goToMenu }) {
 	//setup
@@ -203,13 +205,13 @@ export default function PokemonGame({ goToMenu }) {
 	}
 
 	if (isFetching.pokemon && gameState.round < 1) {
-		return <p className="h-full text-6xl">loading...</p>;
+		return <p className="mt-6 text-6xl">loading...</p>;
 	}
 
 	//render
 	if (pokemon) {
 		return (
-			<>
+			<motion.div>
 				{!isOver && (
 					<GameHeader
 						goToMenu={goToMenu}
@@ -218,77 +220,88 @@ export default function PokemonGame({ goToMenu }) {
 						guessedPokemonList={guessedPokemonList}
 					/>
 				)}
-				<section className="flex gap-8">
-					{(device === "medium" || device === "large") && (
-						<Sidebar
-							isOver={isOver}
-							{...leftSidebarProps}
-							side="left"
-						/>
-					)}
-					<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
-						{!isOver ? (
-							<>
-								<MainWindow
-									gameState={gameState}
-									pokemon={pokemon}
-									isFetching={isFetching}
-								/>
-								{difficulty === "Easy" ? (
-									<Answers
-										MOCK={MOCK}
-										gameState={gameState}
-										onAnswer={handleEasyAnswer}
-										onNext={handleNextQuestion}
-										onStartFetch={handleStartFetchAnswers}
-										onStopFetch={handleStopFetchAnswers}
-										isFetching={isFetching}
-										pokemon={pokemon}
-									/>
-								) : (
-									<InputArea
-										gameState={gameState}
-										onAnswer={handleHardAnswer}
-										onNext={handleNextQuestion}
-										pokemon={pokemon}
-									/>
-								)}
-								{device === "small" &&
-									gameState.hasAnswered && (
-										<>
-											<Sidebar
-												isOver={isOver}
-												{...rightSidebarProps}
-												side="right"
-											/>
-											<Sidebar
-												isOver={isOver}
-												{...rightSidebarProps}
-												side="left"
-											/>
-										</>
-									)}
-							</>
-						) : (
-							<Scoreboard
-								score={gameState.score}
-								pokemonList={pokemonList}
-								guessedPokemonList={guessedPokemonList}
-								startNewGame={handleNewGame}
-								goToMenu={goToMenu}
-								difficulty={difficulty}
+				
+					<motion.section
+						transition={{ duration: 0.2, type: 'tween' }}
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						exit={{ scale: [1, 0] }}
+						key={'game'}
+						className="flex gap-8"
+					>
+						{(device === "medium" || device === "large") && (
+							<Sidebar
+								isOver={isOver}
+								{...leftSidebarProps}
+								side="left"
 							/>
 						)}
-					</div>
-					{(device === "medium" || device === "large") && (
-						<Sidebar
-							{...rightSidebarProps}
-							side="right"
-							isOver={isOver}
-						/>
-					)}
-				</section>
-			</>
+						<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+							{!isOver ? (
+								<>
+									<MainWindow
+										gameState={gameState}
+										pokemon={pokemon}
+										isFetching={isFetching}
+									/>
+									{difficulty === "Easy" ? (
+										<Answers
+											MOCK={MOCK}
+											gameState={gameState}
+											onAnswer={handleEasyAnswer}
+											onNext={handleNextQuestion}
+											onStartFetch={
+												handleStartFetchAnswers
+											}
+											onStopFetch={handleStopFetchAnswers}
+											isFetching={isFetching}
+											pokemon={pokemon}
+										/>
+									) : (
+										<InputArea
+											gameState={gameState}
+											onAnswer={handleHardAnswer}
+											onNext={handleNextQuestion}
+											pokemon={pokemon}
+										/>
+									)}
+									{device === "small" &&
+										gameState.hasAnswered && (
+											<>
+												<Sidebar
+													isOver={isOver}
+													{...rightSidebarProps}
+													side="right"
+												/>
+												<Sidebar
+													isOver={isOver}
+													{...rightSidebarProps}
+													side="left"
+												/>
+											</>
+										)}
+								</>
+							) : (
+								<Scoreboard
+									score={gameState.score}
+									pokemonList={pokemonList}
+									guessedPokemonList={guessedPokemonList}
+									startNewGame={handleNewGame}
+									goToMenu={goToMenu}
+									difficulty={difficulty}
+								/>
+							)}
+						</div>
+						{(device === "medium" || device === "large") && (
+							<Sidebar
+								{...rightSidebarProps}
+								side="right"
+								isOver={isOver}
+							/>
+						)}
+					</motion.section>
+				
+			</motion.div>
 		);
 	}
 }

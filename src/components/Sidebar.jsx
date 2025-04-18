@@ -40,7 +40,7 @@ export default function Sidebar({
 					<motion.img
 						key={sidebarImg}
 						initial={{opacity: 0, scale: 0}}
-						animate={{opacity: 1, scale: [1.5, 1], transition: {duration: 0.4, type: 'spring', bounce: 0.25}}}
+						animate={{opacity: 1, scale: 1, transition: { duration: 0.6, type: 'spring', bounce: 0.25}}}
 						exit={{ x: side === "left" ? -300 : 300, transition: { duration: 0.6 } }}
 						className="absolute object-cover w-full h-full rounded-lg"
 						src={!isOver ? sidebarImg : selectRandomImage()}

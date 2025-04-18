@@ -58,28 +58,34 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 
 	if (pokemon.sprites.front_default) {
 		return (
-			
-				<motion.div
+			<motion.div
 				layout
-				key={pokemon.id + 'window'}
-					style={{
-						background: backgroundColor,
-					}}
-					className={
-						" shadow-lg shadow-black/30 w-full flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative"
-					}
+				key={"window"}
+				style={{
+					background: backgroundColor,
+				}}
+				className={
+					" shadow-lg shadow-black/30 w-full flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative"
+				}
+			>
+				<motion.div
+					ref={jumpScope}
+					initial={{ scale: 0.1 }}
+					animate={{ scale: 1, transition: { duration: 0.5 } }}
+					exit={{ scale: 1, transition: { duration: 1 } }}
+					className="flex justify-center items-center h-full"
 				>
-					<motion.div
-						ref={jumpScope}
-						initial={{ scale: 0.1 }}
-						animate={{ scale: 1, transition: { duration: 0.5 } }}
-						className="flex justify-center items-center h-full"
-					>
+					<AnimatePresence mode="wait">
 						{pokemon.sprites.back_default && device != "small" && (
 							<motion.img
+								initial={{ scale: 0.1 }}
+								animate={{
+									scale: 1,
+									transition: { duration: 0.3 },
+								}}
 								exit={{
 									scale: 0,
-									transition: { duration: 0.01 },
+									transition: { duration: 0.3 },
 								}}
 								onClick={(event) => handleSpriteJump(event)}
 								key={pokemon.sprites.back_default}
@@ -87,19 +93,17 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 								src={pokemon.sprites.back_default}
 							/>
 						)}
-
-						{console.log("ri-render", gameState.round)}
-
+						
 						{pokemon.sprites.front_default && (
 							<motion.img
 								initial={{ scale: 0.1 }}
 								animate={{
 									scale: 1,
-									transition: { duration: 0.2 },
+									transition: { duration: 0.3 },
 								}}
 								exit={{
 									scale: 0,
-									transition: { duration: 0.01 },
+									transition: { duration: 0.3 },
 								}}
 								onClick={(event) => handleSpriteJump(event)}
 								key={pokemon.sprites.front_default}
@@ -107,43 +111,75 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 								src={pokemon.sprites.front_default}
 							/>
 						)}
-					</motion.div>
-
-					<div className="w-[101%] mb-[-4px] bg-neutral-700 flex justify-around sm:justify-center items-center gap-1 h-10 relative">
-						{gameState.hasAnswered && (
-							<>
-								{windowSize.width >= 640 && (
-									<p className="bg-neutral-800 rounded-full px-3 mt-1 text-lg absolute left-4">
-										{pokemon.id}
-									</p>
-								)}
-								<p className="text-lg">{pokemon.name}</p>
-							</>
-						)}
-						<div className="flex sm:absolute right-2 ">
-							{gameState.hasAnswered && pokemon.types
-								? pokemon.types.map((type) => {
-										let typeClass = getColorByType(
-											type.type.name
-										);
-
-										return (
-											<p
-												key={type.type.name}
-												className={
-													"inline-block text-center text-xs rounded-sm px-2 py-0.5 mt-0.5" +
-													typeClass
-												}
-											>
-												{capitalize(type.type.name)}
-											</p>
-										);
-								  })
-								: ""}
-						</div>
-					</div>
+					</AnimatePresence>
 				</motion.div>
-			
+
+				<div className="w-[101%] mb-[-4px] bg-neutral-700 flex justify-around sm:justify-center items-center gap-1 h-10 relative">
+					{gameState.hasAnswered && (
+						<>
+							{windowSize.width >= 640 && (
+								<motion.p
+									transition={{ duration: 0.2 }}
+									animate={{ x: [-30, 0], opacity: [0.5, 1] }}
+									className="bg-neutral-800 rounded-full px-3 mt-1 text-lg absolute left-4"
+								>
+									{pokemon.id}
+								</motion.p>
+							)}
+							<motion.p
+								key={pokemon.name + "name"}
+								transition={{ duration: 0.05 }}
+								animate={{ scale: [0, 1] }}
+								className="text-lg"
+							>
+								{pokemon.name}
+							</motion.p>
+						</>
+					)}
+					<motion.div
+						variants={{
+							moving: { transition: { staggerChildren: 0.5 } },
+							hidden: { opacity: 1 },
+						}}
+						animate="moving"
+						initial="hidden"
+						className="flex sm:absolute right-2 "
+					>
+						{gameState.hasAnswered && pokemon.types
+							? pokemon.types.map((type) => {
+									let typeClass = getColorByType(
+										type.type.name
+									);
+
+									return (
+										<motion.p
+											variants={{
+												moving: {
+													x: [30, 0],
+													opacity: [0.5, 1],
+												},
+												hidden: {
+													x: 30,
+													opacity: 0.5,
+												},
+											}}
+											animate="moving"
+											initial="hidden"
+											transition={{ duration: 0.2 }}
+											key={type.type.name}
+											className={
+												"inline-block text-center text-xs rounded-sm px-2 py-0.5 mt-0.5" +
+												typeClass
+											}
+										>
+											{capitalize(type.type.name)}
+										</motion.p>
+									);
+							  })
+							: ""}
+					</motion.div>
+				</div>
+			</motion.div>
 		);
 	}
 }

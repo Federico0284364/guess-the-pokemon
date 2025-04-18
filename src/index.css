@@ -8,6 +8,10 @@
   background-color: #263238;
 }
 
+select:disabled, input:disabled{
+  cursor: not-allowed;
+}
+
 
 
 header h1{
