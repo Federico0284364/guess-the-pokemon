@@ -27,10 +27,10 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 		}, [pokemon.id]);
 	}
 
-	const backgroundColor = !gameState.hasAnswered
-		? "#fb923c"
+	/*const backgroundColor = !gameState.hasAnswered
+		? "#f0b247"
 		: `linear-gradient(45deg, ${type1Color}, ${type2Color || type1Color})`;
-
+*/
 	function handleSpriteJump(event = null) {
 		if (event) {
 			jump(event.target, {
@@ -61,9 +61,9 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 			<motion.div
 				layout
 				key={"window"}
-				style={{
-					background: backgroundColor,
-				}}
+				//style={{
+					//background: backgroundColor,
+				//}}
 				className={
 					" shadow-lg shadow-black/30 w-full flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative"
 				}
@@ -78,7 +78,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 					<AnimatePresence mode="wait">
 						{pokemon.sprites.back_default && device != "small" && (
 							<motion.img
-								initial={{ scale: 0.1 }}
+								initial={{ scale: 0 }}
 								animate={{
 									scale: 1,
 									transition: { duration: 0.3 },
@@ -88,7 +88,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 									transition: { duration: 0.3 },
 								}}
 								onClick={(event) => handleSpriteJump(event)}
-								key={pokemon.sprites.back_default}
+								key={pokemon.id + 'back-sprite'}
 								className="w-[90%] h-[90%] mt-[-7px] cursor-pointer"
 								src={pokemon.sprites.back_default}
 							/>
@@ -96,7 +96,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 						
 						{pokemon.sprites.front_default && (
 							<motion.img
-								initial={{ scale: 0.1 }}
+								initial={{ scale: 0 }}
 								animate={{
 									scale: 1,
 									transition: { duration: 0.3 },
@@ -106,7 +106,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 									transition: { duration: 0.3 },
 								}}
 								onClick={(event) => handleSpriteJump(event)}
-								key={pokemon.sprites.front_default}
+								key={pokemon.id + 'front-sprite'}
 								className="w-[90%] h-[90%]  mt-[-7px] cursor-pointer"
 								src={pokemon.sprites.front_default}
 							/>

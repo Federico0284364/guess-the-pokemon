@@ -32,6 +32,7 @@ export default function PokemonGame({ goToMenu }) {
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
 	const [gameState, setGameState] = useState({
 		hasAnswered: false,
+		selectedAnswer: '',
 		round: 0,
 		hints: 0,
 		score: [],
@@ -121,10 +122,10 @@ export default function PokemonGame({ goToMenu }) {
 		});
 	}
 
-	function handleEasyAnswer(isCorrect, event) {
+	function handleEasyAnswer(isCorrect) {
 		if (!gameState.hasAnswered) {
 			if (isCorrect) {
-				handleCorrectAnswer(event);
+				handleCorrectAnswer();
 			} else {
 				handleWrongAnswer();
 			}
@@ -232,6 +233,7 @@ export default function PokemonGame({ goToMenu }) {
 						{(device === "medium" || device === "large") && (
 							<Sidebar
 								isOver={isOver}
+								gameState={gameState}
 								{...leftSidebarProps}
 								side="left"
 							/>
@@ -269,11 +271,13 @@ export default function PokemonGame({ goToMenu }) {
 										gameState.hasAnswered && (
 											<>
 												<Sidebar
+												gameState={gameState}
 													isOver={isOver}
 													{...rightSidebarProps}
 													side="right"
 												/>
 												<Sidebar
+												gameState={gameState}
 													isOver={isOver}
 													{...rightSidebarProps}
 													side="left"

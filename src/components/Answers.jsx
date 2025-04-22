@@ -1,6 +1,6 @@
-import { POKEMON_ANSWERS_MOCK } from "../utils/pokemonApiMock";
+
 import { shuffle } from "../utils/functions";
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { removeDashes } from "../utils/functions";
 import {fetchAnswers} from '../utils/fetchFunctions';
 import Answer from "./Answer";
@@ -17,14 +17,15 @@ export default function Answers({
 	MOCK,
 }) {
 	const [answersList, setAnswersList] = useState([]);
-	let answers = [];
-
+	
 	useEffect(() => {
 		if (pokemon.id === 0){
 			return;
 		}
+		let answers = [];
+		
 		async function fetchData() {
-			onStartFetch()
+			onStartFetch();
 			const tempList = await fetchAnswers(MOCK, pokemon);
 
 			console.log('fetching answers');
@@ -51,8 +52,6 @@ export default function Answers({
 
 		return () => setAnswersList([]);
 	}, [pokemon.id]);
-
-	
 
 	return (
 		<>

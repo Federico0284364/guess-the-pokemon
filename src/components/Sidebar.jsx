@@ -13,7 +13,6 @@ export default function Sidebar({
 	hasAnswered = false,
 	pokemon = new Pokemon(),
 }) {
-	
 	let isOverClass = "sm:h-117 ";
 	if (isOver) {
 		isOverClass = "sm:h-155 ";
@@ -39,22 +38,42 @@ export default function Sidebar({
 				{!hasAnswered ? (
 					<motion.img
 						key={sidebarImg}
-						initial={{opacity: 0, scale: 0}}
-						animate={{opacity: 1, scale: 1, transition: { duration: 0.6, type: 'spring', bounce: 0.25}}}
-						exit={{ x: side === "left" ? -300 : 300, transition: { duration: 0.6 } }}
+						initial={{ opacity: 0, scale: 0 }}
+						animate={{
+							opacity: 1,
+							scale: 1,
+							transition: {
+								delay: 0.3,
+								duration: 0.6,
+								type: "spring",
+								bounce: 0.25,
+							},
+						}}
+						exit={{
+							x: side === "left" ? -300 : 300,
+							transition: { duration: 0.6 },
+						}}
 						className="absolute object-cover w-full h-full rounded-lg"
 						src={!isOver ? sidebarImg : selectRandomImage()}
 					/>
 				) : side === "left" ? (
-					<LeftSidebarContent
-						hasAnswered={hasAnswered}
-						pokemon={pokemon}
-					/>
+					<motion.div
+						exit={{ x: [0, -300], transition: { duration: 0.3 } }}
+					>
+						<LeftSidebarContent
+							hasAnswered={hasAnswered}
+							pokemon={pokemon}
+						/>
+					</motion.div>
 				) : side === "right" ? (
-					<RightSidebarContent
-						hasAnswered={hasAnswered}
-						pokemon={pokemon}
-					/>
+					<motion.div
+						exit={{ x: [0, 300], transition: { duration: 0.3 } }}
+					>
+						<RightSidebarContent
+							hasAnswered={hasAnswered}
+							pokemon={pokemon}
+						/>
+					</motion.div>
 				) : (
 					""
 				)}

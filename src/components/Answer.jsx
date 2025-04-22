@@ -1,52 +1,45 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import React from "react";
+import { capitalize } from "../utils/functions";
 
 export default function Answer({
-	children,
-	pokemon,
-	onSelect,
-	hasAnswered = false,
-	isCorrect = false,
+  children,
+  onSelect,
+  hasAnswered = false,
+  isCorrect = false,
 }) {
-	const standardClass = "w-full rounded-2xl py-2 border-4 border-neutral-700";
-	const [buttonClass, setButtonClass] = useState(standardClass);
-	const [isSelected, setIsSelected] = useState(false);
+  const standardClass = "w-full rounded-2xl py-2 border-4 border-neutral-700";
+  const [isSelected, setIsSelected] = useState(false);
 
-	function handleButtonClass() {
-		if (hasAnswered && isSelected && !isCorrect) {
-			setButtonClass(standardClass + " bg-red-500 cursor-not-allowed");
-		}
-		else if (hasAnswered && isCorrect) {
-			setButtonClass(standardClass + " bg-green-500 cursor-not-allowed");
-		} else if (!hasAnswered){
-			setButtonClass(standardClass + " bg-orange-400 hover:bg-orange-400/90 active:bg-orange-400/75");
-		}	else {
-			setButtonClass(standardClass + " bg-neutral-500 cursor-not-allowed");
-		}
-	}
+  let buttonClass = standardClass;
 
-	useEffect(() => {
-		handleButtonClass()
+  if (hasAnswered && isSelected && !isCorrect) {
+    buttonClass += " bg-red-500 cursor-not-allowed";
+  } else if (hasAnswered && isCorrect) {
+    buttonClass += " bg-green-500 cursor-not-allowed";
+  } else if (!hasAnswered) {
+    buttonClass += " bg-orange-400 hover:bg-orange-400/90 active:bg-orange-400/75";
+  } else {
+    buttonClass += " bg-neutral-500 cursor-not-allowed";
+  }
 
-		return () => {
-			setIsSelected(false);
-			setButtonClass(standardClass);
-		}
-	}, [hasAnswered]);
+  // Gestione del click
+  const handleClick = (event) => {
+    if (!hasAnswered) {
+      setIsSelected(true);
+      onSelect(isCorrect);
+    }
+  };
 
-	return (
-		<li className=" shadow-lg shadow-black/20 text-xl my-2 sm:my-2.5 rounded-2xl hover:scale-105 transition">
-			<button
-				className={buttonClass}
-				onClick={(event) => {
-					setIsSelected(true);
-					onSelect(isCorrect, event);
-				}}
-			>
-				{children && pokemon
-					? children[0].toUpperCase() +
-					  children.slice(1).toLowerCase()
-					: ""}
-			</button>
-		</li>
-	);
+  return (
+    <li className="shadow-lg shadow-black/20 text-xl my-2 sm:my-2.5 rounded-2xl hover:scale-105 transition">
+      <button
+        disabled={hasAnswered}
+        className={buttonClass}
+        onClick={handleClick}
+      >
+        {children ? capitalize(children) : ""}
+      </button>
+    </li>
+  );
 }
