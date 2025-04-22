@@ -53,25 +53,28 @@ export default function Answers({
 		return () => setAnswersList([]);
 	}, [pokemon.id]);
 
-	return (
-		<>
-			{!isFetching.answers && <ul className="w-full text-center">
-				{answersList.map((answer, index) => {
-					return (
-						<Answer
-							key={index}
-							onSelect={onAnswer}
-							pokemon={pokemon}
-							isCorrect={answer.isCorrect}
-							isSelected={gameState.selectedAnswer === capitalize(answer.text)}
-							hasAnswered={gameState.hasAnswered}
-						>
-							{capitalize(removeDashes(answer.text))}
-						</Answer>
-					);
-				})}
-			</ul>}
-			{gameState.hasAnswered && <NextButton onClick={onNext} />}
-		</>
-	);
-}
+	
+		return (
+			<>
+				{!isFetching.answers && <ul className="w-full text-center">
+					{answersList.map((answer, index) => {
+						return (
+							<Answer
+								key={index}
+								onSelect={onAnswer}
+								pokemon={pokemon}
+								isCorrect={answer.isCorrect}
+								isSelected={gameState.selectedAnswer === capitalize(answer.text)}
+								hasAnswered={gameState.hasAnswered}
+							>
+								{capitalize(removeDashes(answer.text))}
+							</Answer>
+						);
+					})}
+				</ul>}
+				{gameState.hasAnswered && <NextButton onClick={onNext} />}
+			</>
+		);
+	}
+	
+

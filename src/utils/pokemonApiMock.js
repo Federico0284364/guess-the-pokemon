@@ -31,6 +31,7 @@ export class Pokemon {
 		this.generation = {name: generation}
 	}
 }
+const POKEMON_ANSWERS_MOCK = ["raichu", "charmeleon", "tyranitar"];
 
 const POKEMON_LIST_MOCK = [
 	{
@@ -5866,6 +5867,6 @@ const POKEMON_LIST_MOCK = [
 	new Pokemon("Pikachu", 15, ["electric"], "/pikachu.png"),
 ];
 
-const POKEMON_ANSWERS_MOCK = ["raichu", "charmeleon", "tyranitar"];
+
 
 export { POKEMON_LIST_MOCK, POKEMON_ANSWERS_MOCK };

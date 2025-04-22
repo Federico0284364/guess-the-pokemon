@@ -1,4 +1,5 @@
 import { capitalize } from "./functions";
+import { POKEMON_LIST_MOCK, POKEMON_ANSWERS_MOCK } from "./pokemonApiMock";
 
 export async function fetchPokemonList(useMock, numberOfPokemon) {
 	if (useMock) {
@@ -56,7 +57,7 @@ export async function fetchPokemonSpecies(useMock, pokemonId) {
 
 export async function fetchAnswers(useMock, pokemon) {
 	if (useMock) {
-		return [...POKEMON_ANSWERS_MOCK]; // Restituisce i dati di test
+		return [...POKEMON_ANSWERS_MOCK];
 	}
 
 	const uniqueNumbers = new Set();

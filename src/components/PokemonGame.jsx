@@ -19,7 +19,7 @@ import { motion } from "framer-motion";
 
 const MOCK = false;
 const numberOfPokemon = 10;
-const initialGameState = {
+export const initialGameState = {
 	hasAnswered: false,
 	selectedAnswer: "",
 	round: 0,
