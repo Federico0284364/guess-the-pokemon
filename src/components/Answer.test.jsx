@@ -9,12 +9,16 @@ const mockOnSelect = vi.fn();
 
 describe("Answer component", () => {
 	const props = {
-		children: "pikachu",
+		children: "Pikachu",
 		pokemon: POKEMON_LIST_MOCK[0],
 		onSelect: mockOnSelect,
 		hasAnswered: false,
 		isCorrect: false,
 	};
+
+	beforeEach(() => {
+		mockOnSelect.mockClear();
+	});
 
 	test("renders a pokemon name inside the button", () => {
 		render(<Answer {...props} />);
@@ -33,7 +37,7 @@ describe("Answer component", () => {
 		expect(button).toHaveClass(/bg-orange/);
 	});
 
-	describe("when it gets clicked", () => {
+	describe("onClick", () => {
 		test("onSelect gets called", () => {
 			render(<Answer {...props} />);
 
@@ -44,7 +48,7 @@ describe("Answer component", () => {
 		});
 
 		test("becomes green if it's correct", () => {
-			render(<Answer {...props} isCorrect={true} hasAnswered={true} />);
+			render(<Answer {...props} isSelected={true} isCorrect={true} hasAnswered={true} />);
 
 			const button = screen.getByRole("button");
 			fireEvent.click(button);
@@ -53,23 +57,28 @@ describe("Answer component", () => {
 		});
 
 		test("becomes red if it's not correct", () => {
-			render(<Answer {...props} isCorrect={false} hasAnswered={false} />);
+			render(<Answer {...props} isSelected={true} isCorrect={false} hasAnswered={true} />);
 
 			let button = screen.getByRole("button");
-			fireEvent.click(button);
 			
 			expect(button).toHaveClass(/bg-red/);
 		});
 
-		test("nothing happens if it's already been clicked", () => {
-			render(<Answer {...props}/>);
+		test("becomes grey if it's neither correct or selected", () => {
+			render(<Answer {...props} isSelected={false} isCorrect={false} hasAnswered={true} />);
 
-			const button = screen.getByRole("button");
+			let button = screen.getByRole("button");
+			
+			expect(button).toHaveClass(/bg-neutral/);
+		})
+
+		test("nothing happens if it's already been clicked", () => {
+			render(<Answer {...props} hasAnswered={true}/>);
+
+			const button = screen.getByRole("button");			
 			fireEvent.click(button);
 			
-			fireEvent.click(button);
-			
-			expect(mockOnSelect).not.toHaveBeenCalledTimes(2);
+			expect(mockOnSelect).not.toHaveBeenCalled();
 		})
 	});
 });

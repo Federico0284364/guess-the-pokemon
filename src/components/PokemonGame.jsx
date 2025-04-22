@@ -3,6 +3,7 @@ import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { Pokemon } from "../utils/pokemonApiMock.js";
 import { calculateScore } from "../utils/gameFunctions.js";
+import { capitalize } from "../utils/functions.js";
 import {
 	fetchPokemonList,
 	fetchPokemonSpecies,
@@ -14,10 +15,17 @@ import MainWindow from "./mainWindow.jsx";
 import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "./InputArea.jsx";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const MOCK = false;
 const numberOfPokemon = 10;
+const initialGameState = {
+	hasAnswered: false,
+	selectedAnswer: "",
+	round: 0,
+	hints: 0,
+	score: [],
+};
 
 export default function PokemonGame({ goToMenu }) {
 	//setup
@@ -31,17 +39,14 @@ export default function PokemonGame({ goToMenu }) {
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
 	const [gameState, setGameState] = useState({
-		hasAnswered: false,
-		selectedAnswer: '',
-		round: 0,
-		hints: 0,
-		score: [],
+		...initialGameState,
 	});
 
 	let isOver = false;
 	if (gameState.round === numberOfPokemon) {
 		isOver = true;
 	}
+
 	const pokemon = pokemonList[gameState.round] || new Pokemon();
 
 	const leftSidebarProps = {
@@ -99,6 +104,7 @@ export default function PokemonGame({ goToMenu }) {
 				...tempList[gameState.round],
 				...pokemonSpecies,
 			};
+
 			setPokemonList([...tempList]);
 
 			setIsFetching((prevState) => {
@@ -114,15 +120,11 @@ export default function PokemonGame({ goToMenu }) {
 		setPokemonList([new Pokemon()]);
 		setGuessedPokemonList([]);
 		setGameState({
-			hasAnswered: false,
-			round: 0,
-			hints: 0,
-			score: [],
-			isOver: false,
+			...initialGameState
 		});
 	}
 
-	function handleEasyAnswer(isCorrect) {
+	function handleEasyAnswer(isCorrect, answer) {
 		if (!gameState.hasAnswered) {
 			if (isCorrect) {
 				handleCorrectAnswer();
@@ -133,6 +135,7 @@ export default function PokemonGame({ goToMenu }) {
 			setGameState((prevState) => {
 				return {
 					...prevState,
+					selectedAnswer: capitalize(answer),
 					hasAnswered: true,
 				};
 			});
@@ -221,90 +224,87 @@ export default function PokemonGame({ goToMenu }) {
 						guessedPokemonList={guessedPokemonList}
 					/>
 				)}
-				
-					<motion.section
-						transition={{ duration: 0.2, type: 'tween' }}
-						initial={{ scale: 0 }}
-						animate={{ scale: 1 }}
-						exit={{ scale: [1, 0] }}
-						key={'game'}
-						className="flex gap-8"
-					>
-						{(device === "medium" || device === "large") && (
-							<Sidebar
-								isOver={isOver}
-								gameState={gameState}
-								{...leftSidebarProps}
-								side="left"
-							/>
-						)}
-						<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
-							{!isOver ? (
-								<>
-									<MainWindow
-										gameState={gameState}
-										pokemon={pokemon}
-										isFetching={isFetching}
-									/>
-									{difficulty === "Easy" ? (
-										<Answers
-											MOCK={MOCK}
-											gameState={gameState}
-											onAnswer={handleEasyAnswer}
-											onNext={handleNextQuestion}
-											onStartFetch={
-												handleStartFetchAnswers
-											}
-											onStopFetch={handleStopFetchAnswers}
-											isFetching={isFetching}
-											pokemon={pokemon}
-										/>
-									) : (
-										<InputArea
-											gameState={gameState}
-											onAnswer={handleHardAnswer}
-											onNext={handleNextQuestion}
-											pokemon={pokemon}
-										/>
-									)}
-									{device === "small" &&
-										gameState.hasAnswered && (
-											<>
-												<Sidebar
-												gameState={gameState}
-													isOver={isOver}
-													{...rightSidebarProps}
-													side="right"
-												/>
-												<Sidebar
-												gameState={gameState}
-													isOver={isOver}
-													{...rightSidebarProps}
-													side="left"
-												/>
-											</>
-										)}
-								</>
-							) : (
-								<Scoreboard
-									score={gameState.score}
-									pokemonList={pokemonList}
-									guessedPokemonList={guessedPokemonList}
-									startNewGame={handleNewGame}
-									goToMenu={goToMenu}
-									difficulty={difficulty}
+
+				<motion.section
+					transition={{ duration: 0.2, type: "tween" }}
+					initial={{ scale: 0 }}
+					animate={{ scale: 1 }}
+					exit={{ scale: [1, 0] }}
+					key={"game"}
+					className="flex gap-8"
+				>
+					{(device === "medium" || device === "large") && (
+						<Sidebar
+							isOver={isOver}
+							gameState={gameState}
+							{...leftSidebarProps}
+							side="left"
+						/>
+					)}
+					<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+						{!isOver ? (
+							<>
+								<MainWindow
+									gameState={gameState}
+									pokemon={pokemon}
+									isFetching={isFetching}
 								/>
-							)}
-						</div>
-						{(device === "medium" || device === "large") && (
-							<Sidebar
-								{...rightSidebarProps}
-								side="right"
-								isOver={isOver}
+								{difficulty === "Easy" ? (
+									<Answers
+										MOCK={MOCK}
+										gameState={gameState}
+										onAnswer={handleEasyAnswer}
+										onNext={handleNextQuestion}
+										onStartFetch={handleStartFetchAnswers}
+										onStopFetch={handleStopFetchAnswers}
+										isFetching={isFetching}
+										pokemon={pokemon}
+									/>
+								) : (
+									<InputArea
+										gameState={gameState}
+										onAnswer={handleHardAnswer}
+										onNext={handleNextQuestion}
+										pokemon={pokemon}
+									/>
+								)}
+								{device === "small" &&
+									gameState.hasAnswered && (
+										<>
+											<Sidebar
+												gameState={gameState}
+												isOver={isOver}
+												{...rightSidebarProps}
+												side="right"
+											/>
+											<Sidebar
+												gameState={gameState}
+												isOver={isOver}
+												{...rightSidebarProps}
+												side="left"
+											/>
+										</>
+									)}
+							</>
+						) : (
+							<Scoreboard
+								score={gameState.score}
+								pokemonList={pokemonList}
+								guessedPokemonList={guessedPokemonList}
+								startNewGame={handleNewGame}
+								goToMenu={goToMenu}
+								difficulty={difficulty}
 							/>
 						)}
-					</motion.section>
-				
+					</div>
+					{(device === "medium" || device === "large") && (
+						<Sidebar
+							{...rightSidebarProps}
+							side="right"
+							isOver={isOver}
+						/>
+					)}
+				</motion.section>
 			</motion.div>
 		);
 	}

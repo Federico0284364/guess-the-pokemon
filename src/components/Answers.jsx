@@ -1,7 +1,7 @@
 
 import { shuffle } from "../utils/functions";
 import { useState, useEffect } from "react";
-import { removeDashes } from "../utils/functions";
+import { removeDashes, capitalize } from "../utils/functions";
 import {fetchAnswers} from '../utils/fetchFunctions';
 import Answer from "./Answer";
 import NextButton from "./NextButton";
@@ -63,9 +63,10 @@ export default function Answers({
 							onSelect={onAnswer}
 							pokemon={pokemon}
 							isCorrect={answer.isCorrect}
+							isSelected={gameState.selectedAnswer === capitalize(answer.text)}
 							hasAnswered={gameState.hasAnswered}
 						>
-							{removeDashes(answer.text)}
+							{capitalize(removeDashes(answer.text))}
 						</Answer>
 					);
 				})}
