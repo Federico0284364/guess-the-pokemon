@@ -28,8 +28,6 @@ export default function Answers({
 			onStartFetch();
 			const tempList = await fetchAnswers(MOCK, pokemon);
 
-			console.log('fetching answers');
-
 			answers = [
 				...tempList.map((answer) => {
 					return {
@@ -56,7 +54,7 @@ export default function Answers({
 	
 		return (
 			<>
-				{!isFetching.answers && <ul className="w-full text-center">
+				{!isFetching.answers && answersList.length === 4 && <ul className="w-full text-center">
 					{answersList.map((answer, index) => {
 						return (
 							<Answer
@@ -71,8 +69,9 @@ export default function Answers({
 							</Answer>
 						);
 					})}
+					{gameState.hasAnswered && <NextButton onClick={onNext} />}
 				</ul>}
-				{gameState.hasAnswered && <NextButton onClick={onNext} />}
+				
 			</>
 		);
 	}

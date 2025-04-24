@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, memo } from "react";
+import { useState, useContext, useEffect, useReducer } from "react";
 import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { Pokemon } from "../utils/pokemonApiMock.js";
@@ -23,12 +23,26 @@ export const initialGameState = {
 	hasAnswered: false,
 	selectedAnswer: "",
 	round: 0,
-	hints: 0,
 	score: [],
 };
 
+function gameReducer(state, action){
+	switch (action.type){
+		case 'NEW_GAME':
+			return {...initialGameState}
+		case 'EASY_ANSWER':
+			return {
+				...prevState,
+				selectedAnswer: capitalize(answer),
+				hasAnswered: true,
+			};
+	}
+}
+
 export default function PokemonGame({ goToMenu }) {
-	//setup
+
+	
+
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
 

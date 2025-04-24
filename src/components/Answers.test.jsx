@@ -3,23 +3,25 @@ import '@testing-library/jest-dom';
 import { screen, within, render, fireEvent } from "@testing-library/react";
 import { POKEMON_LIST_MOCK } from "../utils/pokemonApiMock";
 import Answers from "./Answers";
-import { beforeEach, expect } from "vitest";
+import { afterEach, beforeEach, expect } from "vitest";
 import { initialGameState } from "./PokemonGame";
 import { capitalize } from "../utils/functions";
 
 describe("Answers component", () => {
 	const props = {
-		gameState: initialGameState,
+		gameState: {...initialGameState},
 		pokemon: POKEMON_LIST_MOCK[0],
 		onAnswer: vi.fn(),
 		onNext: vi.fn(),
 		onStartFetch: vi.fn(),
 		onStopFetch: vi.fn() ,
-		isFetching: false,
+		isFetching: {answers: false},
 		MOCK: true,
 	};
 
-  props.gameState.hasAnswered = false;
+  afterEach(() => {
+    vi.clearAllMocks();
+  })
   
   async function selectListItems(){
     const listItemElements = await screen.findAllByRole("listitem");   
@@ -31,7 +33,7 @@ describe("Answers component", () => {
     return buttonElements;
   }
 
-	test("renders 4 different Answer elements", async () => {
+	test("renders exactly 4 different Answer elements", async () => {
 		render(<Answers {...props}/>);
 
 		const listItems = await selectListItems();
@@ -66,18 +68,23 @@ describe("Answers component", () => {
     expect(props.onAnswer).toHaveBeenCalled();
   })
 
-  test("doesn't do anything when an Answer is clicked and hasAnswered = true", async () => {
-    const answeredGameState = {...props.gameState, hasAnswered: true}
+  test("doesn't call onAnswer when an Answer is clicked and user has answered", async () => {
+    const answeredGameState = {...props.gameState, hasAnswered: true};
     render(<Answers {...props} gameState={answeredGameState}/>);
     const randomInteger = Math.floor(Math.random() * 4);
 
     const buttons = await selectButtons();
-    fireEvent.click(buttons[randomInteger]);
+    const answerButtons = buttons.filter(button => !button.textContent.toLowerCase().includes('next'));
+    fireEvent.click(answerButtons[randomInteger]);
 
     expect(props.onAnswer).not.toHaveBeenCalled();
+
+    answerButtons.forEach((button) => {
+      expect(button).toBeDisabled();
+    });
   })
 
-  test('renders NextButton when answered', async () => {
+  test('renders NextButton when user has answered', async () => {
     const answeredGameState = {...props.gameState, hasAnswered: true}
     render(<Answers {...props} gameState={answeredGameState}/>);
 
@@ -86,7 +93,7 @@ describe("Answers component", () => {
     expect(nextButton).toBeInTheDocument();
   })
 
-  test('calls onNext when NextButton is pressed', async () => {
+  test('calls onNext when NextButton is clicked', async () => {
     const currentGameState = {...props.gameState, hasAnswered: true}
     render(<Answers {...props} gameState={currentGameState}/>);
 

@@ -72,7 +72,7 @@ describe("Answer component", () => {
 			expect(button).toHaveClass(/bg-neutral/);
 		})
 
-		test("nothing happens if it's already been clicked", () => {
+		test("nothing happens if user has answered", () => {
 			render(<Answer {...props} hasAnswered={true}/>);
 
 			const button = screen.getByRole("button");			

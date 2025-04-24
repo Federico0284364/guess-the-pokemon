@@ -31,7 +31,7 @@ export default function DifficultyButton({ chosenDifficulty }) {
 						Rules for hard mode:
 					</p>
 					<ul className="drop-shadow drop-shadow-black/40 flex flex-col gap-2 text-sm w-50 ml-8 mt-2 list-disc">
-						<li>Pokemon names have a one character tolerance. If you mispell the name by exactly one character, your guess will still be valid but you'll get half the points</li>
+						<li>Pokémon names have a one character tolerance. If you mispell the name by exactly one character, your guess will still be valid but you'll get half the points</li>
 						<li>Dash and spacebar are equivalent "Jangmo-o" = "Jangmo o"</li>
 						<li>If the pokemon has only one type, you must pick the Type 1 and leave the Type 2 as "No type"</li>
 						<li>You cannot input the same type twice on the same pokémon</li>
