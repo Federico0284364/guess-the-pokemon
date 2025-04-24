@@ -26,26 +26,72 @@ export const initialGameState = {
 	score: [],
 };
 
-function gameReducer(state, action){
-	switch (action.type){
-		case 'NEW_GAME':
-			return {...initialGameState}
-		case 'EASY_ANSWER':
-			return {
-				...prevState,
-				selectedAnswer: capitalize(answer),
-				hasAnswered: true,
-			};
-	}
-}
-
 export default function PokemonGame({ goToMenu }) {
+	function gameReducer(state, action) {
+		const { answer } = action.payload;
 
-	
+		function calculateHardGameScore(answer) {
+			let nameScore = 0;
+			let generationScore = 0;
+			let typeScore = 0;
+			let statScore = 0;
 
+			nameScore = calculateScore.name(answer.name, pokemon.name);
+			generationScore = calculateScore.generation(
+				answer.generation,
+				pokemon.generation.name
+			);
+			typeScore = calculateScore.type(answer.types, pokemon.types);
+			statScore = calculateScore.stat(answer.stat, pokemon.stats);
+
+			const tempScore = {
+				nameScore,
+				generationScore,
+				typeScore,
+				statScore,
+			};
+
+			return tempScore;
+		}
+
+		switch (action.type) {
+			case "NEW_GAME":
+				return { ...initialGameState };
+			case "EASY_ANSWER":
+				return {
+					...state,
+					selectedAnswer: capitalize(answer),
+					hasAnswered: true,
+				};
+			case "CORRECT_ANSWER":
+				return {
+					...state,
+					score: [...state.score, { gameScore: 50 }],
+				};
+			case "WRONG_ANSWER":
+				return {
+					...state,
+					score: [...state.score, { gameScore: 0 }],
+				};
+			case "HARD_ANSWER":
+				return {
+					...state,
+					score: [
+						...state.score,
+						{ ...calculateHardGameScore(answer) },
+					],
+					hasAnswered: true,
+				};
+			case "NEXT_QUESTION":
+				return {
+					...state,
+					hasAnswered: false,
+					round: state.round + 1,
+				};
+		}
+	}
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
-
 	const [isFetching, setIsFetching] = useState({
 		pokemonList: false,
 		answers: false,
@@ -55,6 +101,7 @@ export default function PokemonGame({ goToMenu }) {
 	const [gameState, setGameState] = useState({
 		...initialGameState,
 	});
+
 
 	let isOver = false;
 	if (gameState.round === numberOfPokemon) {
@@ -134,7 +181,7 @@ export default function PokemonGame({ goToMenu }) {
 		setPokemonList([new Pokemon()]);
 		setGuessedPokemonList([]);
 		setGameState({
-			...initialGameState
+			...initialGameState,
 		});
 	}
 
