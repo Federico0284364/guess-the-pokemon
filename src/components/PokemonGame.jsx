@@ -2,8 +2,7 @@ import { useState, useContext, useEffect, useReducer } from "react";
 import { DifficultyContext } from "../context/difficulty";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { Pokemon } from "../utils/pokemonApiMock.js";
-import { calculateScore } from "../utils/gameFunctions.js";
-import { capitalize } from "../utils/functions.js";
+import { gameReducer } from "../reducers/gameReducer.js";
 import {
 	fetchPokemonList,
 	fetchPokemonSpecies,
@@ -14,84 +13,15 @@ import Sidebar from "./Sidebar.jsx";
 import MainWindow from "./mainWindow.jsx";
 import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "./InputArea.jsx";
+import { initialGameState } from "../reducers/gameReducer.js";
 
 import { motion } from "framer-motion";
 
 const MOCK = false;
 const numberOfPokemon = 10;
-export const initialGameState = {
-	hasAnswered: false,
-	selectedAnswer: "",
-	round: 0,
-	score: [],
-};
 
 export default function PokemonGame({ goToMenu }) {
-	function gameReducer(state, action) {
-		const { answer, pokemon } = action.payload || {};
-
-		function calculateHardGameScore(answer) {
-			let nameScore = 0;
-			let generationScore = 0;
-			let typeScore = 0;
-			let statScore = 0;
-
-			nameScore = calculateScore.name(answer.name, pokemon.name);
-			generationScore = calculateScore.generation(
-				answer.generation,
-				pokemon.generation.name
-			);
-			typeScore = calculateScore.type(answer.types, pokemon.types);
-			statScore = calculateScore.stat(answer.stat, pokemon.stats);
-
-			const tempScore = {
-				nameScore,
-				generationScore,
-				typeScore,
-				statScore,
-			};
-
-			return tempScore;
-		}
-
-		switch (action.type) {
-			case "NEW_GAME":
-				return { ...initialGameState };
-			case "EASY_ANSWER":
-				return {
-					...state,
-					selectedAnswer: capitalize(answer.name),
-					hasAnswered: true,
-				};
-			case "CORRECT_ANSWER":
-				return {
-					...state,
-					score: [...state.score, { gameScore: 50 }],
-				};
-			case "WRONG_ANSWER":
-				return {
-					...state,
-					score: [...state.score, { gameScore: 0 }],
-				};
-			case "HARD_ANSWER":
-				return {
-					...state,
-					score: [
-						...state.score,
-						{ ...calculateHardGameScore(answer) },
-					],
-					hasAnswered: true,
-				};
-			case "NEXT_QUESTION":
-				return {
-					...state,
-					hasAnswered: false,
-					round: state.round + 1,
-				};
-			default:
-				return state;
-		}
-	}
+	
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
 	const [isFetching, setIsFetching] = useState({
