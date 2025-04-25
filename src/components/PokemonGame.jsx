@@ -28,7 +28,7 @@ export const initialGameState = {
 
 export default function PokemonGame({ goToMenu }) {
 	function gameReducer(state, action) {
-		const { answer } = action.payload;
+		const { answer, pokemon } = action.payload || {};
 
 		function calculateHardGameScore(answer) {
 			let nameScore = 0;
@@ -60,7 +60,7 @@ export default function PokemonGame({ goToMenu }) {
 			case "EASY_ANSWER":
 				return {
 					...state,
-					selectedAnswer: capitalize(answer),
+					selectedAnswer: capitalize(answer.name),
 					hasAnswered: true,
 				};
 			case "CORRECT_ANSWER":
@@ -88,6 +88,8 @@ export default function PokemonGame({ goToMenu }) {
 					hasAnswered: false,
 					round: state.round + 1,
 				};
+			default:
+				return state;
 		}
 	}
 	const { windowSize, device } = useContext(WindowSizeContext);
@@ -98,10 +100,11 @@ export default function PokemonGame({ goToMenu }) {
 	});
 	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
 	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
-	const [gameState, setGameState] = useState({
-		...initialGameState,
-	});
 
+	const [gameState, dispatchGameState] = useReducer(
+		gameReducer,
+		initialGameState
+	);
 
 	let isOver = false;
 	if (gameState.round === numberOfPokemon) {
@@ -180,9 +183,7 @@ export default function PokemonGame({ goToMenu }) {
 	function handleNewGame() {
 		setPokemonList([new Pokemon()]);
 		setGuessedPokemonList([]);
-		setGameState({
-			...initialGameState,
-		});
+		dispatchGameState({ type: "NEW_GAME" });
 	}
 
 	function handleEasyAnswer(isCorrect, answer) {
@@ -193,54 +194,16 @@ export default function PokemonGame({ goToMenu }) {
 				handleWrongAnswer();
 			}
 
-			setGameState((prevState) => {
-				return {
-					...prevState,
-					selectedAnswer: capitalize(answer),
-					hasAnswered: true,
-				};
-			});
+			dispatchGameState({ type: "EASY_ANSWER", payload: { answer, pokemon } });
 		}
 	}
 
 	function handleHardAnswer(answer) {
-		let nameScore = 0;
-		let generationScore = 0;
-		let typeScore = 0;
-		let statScore = 0;
-
-		nameScore = calculateScore.name(answer.name, pokemon.name);
-		generationScore = calculateScore.generation(
-			answer.generation,
-			pokemon.generation.name
-		);
-		typeScore = calculateScore.type(answer.types, pokemon.types);
-		statScore = calculateScore.stat(answer.stat, pokemon.stats);
-
-		const tempScore = {
-			nameScore,
-			generationScore,
-			typeScore,
-			statScore,
-		};
-
-		setGameState((prevState) => {
-			return {
-				...prevState,
-				score: [...prevState.score, { ...tempScore }],
-				hasAnswered: true,
-			};
-		});
+		dispatchGameState({ type: "HARD_ANSWER", payload: { answer, pokemon }});
 	}
 
 	function handleNextQuestion() {
-		setGameState((prevState) => {
-			return {
-				...prevState,
-				hasAnswered: false,
-				round: prevState.round + 1,
-			};
-		});
+		dispatchGameState({ type: "NEXT_QUESTION" });
 	}
 
 	function handleCorrectAnswer() {
@@ -248,12 +211,7 @@ export default function PokemonGame({ goToMenu }) {
 			return [...oldList, true];
 		});
 
-		setGameState((prevState) => {
-			return {
-				...prevState,
-				score: [...prevState.score, { gameScore: 50 }],
-			};
-		});
+		dispatchGameState({ type: "CORRECT_ANSWER" });
 	}
 
 	function handleWrongAnswer() {
@@ -261,12 +219,7 @@ export default function PokemonGame({ goToMenu }) {
 			return [...oldList, false];
 		});
 
-		setGameState((prevState) => {
-			return {
-				...prevState,
-				score: [...prevState.score, { gameScore: 0 }],
-			};
-		});
+		dispatchGameState({ type: "WRONG_ANSWER" });
 	}
 
 	if (isFetching.pokemon && gameState.round < 1) {

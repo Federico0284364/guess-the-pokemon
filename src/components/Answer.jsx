@@ -26,7 +26,7 @@ export default function Answer({
 	// Gestione del click
 	const handleClick = () => {
 		if (!hasAnswered) {
-			onSelect(isCorrect, children);
+			onSelect(isCorrect, { name: children });
 		}
 	};
 
