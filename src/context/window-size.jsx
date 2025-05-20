@@ -28,9 +28,9 @@ export default function WindowSizeContextProvider({ children }) {
 		};
 	}, []);
 
-	if (windowSize.width >= 1024) {
+	if (windowSize.width >= 1120) {
 		device = "large";
-	} else if (windowSize.width >= 768) {
+	} else if (windowSize.width >= 860) {
 		device = "medium";
 	} else {
 		device = "small";
