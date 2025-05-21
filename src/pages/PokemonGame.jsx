@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect, useReducer } from "react";
-import { DifficultyContext } from "../context/difficulty";
+import { DifficultyContext } from "../context/difficulty.jsx";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { Pokemon } from "../utils/pokemonApiMock.js";
 import { gameReducer } from "../reducers/gameReducer.js";
@@ -7,12 +7,12 @@ import {
 	fetchPokemonList,
 	fetchPokemonSpecies,
 } from "../utils/fetchFunctions.js";
-import GameHeader from "./GameHeader.jsx";
-import Answers from "./Answers.jsx";
-import Sidebar from "./Sidebar.jsx";
-import MainWindow from "./mainWindow.jsx";
-import Scoreboard from "./Scoreboard.jsx";
-import InputArea from "./InputArea.jsx";
+import GameHeader from "../components/GameHeader.jsx";
+import Answers from "../components/Answers.jsx";
+import Sidebar from "../components/Sidebar.jsx";
+import MainWindow from "../components/mainWindow.jsx";
+import Scoreboard from "../components/Scoreboard.jsx";
+import InputArea from "../components/InputArea.jsx";
 import { initialGameState } from "../reducers/gameReducer.js";
 
 import { motion } from "framer-motion";
@@ -20,7 +20,7 @@ import { motion } from "framer-motion";
 const MOCK = false;
 const numberOfPokemon = 10;
 
-export default function PokemonGame({ goToMenu }) {
+export default function PokemonGame() {
 	
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
@@ -162,7 +162,6 @@ export default function PokemonGame({ goToMenu }) {
 			<motion.div>
 				{!isOver && (
 					<GameHeader
-						goToMenu={goToMenu}
 						gameState={gameState}
 						pokemonList={pokemonList}
 						guessedPokemonList={guessedPokemonList}
@@ -235,8 +234,7 @@ export default function PokemonGame({ goToMenu }) {
 								score={gameState.score}
 								pokemonList={pokemonList}
 								guessedPokemonList={guessedPokemonList}
-								startNewGame={handleNewGame}
-								goToMenu={goToMenu}
+								startNewGame={handleNewGame}								
 								difficulty={difficulty}
 							/>
 						)}

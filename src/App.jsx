@@ -1,45 +1,28 @@
 import { useState, useContext } from "react";
 import MainMenu from "./components/MainMenu";
-import PokemonGame from "./components/PokemonGame.jsx";
+import PokemonGame from "./pages/PokemonGame.jsx";
 import DifficultyContextProvider from "./context/difficulty.jsx";
 import "./App.css";
 import { WindowSizeContext } from "./context/window-size.jsx";
 import WindowSizeContextProvider from "./context/window-size.jsx";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-function selectGame(gameName) {
-	const { windowSize, device } = useContext(WindowSizeContext);
-	const selectedGame = games.forEach((game) => {
-		if (game.name === gameName) {
-			return game;
-		}
-
-		return selectedGame;
-	});
-}
+const router = createBrowserRouter([
+	{
+		path: "/guess-the-pokemon",
+		element: <MainMenu />,
+	},
+	{
+		path: "/guess-the-pokemon/game",
+		element: <PokemonGame />,
+	},
+]);
 
 function App() {
-	const [mainState, setMainState] = useState("main-menu");
-
-	function handleStartGame() {
-		setMainState('playing');
-	}
-
-	function handleGoToMenu(){
-		setMainState('main-menu');
-	}
-
 	return (
 		<WindowSizeContextProvider>
 			<DifficultyContextProvider>
-				<main>
-					{mainState === "main-menu" && (
-						<MainMenu startGame={handleStartGame} />
-					)}
-					
-					{mainState === "playing" && <PokemonGame goToMenu={handleGoToMenu}/>}
-
-					
-				</main>
+				<RouterProvider router={router} />
 			</DifficultyContextProvider>
 		</WindowSizeContextProvider>
 	);

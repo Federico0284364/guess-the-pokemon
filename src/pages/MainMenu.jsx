@@ -1,6 +1,6 @@
-import GameOption from "./GameOption.jsx";
+import GameOption from "../components/GameOption.jsx";
 import { games } from "../games.js";
-import DifficultyButton from "./Difficultybutton.jsx";
+import DifficultyButton from "../components/Difficultybutton.jsx";
 
 export default function MainMenu({ startGame }) {
 	return (
