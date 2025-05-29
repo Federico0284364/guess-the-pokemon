@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { calculateScore } from "../utils/gameFunctions";
 
-export default function Input({ gameState, ref, label, widthClass }) {
+export default function Input({ hasAnswered, round, score, ref, label, widthClass }) {
 	let isCorrect = false;
 	let isAlmostCorrect = false;
 	let customClass = "bg-orange-400 ";
@@ -9,16 +9,16 @@ export default function Input({ gameState, ref, label, widthClass }) {
 	
 	useEffect(() => {	
 			ref.current.value = '';
-	}, [gameState.round])
+	}, [round])
 
-	if (gameState.hasAnswered) {
-		if (gameState.score[gameState.round].nameScore === 100) {
+	if (hasAnswered) {
+		if (score[round].nameScore === 100) {
 			isCorrect = true;
-		} else if (gameState.score[gameState.round].nameScore === 50) {
+		} else if (score[round].nameScore === 50) {
 			isAlmostCorrect = true;
 		}
 	}
-	if (gameState.hasAnswered) {
+	if (hasAnswered) {
 		isCorrect
 			? (customClass = " bg-green-500 ")
 			: isAlmostCorrect
@@ -34,12 +34,12 @@ export default function Input({ gameState, ref, label, widthClass }) {
 	return (
 		<div className={"flex flex-col items-center min-w-0 " + widthClass}>
 			<label className={textCustomClass + "text-sm"}>
-				{gameState.hasAnswered
-					? "+" + gameState.score[gameState.round].nameScore
+				{hasAnswered
+					? "+" + score[round].nameScore
 					: label}
 			</label>
 			<input
-				disabled={gameState.hasAnswered}
+				disabled={hasAnswered}
 				ref={ref}
 				className={
 					customClass +

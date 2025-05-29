@@ -1,11 +1,26 @@
+import { useDispatch } from 'react-redux';
 import pikachuImg from '../assets/pikachu.png';
 import {useNavigate} from 'react-router-dom';
+import { newGame } from '../store/gameSlice';
+import { useContext } from 'react';
+import { DifficultyContext } from '../context/difficulty';
 
-export default function GameOption({game, onClick}) {
+export default function GameOption({selectedDifficulty}) {
 	const navigate = useNavigate();
+	const dispatch = useDispatch();
+	const { setEasy, setHard } = useContext(DifficultyContext);
 
 	function handleClick(){
+		dispatch(newGame());
+
+		if (selectedDifficulty === 'Easy'){
+			setEasy();
+		} else {
+			setHard();
+		}
+
 		navigate('game');
+
 	}
 	
 	return (

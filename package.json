@@ -1,6 +1,6 @@
 {
   "name": "guess-the-pokemon",
-  "homepage": "https://federico0284364.github.io/guess-the-pokemon/",
+  "homepage": "https://federico0284364.github.io/guess-the-pokemon",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -14,13 +14,16 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.0.12",
     "framer-motion": "^12.6.5",
     "motion": "^12.6.5",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.6.0",
-    "tailwindcss": "^4.0.12"
+    "tailwindcss": "^4.0.12",
+    "tailwindcss-textshadow": "^2.1.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

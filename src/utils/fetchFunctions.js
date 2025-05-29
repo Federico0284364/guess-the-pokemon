@@ -63,7 +63,7 @@ export async function fetchAnswers(useMock, pokemon) {
 	const uniqueNumbers = new Set();
 
 	while (uniqueNumbers.size < 3) {
-		let randomId = Math.floor(Math.random() * 1000) + 1;
+		let randomId = Math.floor(Math.random() * 1025) + 1;
 		if (randomId !== pokemon.id) {
 			uniqueNumbers.add(randomId);
 		}

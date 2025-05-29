@@ -3,34 +3,35 @@ import { capitalize } from "../utils/functions";
 
 export default function SelectInput({
 	pokemon,
-	gameState,
+	hasAnswered,
+	round,
+	score,
 	ref,
 	optionArray,
 	label,
 	widthClass,
 }) {
-
 	useEffect(() => {
 		return () => {
 			if (ref.current && optionArray.length > 0) {
 				ref.current.value = capitalize(optionArray[0]);
 			}
 		};
-	}, [gameState.round]);
+	}, [round]);
 
-	let score = 0;
+	let totalScore = 0;
 	let customClass = "bg-orange-400 ";
 	let textCustomClass = "";
 	let isCorrect = false;
-	if (gameState.hasAnswered) {
+	if (hasAnswered) {
 		switch (label) {
 			case "Generation":
-				score = gameState.score[gameState.round].generationScore;
-				score === 20 ? (isCorrect = true) : (isCorrect = false);
+				totalScore = score[round].generationScore;
+				totalScore === 20 ? (isCorrect = true) : (isCorrect = false);
 				break;
 			case "Best stat":
-				score = gameState.score[gameState.round].statScore;
-				score === 50 ? (isCorrect = true) : (isCorrect = false);
+				totalScore = score[round].statScore;
+				totalScore === 50 ? (isCorrect = true) : (isCorrect = false);
 				break;
 			case "Type 1":
 				pokemon.types.forEach((type) => {
@@ -38,33 +39,33 @@ export default function SelectInput({
 						type.type.name.toLowerCase() ===
 						ref.current.value.toLowerCase()
 					) {
-						score = 25;
+						totalScore = 25;
 					}
 				});
-				score === 25 ? (isCorrect = true) : (isCorrect = false);
+				totalScore === 25 ? (isCorrect = true) : (isCorrect = false);
 				break;
 			case "Type 2":
 				if (
 					pokemon.types.length === 1 &&
-					gameState.score[gameState.round].typeScore === 50
+					score[round].typeScore === 50
 				) {
-					score = 25;
+					totalScore = 25;
 				} else {
 					pokemon.types.forEach((type) => {
 						if (
 							type.type.name.toLowerCase() ===
 							ref.current.value.toLowerCase()
 						) {
-							score = 25;
+							totalScore = 25;
 						}
 					});
 				}
-				score === 25 ? (isCorrect = true) : (isCorrect = false);
+				totalScore === 25 ? (isCorrect = true) : (isCorrect = false);
 				break;
 		}
 	}
 
-	if (gameState.hasAnswered) {
+	if (hasAnswered) {
 		isCorrect
 			? (customClass = "bg-green-500 ")
 			: (customClass = "bg-red-500 ");
@@ -76,11 +77,11 @@ export default function SelectInput({
 	return (
 		<div className={"flex flex-col items-center min-w-0 " + widthClass}>
 			<label className={textCustomClass + " text-sm"}>
-				{gameState.hasAnswered ? "+" + score : label}
+				{hasAnswered ? "+" + totalScore : label}
 			</label>
-			
+
 			<select
-				disabled={gameState.hasAnswered}
+				disabled={hasAnswered}
 				ref={ref}
 				className={
 					customClass +

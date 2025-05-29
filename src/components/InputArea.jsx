@@ -2,9 +2,10 @@ import { useRef } from "react";
 import SelectInput from "./SelectInput";
 import Input from "./Input";
 import NextButton from "./NextButton";
+import { useSelector, useDispatch } from 'react-redux';
+import { getCurrentPokemon} from '../store/gameSlice.js';
 
-export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
-	const GENERATIONS = [
+const GENERATIONS = [
 		"I",
 		"II",
 		"III",
@@ -45,6 +46,10 @@ export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 	];
 	const TYPES2 = ["no type", ...TYPES1];
 
+export default function InputArea({ onAnswer, onNext }) {
+	const { hasAnswered,score, round } = useSelector(state => state.game);
+	const pokemon = useSelector(getCurrentPokemon);
+
 	const nameInput = useRef();
 	const generationInput = useRef();
 	const type1Input = useRef();
@@ -72,14 +77,18 @@ export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 	return (
 		<section className="flex flex-wrap gap-x-1 gap-y-2">
 			<Input
-				gameState={gameState}
+				hasAnswered={hasAnswered}
+				score={score}
+				round={round}
 				ref={nameInput}
 				label="Name"
 				widthClass={"w-[70%]"}
 			/>
 			<SelectInput
 				pokemon={pokemon}
-				gameState={gameState}
+				hasAnswered={hasAnswered}
+				score={score}
+				round={round}
 				ref={generationInput}
 				optionArray={GENERATIONS}
 				label="Generation"
@@ -87,7 +96,9 @@ export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 			/>
 			<SelectInput
 				pokemon={pokemon}
-				gameState={gameState}
+				hasAnswered={hasAnswered}
+				score={score}
+				round={round}
 				ref={type1Input}
 				optionArray={TYPES1}
 				label="Type 1"
@@ -95,7 +106,9 @@ export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 			/>
 			<SelectInput
 				pokemon={pokemon}
-				gameState={gameState}
+				hasAnswered={hasAnswered}
+				score={score}
+				round={round}
 				ref={type2Input}
 				optionArray={TYPES2}
 				label="Type 2"
@@ -103,14 +116,16 @@ export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 			/>
 			<SelectInput
 				pokemon={pokemon}
-				gameState={gameState}
+				hasAnswered={hasAnswered}
+				score={score}
+				round={round}
 				ref={statInput}
 				optionArray={STATS}
 				label="Best stat"
 				widthClass={"flex-1"}
 			/>
 
-			{!gameState.hasAnswered && <button
+			{!hasAnswered && <button
 				onClick={() => {
 					handleConfirm();
 				}}
@@ -119,7 +134,7 @@ export default function InputArea({ gameState, onAnswer, onNext, pokemon }) {
 				Confirm
 			</button>}
 
-			{gameState.hasAnswered && <NextButton onClick={onNext} />}
+			{hasAnswered && <NextButton onClick={onNext} />}
 		</section>
 	);
 }

@@ -1,31 +1,35 @@
-
 import { shuffle } from "../utils/functions";
-import { useState, useEffect } from "react";
+import { useEffect, useContext, memo } from "react";
 import { removeDashes, capitalize } from "../utils/functions";
-import {fetchAnswers} from '../utils/fetchFunctions';
+import { fetchAnswers } from "../utils/fetchFunctions";
 import Answer from "./Answer";
 import NextButton from "./NextButton";
+import { useSelector, useDispatch } from "react-redux";
+import {
+	setIsFetching,
+	setAnswersList,
+	getCurrentPokemon,
+} from "../store/gameSlice.js";
 
-export default function Answers({
-	gameState,
-	pokemon,
-	onAnswer,
-	onNext,
-	onStartFetch,
-	onStopFetch,
-	isFetching,
-	MOCK,
-}) {
-	const [answersList, setAnswersList] = useState([]);
-	
+function Answers({ onAnswer, onNext, MOCK }) {
+	const { hasAnswered, round, selectedAnswer, answersList, isFetching } =
+		useSelector((state) => state.game);
+
+	const pokemon = useSelector(getCurrentPokemon);
+
+	const dispatch = useDispatch();
+
+	console.log("answers montato");
+
 	useEffect(() => {
-		if (pokemon.id === 0){
-			return;
-		}
 		let answers = [];
-		
+
 		async function fetchData() {
-			onStartFetch();
+			if (answersList.length != 0){
+				return
+			}
+
+			dispatch(setIsFetching({ answers: true }));
 			const tempList = await fetchAnswers(MOCK, pokemon);
 
 			answers = [
@@ -43,37 +47,37 @@ export default function Answers({
 
 			answers = shuffle(answers);
 
-			setAnswersList([...answers]);
-			onStopFetch();
+			dispatch(setAnswersList([...answers]));
+			dispatch(setIsFetching({ answers: false }));
 		}
 		fetchData();
+	}, [round]);
 
-		return () => setAnswersList([]);
-	}, [pokemon.id]);
-
-	
-		return (
-			<>
-				{!isFetching.answers && answersList.length === 4 && <ul className="w-full text-center">
+	return (
+		<>
+			{!isFetching.answers && answersList.length === 4 && (
+				<ul className="w-full text-center">
 					{answersList.map((answer, index) => {
 						return (
 							<Answer
-								key={index}
+								key={index + "answer"}
 								onSelect={onAnswer}
 								pokemon={pokemon}
 								isCorrect={answer.isCorrect}
-								isSelected={gameState.selectedAnswer === capitalize(answer.text)}
-								hasAnswered={gameState.hasAnswered}
+								isSelected={
+									selectedAnswer === capitalize(answer.text)
+								}
+								hasAnswered={hasAnswered}
 							>
 								{capitalize(removeDashes(answer.text))}
 							</Answer>
 						);
 					})}
-					{gameState.hasAnswered && <NextButton onClick={onNext} />}
-				</ul>}
-				
-			</>
-		);
-	}
-	
+					{hasAnswered && <NextButton onClick={onNext} />}
+				</ul>
+			)}
+		</>
+	);
+}
 
+export default memo(Answers);

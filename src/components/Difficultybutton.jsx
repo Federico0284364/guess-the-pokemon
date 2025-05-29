@@ -1,9 +1,8 @@
 import { useContext } from "react";
 import { DifficultyContext } from "../context/difficulty";
 
-export default function DifficultyButton({ chosenDifficulty }) {
-	const { difficulty, setEasy, setHard } = useContext(DifficultyContext);
-	const isChecked = difficulty === chosenDifficulty;
+export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }) {
+	const isChecked = selectedDifficulty === buttonDifficulty;
 
 	return (
 		<label className=" drop-shadow drop-shadow-black/40 text-xl mt-1">
@@ -11,16 +10,16 @@ export default function DifficultyButton({ chosenDifficulty }) {
 				className="cursor-pointer w-4 aspect-square"
 				type="radio"
 				name="difficulty"
-				value={chosenDifficulty}
+				value={buttonDifficulty}
 				checked={isChecked}
-				onChange={chosenDifficulty === "Easy" ? setEasy : setHard}
+				onChange={() => onSelect(buttonDifficulty)}
 			/>{" "}
-			{chosenDifficulty}
-			{isChecked && chosenDifficulty === "Easy" ? (
+			{buttonDifficulty}
+			{isChecked && buttonDifficulty === "Easy" ? (
 				<p className="drop-shadow drop-shadow-black/40 text-sm font-light w-50 ml-4">
 					Can you pick the right Pokémon name from the given options?
 				</p>
-			) : isChecked && chosenDifficulty === "Hard" ? (
+			) : isChecked && buttonDifficulty === "Hard" ? (
 				<>
 					<p className="drop-shadow-lg drop-shadow-black/40 font-light text-sm w-50 ml-4">
 						Can you identify the Pokémon’s name, type, and extra

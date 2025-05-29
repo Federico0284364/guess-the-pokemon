@@ -4,10 +4,14 @@ import {
 	removeDashes,
 	extractRoman,
 } from "../utils/functions";
+import { useSelector } from "react-redux";
 
-import { Pokemon } from "../utils/pokemonApiMock";
+export default function RightSidebarContent() {
+	const { pokemonList, round } = useSelector(state => state.game);
+	const pokemon = structuredClone(pokemonList[round]);
 
-export default function RightSidebarContent({ pokemon = new Pokemon() }) {
+	console.log(pokemon)
+
 	function getDescriptionByLanguage(language) {
 		let chosenEntry;
 		pokemon.flavor_text_entries.forEach((entry) => {
@@ -33,7 +37,7 @@ export default function RightSidebarContent({ pokemon = new Pokemon() }) {
 	const dotSymbol = "- ";
 
 	return (
-		<div className="mx-2 mt-4 w-[95%] text-wrap wrap flex flex-col gap-2 h-full overflow-auto text-neutral-200">
+		<div className="mx-2 mt-4 max-w-[99%] text-wrap wrap flex flex-col gap-2 h-[94%] overflow-x-hidden text-neutral-200">
 			<h1 className="font-semibold uppercase mb-2 text-3xl text-white self-center mt-[-6px]">
 				Info
 			</h1>

@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 
 import { capitalize, getColorByStat, removeDashes } from "../utils/functions";
+import { useSelector } from 'react-redux';
 
-export default function LeftSidebarContent({ pokemon }) {
+export default function LeftSidebarContent() {
+	const { pokemonList, round } = useSelector(state => state.game);
+	const pokemon = structuredClone(pokemonList[round]);
+
 	let totalStats = 0;
 	pokemon.stats.forEach((stat) => {
 		totalStats += stat.base_stat;

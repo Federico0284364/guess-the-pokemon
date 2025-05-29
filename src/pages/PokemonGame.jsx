@@ -1,8 +1,7 @@
-import { useState, useContext, useEffect, useReducer } from "react";
+import { useContext, useEffect, useCallback } from "react";
 import { DifficultyContext } from "../context/difficulty.jsx";
 import { WindowSizeContext } from "../context/window-size.jsx";
 import { Pokemon } from "../utils/pokemonApiMock.js";
-import { gameReducer } from "../reducers/gameReducer.js";
 import {
 	fetchPokemonList,
 	fetchPokemonSpecies,
@@ -11,137 +10,129 @@ import GameHeader from "../components/GameHeader.jsx";
 import Answers from "../components/Answers.jsx";
 import Sidebar from "../components/Sidebar.jsx";
 import MainWindow from "../components/mainWindow.jsx";
-import Scoreboard from "../components/Scoreboard.jsx";
+import Scoreboard from "./Scoreboard.jsx";
 import InputArea from "../components/InputArea.jsx";
-import { initialGameState } from "../reducers/gameReducer.js";
-
+import { replace, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import LoadingScreen from "../components/LoadingScreen.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	newGame,
+	easyAnswer,
+	correctAnswer,
+	wrongAnswer,
+	hardAnswer,
+	nextQuestion,
+	setPokemonList,
+	setGuessedPokemonList,
+	setIsFetching,
+} from "../store/gameSlice";
+import { NUMBER_OF_POKEMON } from "../store/gameSlice";
+import { getCurrentPokemon, getIsOver } from "../store/gameSlice";
 
 const MOCK = false;
-const numberOfPokemon = 10;
 
 export default function PokemonGame() {
-	
-	const { windowSize, device } = useContext(WindowSizeContext);
+	const { device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
-	const [isFetching, setIsFetching] = useState({
-		pokemonList: false,
-		answers: false,
-	});
-	const [pokemonList, setPokemonList] = useState([new Pokemon()]);
-	const [guessedPokemonList, setGuessedPokemonList] = useState([]);
+	const {
+		hasAnswered,
+		round,
+		score,
+		pokemonList,
+		guessedPokemonList,
+		isFetching,
+	} = useSelector((state) => state.game);
 
-	const [gameState, dispatchGameState] = useReducer(
-		gameReducer,
-		initialGameState
-	);
+	const pokemon = useSelector(getCurrentPokemon);
+	const isOver = useSelector(getIsOver);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-	let isOver = false;
-	if (gameState.round === numberOfPokemon) {
-		isOver = true;
-	}
+	useEffect(() => {
+		if (!isOver) {
+			return;
+		}
 
-	const pokemon = pokemonList[gameState.round] || new Pokemon();
-
-	const leftSidebarProps = {
-		pokemon: pokemon,
-		hasAnswered: gameState.hasAnswered,
-	};
-
-	const rightSidebarProps = {
-		pokemon: pokemon,
-		hasAnswered: gameState.hasAnswered,
-	};
-
-	function handleStartFetchAnswers() {
-		setIsFetching((prevState) => {
-			return {
-				...prevState,
-				answers: true,
-			};
-		});
-	}
-
-	function handleStopFetchAnswers() {
-		setIsFetching((prevState) => {
-			return {
-				...prevState,
-				answers: false,
-			};
-		});
-	}
+		if (isOver) {
+			navigate("/game/score", {replace: true});
+		}
+	}, [isOver]);
 
 	//fetch pokemon
 	useEffect(() => {
 		let tempList = [];
-		if (gameState.round < numberOfPokemon) fetchData();
+		if (round < NUMBER_OF_POKEMON) fetchData();
 
 		async function fetchData() {
-			setIsFetching((prevState) => {
-				return {
-					...prevState,
-					pokemon: true,
-				};
-			});
+			dispatch(setIsFetching({ pokemonList: true }));
 
 			if (pokemonList.length <= 1) {
-				tempList = await fetchPokemonList(MOCK, numberOfPokemon);
+				tempList = await fetchPokemonList(MOCK, NUMBER_OF_POKEMON);
 			} else {
 				tempList = [...pokemonList];
 			}
 			const pokemonSpecies = await fetchPokemonSpecies(
 				MOCK,
-				tempList[gameState.round].id
+				tempList[round].id
 			);
 
-			tempList[gameState.round] = {
-				...tempList[gameState.round],
+			tempList[round] = {
+				...tempList[round],
 				...pokemonSpecies,
 			};
 
-			setPokemonList([...tempList]);
+			dispatch(setPokemonList([...tempList]));
 
-			setIsFetching((prevState) => {
-				return {
-					...prevState,
-					pokemon: false,
-				};
-			});
+			dispatch(setIsFetching({ pokemonList: false }));
 		}
-	}, [gameState.round]);
+	}, [round]);
+
+	const leftSidebarProps = {
+		pokemon: pokemon,
+		hasAnswered: hasAnswered,
+	};
+
+	const rightSidebarProps = {
+		pokemon: pokemon,
+		hasAnswered: hasAnswered,
+	};
 
 	function handleNewGame() {
-		setPokemonList([new Pokemon()]);
-		setGuessedPokemonList([]);
-		dispatchGameState({ type: "NEW_GAME" });
+		dispatch(setPokemonList([]));
+		dispatch(setGuessedPokemonList([]));
+		dispatch(newGame());
 	}
 
-	function handleEasyAnswer(isCorrect, answer) {
-		if (!gameState.hasAnswered) {
-			if (isCorrect) {
-				handleCorrectAnswer();
-			} else {
-				handleWrongAnswer();
+	const handleEasyAnswer = useCallback(
+		(isCorrect, answer) => {
+			if (!hasAnswered) {
+				if (isCorrect) {
+					handleCorrectAnswer();
+				} else {
+					handleWrongAnswer();
+				}
+
+				dispatch(easyAnswer({ answer, pokemon }));
 			}
-
-			dispatchGameState({ type: "EASY_ANSWER", payload: { answer, pokemon } });
-		}
-	}
+		},
+		[round]
+	);
 
 	function handleHardAnswer(answer) {
-		dispatchGameState({ type: "HARD_ANSWER", payload: { answer, pokemon }});
+		dispatch(hardAnswer({ answer, pokemon }));
 	}
 
-	function handleNextQuestion() {
-		dispatchGameState({ type: "NEXT_QUESTION" });
-	}
+	const handleNextQuestion = useCallback(() => {
+		dispatch(nextQuestion());
+	}, [round]);
 
 	function handleCorrectAnswer() {
 		setGuessedPokemonList((oldList) => {
 			return [...oldList, true];
 		});
 
-		dispatchGameState({ type: "CORRECT_ANSWER" });
+		dispatch(correctAnswer());
 	}
 
 	function handleWrongAnswer() {
@@ -149,20 +140,19 @@ export default function PokemonGame() {
 			return [...oldList, false];
 		});
 
-		dispatchGameState({ type: "WRONG_ANSWER" });
+		dispatch(wrongAnswer());
 	}
 
-	if (isFetching.pokemon && gameState.round < 1) {
-		return <p className="mt-6 text-6xl">loading...</p>;
+	if (isFetching.pokemonList) {
+		return <LoadingScreen />;
 	}
 
 	//render
-	if (pokemon) {
+	if (pokemon?.genera) {
 		return (
 			<motion.div>
 				{!isOver && (
 					<GameHeader
-						gameState={gameState}
 						pokemonList={pokemonList}
 						guessedPokemonList={guessedPokemonList}
 					/>
@@ -179,65 +169,46 @@ export default function PokemonGame() {
 					{(device === "medium" || device === "large") && (
 						<Sidebar
 							isOver={isOver}
-							gameState={gameState}
 							{...leftSidebarProps}
 							side="left"
 						/>
 					)}
 					<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
-						{!isOver ? (
+						
 							<>
 								<MainWindow
-									gameState={gameState}
 									pokemon={pokemon}
 									isFetching={isFetching}
 								/>
 								{difficulty === "Easy" ? (
 									<Answers
 										MOCK={MOCK}
-										gameState={gameState}
 										onAnswer={handleEasyAnswer}
 										onNext={handleNextQuestion}
-										onStartFetch={handleStartFetchAnswers}
-										onStopFetch={handleStopFetchAnswers}
-										isFetching={isFetching}
-										pokemon={pokemon}
 									/>
 								) : (
 									<InputArea
-										gameState={gameState}
 										onAnswer={handleHardAnswer}
 										onNext={handleNextQuestion}
 										pokemon={pokemon}
 									/>
 								)}
-								{device === "small" &&
-									gameState.hasAnswered && (
-										<>
-											<Sidebar
-												gameState={gameState}
-												isOver={isOver}
-												{...rightSidebarProps}
-												side="right"
-											/>
-											<Sidebar
-												gameState={gameState}
-												isOver={isOver}
-												{...rightSidebarProps}
-												side="left"
-											/>
-										</>
-									)}
+								{device === "small" && hasAnswered && (
+									<>
+										<Sidebar
+											isOver={isOver}
+											{...rightSidebarProps}
+											side="right"
+										/>
+										<Sidebar
+											isOver={isOver}
+											{...rightSidebarProps}
+											side="left"
+										/>
+									</>
+								)}
 							</>
-						) : (
-							<Scoreboard
-								score={gameState.score}
-								pokemonList={pokemonList}
-								guessedPokemonList={guessedPokemonList}
-								startNewGame={handleNewGame}								
-								difficulty={difficulty}
-							/>
-						)}
+						
 					</div>
 					{(device === "medium" || device === "large") && (
 						<Sidebar
@@ -250,4 +221,5 @@ export default function PokemonGame() {
 			</motion.div>
 		);
 	}
+	return null;
 }

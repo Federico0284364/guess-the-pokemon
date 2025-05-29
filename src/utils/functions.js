@@ -118,6 +118,8 @@ export function getColorByStat(stat) {
 }
 
 export function capitalize(string) {
+	if (string.length === 0) return "";
+
 	return string.length > 1
 		? string[0].toUpperCase() + string.slice(1)
 		: string.toUpperCase();
@@ -144,13 +146,12 @@ export function extractRoman(string) {
 }
 
 export function calculateTotalScore(score) {
-	console.log(score);
 	let totalScore = 0;
 	score.forEach((round) => {
 		Object.values(round).forEach((entry) => {
 			totalScore += entry;
-		})
-	})
+		});
+	});
 
 	return totalScore;
 }
@@ -181,9 +182,9 @@ export function checkMispelling(string, correctString) {
 		if (string[i] !== correctString[j]) {
 			diffCount++;
 			if (string.length > correctString.length) {
-				i++; 
+				i++;
 			} else if (string.length < correctString.length) {
-				j++; 
+				j++;
 			}
 		} else {
 			i++;

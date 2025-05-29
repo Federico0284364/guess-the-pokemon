@@ -5,25 +5,28 @@ import {
 	capitalize,
 } from "../utils/functions.js";
 import { WindowSizeContext } from "../context/window-size.jsx";
-
 import { motion, useAnimate, AnimatePresence } from "framer-motion";
+import { useSelector} from 'react-redux';
 
-export default function MainWindow({ pokemon, gameState, isFetching }) {
+export default function MainWindow() {
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const [jumpScope, jump] = useAnimate();
+	const { pokemonList, hasAnswered, round } = useSelector(state => state.game);
+
+	const pokemon = pokemonList[round];
 
 	let type1Color;
 	let type2Color;
-	if (pokemon.types[0]) {
+	if (pokemon.types?.[0]) {
 		type1Color = useMemo(() => {
-			return getInlineColorByType(pokemon.types[0].type.name);
+			return getInlineColorByType(pokemon.types?.[0]?.type?.name);
 		}, [pokemon.id]);
 		type2Color = useMemo(() => {
-			if (pokemon.types.length === 1) {
+			if (pokemon.types?.length === 1) {
 				return;
 			}
 
-			return getInlineColorByType(pokemon.types[1].type.name);
+			return getInlineColorByType(pokemon.types?.[1]?.type.name);
 		}, [pokemon.id]);
 	}
 
@@ -31,6 +34,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 		? "#f0b247"
 		: `linear-gradient(45deg, ${type1Color}, ${type2Color || type1Color})`;
 */
+
 	function handleSpriteJump(event = null) {
 		if (event) {
 			jump(event.target, {
@@ -50,11 +54,11 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 	}
 
 	useEffect(() => {
-		if (!gameState.hasAnswered) {
+		if (!hasAnswered) {
 			return;
 		}
 		handleSpriteJump();
-	}, [gameState.hasAnswered]);
+	}, [hasAnswered]);
 
 	if (pokemon.sprites.front_default) {
 		return (
@@ -62,7 +66,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 				layout
 				key={"window"}
 				//style={{
-					//background: backgroundColor,
+				//background: backgroundColor,
 				//}}
 				className={
 					" shadow-lg shadow-black/30 w-full flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700 h-55 relative"
@@ -88,12 +92,12 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 									transition: { duration: 0.3 },
 								}}
 								onClick={(event) => handleSpriteJump(event)}
-								key={pokemon.id + 'back-sprite'}
+								key={pokemon.id + "back-sprite"}
 								className="w-[90%] h-[90%] mt-[-7px] cursor-pointer"
 								src={pokemon.sprites.back_default}
 							/>
 						)}
-						
+
 						{pokemon.sprites.front_default && (
 							<motion.img
 								initial={{ scale: 0 }}
@@ -106,7 +110,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 									transition: { duration: 0.3 },
 								}}
 								onClick={(event) => handleSpriteJump(event)}
-								key={pokemon.id + 'front-sprite'}
+								key={pokemon.id + "front-sprite"}
 								className="w-[90%] h-[90%]  mt-[-7px] cursor-pointer"
 								src={pokemon.sprites.front_default}
 							/>
@@ -115,7 +119,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 				</motion.div>
 
 				<div className="w-[101%] mb-[-4px] bg-neutral-700 flex justify-around sm:justify-center items-center gap-1 h-10 relative">
-					{gameState.hasAnswered && (
+					{hasAnswered && (
 						<>
 							{windowSize.width >= 640 && (
 								<motion.p
@@ -145,7 +149,7 @@ export default function MainWindow({ pokemon, gameState, isFetching }) {
 						initial="hidden"
 						className="flex sm:absolute right-2 "
 					>
-						{gameState.hasAnswered && pokemon.types
+						{hasAnswered && pokemon.types
 							? pokemon.types.map((type) => {
 									let typeClass = getColorByType(
 										type.type.name

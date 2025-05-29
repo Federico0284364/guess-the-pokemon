@@ -60,19 +60,14 @@ export default function Sidebar({
 					<motion.div
 						exit={{ x: [0, -300], transition: { duration: 0.3 } }}
 					>
-						<LeftSidebarContent
-							hasAnswered={hasAnswered}
-							pokemon={pokemon}
-						/>
+						<LeftSidebarContent />
 					</motion.div>
 				) : side === "right" ? (
 					<motion.div
 						exit={{ x: [0, 300], transition: { duration: 0.3 } }}
+						className="overflow-y-auto h-full"
 					>
-						<RightSidebarContent
-							hasAnswered={hasAnswered}
-							pokemon={pokemon}
-						/>
+						<RightSidebarContent />
 					</motion.div>
 				) : (
 					""
