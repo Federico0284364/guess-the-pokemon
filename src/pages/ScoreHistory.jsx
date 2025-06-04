@@ -4,12 +4,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { WindowSizeContext } from "../context/window-size";
 
 export default function ScoreRecord() {
-	const [selectedDifficulty, setSelectedDifficulty] = useState("Easy");
 	const { device } = useContext(WindowSizeContext);
 	const [easyIsVisible, setEasyIsVisible] = useState(true);
 	const [hardIsVisible, setHardIsVisible] = useState(true);
 
 	const scoreHistory = JSON.parse(localStorage.getItem("score-history"));
+
 	if (!scoreHistory) {
 		return <p>No score yet</p>;
 	}
@@ -66,8 +66,8 @@ export default function ScoreRecord() {
 	}
 
 	return (
-		<motion.div layout className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100%] justify-center relative overflow-hidden">
-			<AnimatePresence layout>
+		<motion.div className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100%] justify-center relative overflow-hidden">
+			<AnimatePresence>
 				{renderSection("Easy")}
 				{renderSection("Hard")}
 			</AnimatePresence>

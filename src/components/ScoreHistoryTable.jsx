@@ -5,7 +5,7 @@ export default function ScoreHistoryTable({
 }) {
 	
 
-	const headerCellStyle = " ";
+	const headerCellStyle = " bg-black/20 rounded-lg";
 
 	return (
 		<table className=" min-w-[85vw] sm:min-w-[80vw] md:min-w-[35vw] w-[85%] rounded-2xl text-center border-separate border-spacing-1 table-fixed border-neutral-800 border-4 bg-orange-400 pb-1 px-1 shadow-md shadow-black/50">
@@ -35,7 +35,7 @@ export default function ScoreHistoryTable({
 						: " bg-neutral-700";
 
 					return (
-						<tr>
+						<tr className="bg-black/80">
 							<td className={cellStyle}>{formattedDate}</td>
 							<td className={cellStyle}>
 								{entry.score}

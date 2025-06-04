@@ -13,6 +13,7 @@ export default function ScoreHistorySection({
 	device,
 	isVisible,
 }) {
+	
 	const bestEntry = scoreHistory.reduce((best, entry) => {
 		if (!best || entry.score > best.score) {
 			return entry;
@@ -20,27 +21,7 @@ export default function ScoreHistorySection({
 		return best;
 	}, null);
 
-	if (!isVisible && device != 'small') {
-		return (
-			<div className="flex justify-center items-baseline relative gap-4 mb-4">
-				<Button
-					onClick={device === "small" ? onToggle : onHide}
-					variant={"secondary"}
-					className="text-xs aspect-square absolute top-22 h-8"
-				>
-					<img
-						className="h-6 aspect-square"
-						src={device === "small" ? changeSvg : hideSvg}
-					/>
-				</Button>
-				<h1 className="font-bold bg-white p-2 rounded-xl text-neutral-800 text-5xl shadow-md shadow-black/50 border-4 border-orange-900">
-					{difficulty}
-				</h1>
-
-				
-			</div>
-		);
-	}
+	
 
 	if (isVisible) {
 		return (
@@ -59,13 +40,17 @@ export default function ScoreHistorySection({
 					<h1 className="font-bold bg-white p-2 rounded-xl text-neutral-800 text-5xl shadow-md shadow-black/50 border-4 border-orange-900">
 						{difficulty}
 					</h1>	
+
+					{device === 'small' && <Button className=' absolute w-9 aspect-square right-[-3rem]' variant={'secondary'} onClick={onToggle}>
+						<img className="" src={changeSvg}/>
+					</Button>}
 				</div>
 
 				{bestEntry ? (
 					<>
 						<div className="font-semibold shadow-md shadow-black/50 text-2xl bg-orange-400 w-[100%] max-w-[90vw] rounded-2xl p-2 border-4 border-neutral-800">
-							<h2 className=" text-shadow text-min-2 text-[clamp(1.2rem, 4vw, 3rem)]">
-								{new Date(bestEntry.date).toLocaleDateString()} - Best: {bestEntry.score}
+							<h2 className=" bg-black/20 rounded-xl py-1 mb-2 text-shadow text-min-2 text-[clamp(1.2rem, 4vw, 3rem)]">
+								 Best: {bestEntry.score} - {new Date(bestEntry.date).toLocaleDateString()} 
 							</h2>
 							<ul className="grid w-full grid-cols-5 md:grid-cols-10">
 								{bestEntry.pokemon.map((entry) => {
@@ -81,7 +66,8 @@ export default function ScoreHistorySection({
 											/>
 											<p className={
 											" text-shadow relative bottom-1 px-2 text-center text-white rounded-sm bg-opacity-10 text-sm"
-										}>{entry.score}</p>
+										}>{difficulty === 'Hard' ? entry.score : 
+											entry.score == 50 ? "\u2713" : "\u274C"}</p>
 										</li>
 									);
 								})}
@@ -95,7 +81,7 @@ export default function ScoreHistorySection({
 						/>
 					</>
 				) : (
-					<p className="absolute ">No score yet</p>
+					<p className=" text-2xl">No score yet</p>
 				)}
 			</motion.div>
 		);
