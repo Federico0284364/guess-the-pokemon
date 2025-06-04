@@ -1,11 +1,11 @@
 import { useContext } from "react";
-import { WindowSizeContext } from "../context/window-size.jsx";
-import { capitalize, calculateTotalScore } from "../utils/functions.js";
-import pokeballImg from "../assets/pokeball.png";
+import { WindowSizeContext } from "../../context/window-size.jsx";
+import { capitalize, calculateTotalScore } from "../../utils/functions.js";
+import pokeballImg from "../../assets/pokeball.png";
 import { useNavigate } from "react-router-dom";
 import  {useSelector, useDispatch} from 'react-redux';
-import { newGame } from "../store/gameSlice.js";
-import Button from "./Button.jsx";
+import { newGame } from "../../store/gameSlice.js";
+import Button from "../UI/Button.jsx";
 
 export default function GameHeader({
 	pokemonList,

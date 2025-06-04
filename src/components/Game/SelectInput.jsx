@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { capitalize } from "../utils/functions";
+import { capitalize } from "../../utils/functions";
 
 export default function SelectInput({
 	pokemon,

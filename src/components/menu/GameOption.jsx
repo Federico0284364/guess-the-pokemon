@@ -1,9 +1,9 @@
 import { useDispatch } from 'react-redux';
-import pikachuImg from '../assets/pikachu.png';
+import pikachuImg from '../../assets/pikachu.png';
 import {useNavigate} from 'react-router-dom';
-import { newGame } from '../store/gameSlice';
+import { newGame } from '../../store/gameSlice';
 import { useContext } from 'react';
-import { DifficultyContext } from '../context/difficulty';
+import { DifficultyContext } from '../../context/difficulty';
 
 export default function GameOption({selectedDifficulty}) {
 	const navigate = useNavigate();

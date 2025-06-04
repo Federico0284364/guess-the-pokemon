@@ -3,8 +3,8 @@ import {
 	getColorByType,
 	getInlineColorByType,
 	capitalize,
-} from "../utils/functions.js";
-import { WindowSizeContext } from "../context/window-size.jsx";
+} from "../../utils/functions.js";
+import { WindowSizeContext } from "../../context/window-size.jsx";
 import { motion, useAnimate, AnimatePresence } from "framer-motion";
 import { useSelector} from 'react-redux';
 

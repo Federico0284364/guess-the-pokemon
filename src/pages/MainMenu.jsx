@@ -1,7 +1,7 @@
-import GameOption from "../components/GameOption.jsx";
+import GameOption from "../components/menu/GameOption.jsx";
 import { games } from "../games.js";
-import DifficultyButton from "../components/Difficultybutton.jsx";
-import Button from "../components/Button.jsx";
+import DifficultyButton from "../components/menu/Difficultybutton.jsx";
+import Button from "../components/UI/Button.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 

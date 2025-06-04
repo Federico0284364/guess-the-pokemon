@@ -1,9 +1,9 @@
-import { Pokemon } from "../utils/pokemonApiMock";
+import { Pokemon } from "../../utils/pokemonApiMock";
 import LeftSidebarContent from "./LeftSidebarContent";
-import RightSidebarContent from "./game/RightSidebarContent";
-import sidebarImg from "../assets/sidebar-wallpapers/vertical.jpg";
-import { selectRandomImage } from "../utils/selectImage";
-import { getColorByType, getInlineColorByType } from "../utils/functions";
+import RightSidebarContent from "./RightSidebarContent";
+import sidebarImg from "../../assets/sidebar-wallpapers/vertical.jpg";
+import { selectRandomImage } from "../../utils/selectImage";
+import { getColorByType, getInlineColorByType } from "../../utils/functions";
 
 import { motion, AnimatePresence } from "motion/react";
 

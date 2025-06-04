@@ -3,7 +3,7 @@ import {
 	getColorByStat,
 	removeDashes,
 	extractRoman,
-} from "../utils/functions";
+} from "../../utils/functions";
 import { useSelector } from "react-redux";
 
 export default function RightSidebarContent() {

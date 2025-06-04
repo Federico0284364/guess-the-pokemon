@@ -6,15 +6,14 @@ import {
 	fetchPokemonList,
 	fetchPokemonSpecies,
 } from "../utils/fetchFunctions.js";
-import GameHeader from "../components/GameHeader.jsx";
-import Answers from "../components/Answers.jsx";
-import Sidebar from "../components/Sidebar.jsx";
-import MainWindow from "../components/mainWindow.jsx";
-import Scoreboard from "./Scoreboard.jsx";
-import InputArea from "../components/InputArea.jsx";
+import GameHeader from "../components/game/GameHeader.jsx";
+import Answers from "../components/game/Answers.jsx";
+import Sidebar from "../components/game/Sidebar.jsx";
+import MainWindow from "../components/game/mainWindow.jsx";
+import InputArea from "../components/game/InputArea.jsx";
 import { replace, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import LoadingScreen from "../components/LoadingScreen.jsx";
+import LoadingScreen from "../components/game/LoadingScreen.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	newGame,
@@ -38,7 +37,6 @@ export default function PokemonGame() {
 	const {
 		hasAnswered,
 		round,
-		score,
 		pokemonList,
 		guessedPokemonList,
 		isFetching,
@@ -48,6 +46,8 @@ export default function PokemonGame() {
 	const isOver = useSelector(getIsOver);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	console.log(round)
 
 	useEffect(() => {
 		if (!isOver) {
@@ -98,11 +98,7 @@ export default function PokemonGame() {
 		hasAnswered: hasAnswered,
 	};
 
-	function handleNewGame() {
-		dispatch(setPokemonList([]));
-		dispatch(setGuessedPokemonList([]));
-		dispatch(newGame());
-	}
+
 
 	const handleEasyAnswer = useCallback(
 		(isCorrect, answer) => {

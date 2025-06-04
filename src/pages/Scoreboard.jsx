@@ -14,8 +14,10 @@ import {
 	getIsOver,
 	newGame,
 	NUMBER_OF_POKEMON,
+	setGuessedPokemonList,
+	setPokemonList
 } from "../store/gameSlice.js";
-import Button from "../components/Button.jsx";
+import Button from "../components/UI/Button.jsx";
 
 export default function Scoreboard() {
 	const { score, pokemonList, round } = useSelector((state) => state.game);
@@ -34,12 +36,6 @@ export default function Scoreboard() {
 	}
 
 	useEffect(() => {
-		if (score.length != NUMBER_OF_POKEMON) {
-			navigate("/score-history");
-		}
-	}, [score.length]);
-
-	useEffect(() => {
 		if (score.length === NUMBER_OF_POKEMON) {
 			const scoreHistory =
 				JSON.parse(localStorage.getItem("score-history")) || [];
@@ -47,10 +43,11 @@ export default function Scoreboard() {
 				date: date,
 				score: totalScore,
 				difficulty: difficulty,
-				pokemon: pokemonList.map((entry) => {
+				pokemon: pokemonList.map((entry, index) => {
 					return {
 						name: entry.name,
 						sprite: entry.sprites.front_default,
+						score: calculatePokemonScore(index) 
 					};
 				}),
 			});
@@ -58,6 +55,8 @@ export default function Scoreboard() {
 
 			localStorage.setItem("best-score", JSON.stringify(bestScore));
 		}
+
+
 	}, []);
 
 	if (score.length != NUMBER_OF_POKEMON) {
@@ -66,12 +65,14 @@ export default function Scoreboard() {
 
 	function handleGoToMenu() {
 		dispatch(newGame());
+		navigate("/score-history",  {replace: true});
 		navigate("/");
 	}
 
 	function handleNewGame() {
 		dispatch(newGame());
-		navigate("/game");
+		navigate("/score-history",  {replace: true});
+		navigate("/game")
 	}
 
 	function calculatePokemonScore(index) {

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import ScoreHistorySection from "../components/ScoreHistorySection";
 import { motion, AnimatePresence } from "framer-motion";
 import { WindowSizeContext } from "../context/window-size";
@@ -6,16 +6,40 @@ import { WindowSizeContext } from "../context/window-size";
 export default function ScoreRecord() {
 	const [selectedDifficulty, setSelectedDifficulty] = useState("Easy");
 	const { device } = useContext(WindowSizeContext);
+	const [easyIsVisible, setEasyIsVisible] = useState(true);
+	const [hardIsVisible, setHardIsVisible] = useState(true);
 
 	const scoreHistory = JSON.parse(localStorage.getItem("score-history"));
 	if (!scoreHistory) {
 		return <p>No score yet</p>;
 	}
 
-	function handleToggleDifficulty() {
-		selectedDifficulty === "Easy"
-			? setSelectedDifficulty("Hard")
-			: setSelectedDifficulty("Easy");
+	useEffect(() => {
+		if (device === "small") {
+			setEasyIsVisible(true);
+			setHardIsVisible(false);
+		} else {
+			setEasyIsVisible(true);
+			setHardIsVisible(true);
+		}
+	}, [device]);
+
+	function handleHideSection(difficulty) {
+		if (difficulty === "Easy") {
+			setEasyIsVisible(!easyIsVisible);
+		} else {
+			setHardIsVisible(!hardIsVisible);
+		}
+	}
+
+	function handleToggleSection() {
+		if (easyIsVisible) {
+			setEasyIsVisible(false);
+			setHardIsVisible(true);
+		} else {
+			setEasyIsVisible(true);
+			setHardIsVisible(false);
+		}
 	}
 
 	const difficulties = ["Easy", "Hard"];
@@ -31,23 +55,22 @@ export default function ScoreRecord() {
 				scoreHistory={filteredHistory[difficulty]}
 				difficulty={difficulty}
 				key={difficulty}
-				onClick={handleToggleDifficulty}
+				onToggle={() => handleToggleSection()}
+				onHide={() => handleHideSection(difficulty)}
 				device={device}
+				isVisible={
+					difficulty === "Easy" ? easyIsVisible : hardIsVisible
+				}
 			/>
 		);
 	}
 
 	return (
-		<div className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100vw] justify-center relative overflow-hidden">
-			{device === "small" ? (
-				<AnimatePresence>
-					{renderSection(selectedDifficulty)}
-				</AnimatePresence>
-			) : (
-				<>
-					{renderSection("Easy")} {renderSection("Hard")}
-				</>
-			)}
-		</div>
+		<motion.div layout className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100%] justify-center relative overflow-hidden">
+			<AnimatePresence layout>
+				{renderSection("Easy")}
+				{renderSection("Hard")}
+			</AnimatePresence>
+		</motion.div>
 	);
 }

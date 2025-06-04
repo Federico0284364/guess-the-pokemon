@@ -1,15 +1,15 @@
-import { shuffle } from "../utils/functions";
+import { shuffle } from "../../utils/functions.js";
 import { useEffect, useContext, memo } from "react";
-import { removeDashes, capitalize } from "../utils/functions";
-import { fetchAnswers } from "../utils/fetchFunctions";
-import Answer from "./Answer";
-import NextButton from "./NextButton";
+import { removeDashes, capitalize } from "../../utils/functions.js";
+import { fetchAnswers } from "../../utils/fetchFunctions.js";
+import Answer from "./Answer.jsx";
+import NextButton from "./NextButton.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	setIsFetching,
 	setAnswersList,
 	getCurrentPokemon,
-} from "../store/gameSlice.js";
+} from "../../store/gameSlice.js";
 
 function Answers({ onAnswer, onNext, MOCK }) {
 	const { hasAnswered, round, selectedAnswer, answersList, isFetching } =

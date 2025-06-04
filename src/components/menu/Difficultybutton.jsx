@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { DifficultyContext } from "../context/difficulty";
+import { DifficultyContext } from "../../context/difficulty";
 
 export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }) {
 	const isChecked = selectedDifficulty === buttonDifficulty;

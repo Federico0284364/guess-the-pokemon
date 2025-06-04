@@ -15,7 +15,7 @@ import {
 } from "react-router-dom";
 import { getIsOver } from "./store/gameSlice.js";
 import ScoreHistory from "./pages/ScoreHistory.jsx";
-import Error from "./components/Error.jsx";
+import Error from "./components/UI/Error.jsx";
 
 const router = createBrowserRouter(
 	[

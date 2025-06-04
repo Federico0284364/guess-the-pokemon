@@ -1,9 +1,14 @@
-export default function ScoreHistoryTable({scoreHistory, difficulty}) {
-	const cellStyle = ' border border-neutral-800 rounded bg-neutral-700';
-	const headerCellStyle= ' ';
+export default function ScoreHistoryTable({
+	scoreHistory,
+	difficulty,
+	bestEntry,
+}) {
+	
+
+	const headerCellStyle = " ";
 
 	return (
-		<table className=" min-w-[85vw] sm:min-w-[80vw] md:min-w-[35vw]  rounded-2xl text-center border-separate border-spacing-1 table-fixed border-neutral-800 border-4 bg-orange-400 pb-1 px-1 shadow-md shadow-black/50">
+		<table className=" min-w-[85vw] sm:min-w-[80vw] md:min-w-[35vw] w-[85%] rounded-2xl text-center border-separate border-spacing-1 table-fixed border-neutral-800 border-4 bg-orange-400 pb-1 px-1 shadow-md shadow-black/50">
 			<thead>
 				<tr>
 					<th className={"w-[20vw]" + headerCellStyle}>Date</th>
@@ -12,6 +17,7 @@ export default function ScoreHistoryTable({scoreHistory, difficulty}) {
 			</thead>
 			<tbody>
 				{scoreHistory.map((entry) => {
+					let cellStyle = " border border-neutral-800 rounded ";
 					const formattedDate = new Date(entry.date).toLocaleString(
 						"en-GB",
 						{
@@ -24,10 +30,16 @@ export default function ScoreHistoryTable({scoreHistory, difficulty}) {
 							hour12: false, // opzionale, per ora 24h
 						}
 					);
+					cellStyle += bestEntry.score === entry.score
+						? " bg-green-500/60"
+						: " bg-neutral-700";
+
 					return (
 						<tr>
 							<td className={cellStyle}>{formattedDate}</td>
-							<td className={cellStyle}>{entry.score}</td>
+							<td className={cellStyle}>
+								{entry.score}
+							</td>
 						</tr>
 					);
 				})}

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { calculateScore } from "../utils/gameFunctions";
+import { calculateScore } from "../../utils/gameFunctions";
 
 export default function Input({ hasAnswered, round, score, ref, label, widthClass }) {
 	let isCorrect = false;

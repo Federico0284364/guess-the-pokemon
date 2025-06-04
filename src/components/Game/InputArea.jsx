@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import SelectInput from "./SelectInput";
-import Input from "./Input";
+import Input from "./Input.jsx";
 import NextButton from "./NextButton";
 import { useSelector, useDispatch } from 'react-redux';
-import { getCurrentPokemon} from '../store/gameSlice.js';
+import { getCurrentPokemon} from '../../store/gameSlice.js';
 
 const GENERATIONS = [
 		"I",

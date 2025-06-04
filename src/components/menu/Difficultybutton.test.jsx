@@ -1,10 +1,10 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import { screen, within, render, fireEvent } from "@testing-library/react";
-import { POKEMON_LIST_MOCK } from "../utils/pokemonApiMock";
+import { POKEMON_LIST_MOCK } from "../../utils/pokemonApiMock";
 import { afterEach, beforeEach, expect } from "vitest";
 import DifficultyButton from "./Difficultybutton";
-import { DifficultyContext } from "../context/difficulty";
+import { DifficultyContext } from "../../context/difficulty";
 
 let mockSetEasy;
 let mockSetHard;

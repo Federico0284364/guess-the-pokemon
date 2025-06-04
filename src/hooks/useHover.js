@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 
 export function useHover() {
 	const [isHovered, setIsHovered] = useState(false);
-	const ref = useRef(null);
+	const ref = useRef();
 
 	useEffect(() => {
 		const node = ref.current;
@@ -15,11 +15,8 @@ export function useHover() {
 		node.addEventListener("mouseleave", handleMouseLeave);
 
 		// Cleanup
-		return () => {
-			node.removeEventListener("mouseenter", handleMouseEnter);
-			node.removeEventListener("mouseleave", handleMouseLeave);
-		};
-	}, [ref]);
+		
+	}, []);
 
 	return [ref, isHovered];
 }

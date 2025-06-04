@@ -5,7 +5,7 @@ import { calculateScore } from "../utils/gameFunctions";
 import { Pokemon } from "../utils/pokemonApiMock";
 import { POKEMON_LIST_MOCK } from "../utils/pokemonApiMock.js";
 
-export const NUMBER_OF_POKEMON = 2;
+export const NUMBER_OF_POKEMON = 10;
 
 const standardState = {
 	hasAnswered: false,

@@ -7,7 +7,7 @@ export default function PokemonSprite({ pokemonName, pokemonSprite, imgClassName
 	return (
 		<div className="relative flex flex-col items-center">
 			<img ref={ref} src={pokemonSprite} className={imgClassName} {...props}/>
-      {isHovering && <p className="absolute z-1000 font-normal text-xs bg-neutral-800/95 rounded-lg p-2 top-10">{pokemonName}</p>}
+      {isHovering && <p className="pointer-events-none absolute text-xs sm:text-sm z-1000 font-normal bg-neutral-800/95 rounded-lg px-2 py-1 bottom-[-26px]">{pokemonName}</p>}
 		</div>
 	);
 }
