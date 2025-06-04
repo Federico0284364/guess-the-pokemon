@@ -2,11 +2,14 @@ import { useContext, useState, useEffect } from "react";
 import ScoreHistorySection from "../components/ScoreHistorySection";
 import { motion, AnimatePresence } from "framer-motion";
 import { WindowSizeContext } from "../context/window-size";
+import BackButton from "../components/UI/BackButton";
+import { useNavigate } from "react-router-dom";
 
 export default function ScoreRecord() {
 	const { device } = useContext(WindowSizeContext);
 	const [easyIsVisible, setEasyIsVisible] = useState(true);
 	const [hardIsVisible, setHardIsVisible] = useState(true);
+	const navigate = useNavigate();
 
 	const scoreHistory = JSON.parse(localStorage.getItem("score-history"));
 
@@ -23,6 +26,10 @@ export default function ScoreRecord() {
 			setHardIsVisible(true);
 		}
 	}, [device]);
+
+	function handleGoToMenu() {
+			navigate("/");
+		}
 
 	function handleHideSection(difficulty) {
 		if (difficulty === "Easy") {
@@ -67,6 +74,7 @@ export default function ScoreRecord() {
 
 	return (
 		<motion.div className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100%] justify-center relative overflow-hidden">
+			<BackButton onClick={handleGoToMenu} className="z-1000 absolute left-4 top-[-8px] scale-110"/>
 			<AnimatePresence>
 				{renderSection("Easy")}
 				{renderSection("Hard")}

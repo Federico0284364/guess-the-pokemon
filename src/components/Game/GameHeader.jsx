@@ -3,30 +3,28 @@ import { WindowSizeContext } from "../../context/window-size.jsx";
 import { capitalize, calculateTotalScore } from "../../utils/functions.js";
 import pokeballImg from "../../assets/pokeball.png";
 import { useNavigate } from "react-router-dom";
-import  {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { newGame } from "../../store/gameSlice.js";
 import Button from "../UI/Button.jsx";
+import BackButton from "../UI/BackButton.jsx";
 
-export default function GameHeader({
-	pokemonList,
-	guessedPokemonList,
-}) {
+export default function GameHeader({ pokemonList, guessedPokemonList }) {
 	const { device } = useContext(WindowSizeContext);
-	
+
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const { score, round } = useSelector(state => state.game);
+	const { score, round } = useSelector((state) => state.game);
 	const totalScore = calculateTotalScore(score);
 
-	function handleGoToMenu(){
+	function handleGoToMenu() {
 		dispatch(newGame());
-		navigate('/');
+		navigate("/");
 	}
 
 	return (
 		<header className="flex justify-between md:justify-normal items-center gap-6 sm:gap-0 mb-4">
-			<Button onClick={handleGoToMenu} className="active:opacity-70 hover:bg-neutral-300 hover:text-neutral-700 font-extrabold text-xl text-center pb-1 mt-4 w-10 aspect-square items-center rounded-xl bg-neutral-700 border-4 border-neutral-300" variant="none">{'x'}</Button>
+			<BackButton onClick={handleGoToMenu}/>{" "}
 			<h1 className="mt-3 ml-3 text-3xl sm:text-3xl sm:w-45 text-nowrap text-white font-semibold text-center uppercase">
 				score: {totalScore}
 			</h1>
@@ -42,7 +40,10 @@ export default function GameHeader({
 						.map((guessedPokemon, index) => {
 							let isCorrect = guessedPokemonList[index];
 							return (
-								<div key={[pokemonList[index].id + 'header']} className="flex flex-col items-center relative w-13 lg:w-17">
+								<div
+									key={[pokemonList[index].id + "header"]}
+									className="flex flex-col items-center relative w-13 lg:w-17"
+								>
 									<img
 										className="w-13 lg:w-15 hover:scale-125 transition-[2s]"
 										src={
@@ -61,17 +62,16 @@ export default function GameHeader({
 								</div>
 							);
 						})}
-						{pokemonList.slice(round).map(() => {
-							return (
-								<div className="flex flex-col items-center relative w-13 lg:w-17">
-									<img
+					{pokemonList.slice(round).map(() => {
+						return (
+							<div className="flex flex-col items-center relative w-13 lg:w-17">
+								<img
 									className="mt-2 aspect-square w-7 h-7 lg:w-8 lg:h-8 hover:scale-125 transition-[2s]"
 									src={pokeballImg}
 								/>
-								</div>
-								
-							);
-						})}
+							</div>
+						);
+					})}
 				</ul>
 			)}
 		</header>
