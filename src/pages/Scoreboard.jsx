@@ -39,7 +39,7 @@ export default function Scoreboard() {
 		if (score.length === NUMBER_OF_POKEMON) {
 			const scoreHistory =
 				JSON.parse(localStorage.getItem("score-history")) || [];
-			scoreHistory.push({
+			scoreHistory.unshift({
 				date: date,
 				score: totalScore,
 				difficulty: difficulty,

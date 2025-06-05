@@ -65,6 +65,7 @@ export default function ScoreRecord() {
 				onToggle={() => handleToggleSection()}
 				onHide={() => handleHideSection(difficulty)}
 				device={device}
+				onGoToMenu={handleGoToMenu}
 				isVisible={
 					difficulty === "Easy" ? easyIsVisible : hardIsVisible
 				}
@@ -74,7 +75,6 @@ export default function ScoreRecord() {
 
 	return (
 		<motion.div className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100%] justify-center relative overflow-hidden">
-			<BackButton onClick={handleGoToMenu} className="z-1000 absolute left-4 top-[-8px] scale-110"/>
 			<AnimatePresence>
 				{renderSection("Easy")}
 				{renderSection("Hard")}

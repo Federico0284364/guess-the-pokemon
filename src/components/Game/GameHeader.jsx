@@ -24,7 +24,7 @@ export default function GameHeader({ pokemonList, guessedPokemonList }) {
 
 	return (
 		<header className="flex justify-between md:justify-normal items-center gap-6 sm:gap-0 mb-4">
-			<BackButton onClick={handleGoToMenu}/>{" "}
+			<BackButton className="scale-120" onClick={handleGoToMenu}/>{" "}
 			<h1 className="mt-3 ml-3 text-3xl sm:text-3xl sm:w-45 text-nowrap text-white font-semibold text-center uppercase">
 				score: {totalScore}
 			</h1>
