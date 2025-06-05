@@ -21,29 +21,32 @@ const router = createBrowserRouter(
 	[
 		{
 			path: "/",
-			element: <MainMenu />,
-			errorElement: <Error />
-		},
-		{
-			path: "/game",
-			element: <PokemonGame />,
-			errorElement: <Error />
-		},
-		{
-			path: "/game/score",
-			element: <Scoreboard />,
-			errorElement: <Error />
-		},
-		{
-			path: '/score-history',
-			element: <ScoreHistory />,
-			errorElement: <Error />
+			errorElement: <Error />, 
+			children: [
+				{
+					index: true,
+					element: <MainMenu />
+				},
+				{
+					path: "game",
+					element: <PokemonGame />
+				},
+				{
+					path: "game/score",
+					element: <Scoreboard />
+				},
+				{
+					path: "score-history",
+					element: <ScoreHistory />
+				}
+			]
 		}
 	],
 	{
 		basename: "/guess-the-pokemon/",
 	}
 );
+
 
 function App() {
 	const { score } = useSelector((state) => state.game);

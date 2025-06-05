@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export default function LoadingScreen({ children = "loading..." }) {
 	return (
-		<div className="flex flex-col items-center gap-4">
+		<div className="flex flex-col items-center gap-4 overflow-hidden">
 			<p className="mt-6 text-6xl">{children}</p>
 			<motion.img
 				src={pokeballImg}

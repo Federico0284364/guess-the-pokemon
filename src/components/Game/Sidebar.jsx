@@ -13,9 +13,9 @@ export default function Sidebar({
 	hasAnswered = false,
 	pokemon = new Pokemon(),
 }) {
-	let isOverClass = "sm:h-117 ";
+	let isOverClass = "md:h-117 ";
 	if (isOver) {
-		isOverClass = "sm:h-155 ";
+		isOverClass = "md:h-155 ";
 	}
 
 	let initialX;
