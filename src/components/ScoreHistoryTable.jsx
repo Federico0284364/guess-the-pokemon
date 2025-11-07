@@ -1,6 +1,5 @@
 export default function ScoreHistoryTable({
 	scoreHistory,
-	difficulty,
 	bestEntry,
 }) {
 	

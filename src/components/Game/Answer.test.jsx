@@ -1,9 +1,9 @@
 import React from "react";
-import { screen, render, fireEvent } from "@testing-library/react";
+import { screen, render, describe, fireEvent } from "@testing-library/react";
 
 import Answer from "./Answer";
 import { POKEMON_LIST_MOCK } from "../../utils/pokemonApiMock";
-import { beforeEach, expect } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 
 const mockOnSelect = vi.fn();
 

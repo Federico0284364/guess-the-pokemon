@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { screen, within, render, fireEvent } from "@testing-library/react";
 import { POKEMON_LIST_MOCK } from "../../utils/pokemonApiMock";
 import Answers from "./Answers";
-import { afterEach, beforeEach, expect } from "vitest";
+import { afterEach, expect } from "vitest";
 import { initialGameState } from "../../pages/PokemonGame";
 import { capitalize } from "../../utils/functions";
 import { GameContext } from "../context/game-state";
