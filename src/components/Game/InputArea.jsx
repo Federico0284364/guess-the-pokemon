@@ -2,7 +2,7 @@ import { useRef } from "react";
 import SelectInput from "./SelectInput";
 import Input from "./Input.jsx";
 import NextButton from "./NextButton";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { getCurrentPokemon} from '../../store/gameSlice.js';
 
 const GENERATIONS = [

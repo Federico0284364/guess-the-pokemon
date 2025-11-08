@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 
 import { capitalize, getColorByStat, removeDashes } from "../../utils/functions";
 import { useSelector } from 'react-redux';

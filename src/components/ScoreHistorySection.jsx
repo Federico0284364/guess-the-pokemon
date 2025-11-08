@@ -1,6 +1,8 @@
 import ScoreHistoryTable from "./ScoreHistoryTable";
 import Button from "./UI/Button";
+import { motion } from "framer-motion";
 import changeSvg from "../assets/cycle-svgrepo-com.svg";
+import hideSvg from "../assets/hide-svgrepo-com.svg";
 import PokemonSprite from "./PokemonSprite";
 import BackButton from "./UI/BackButton";
 
@@ -8,6 +10,7 @@ export default function ScoreHistorySection({
 	scoreHistory,
 	difficulty,
 	onToggle,
+	onHide,
 	device,
 	isVisible,
 	onGoToMenu,

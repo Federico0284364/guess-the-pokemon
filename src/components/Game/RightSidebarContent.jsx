@@ -1,5 +1,6 @@
 import {
 	capitalize,
+	getColorByStat,
 	removeDashes,
 	extractRoman,
 } from "../../utils/functions";

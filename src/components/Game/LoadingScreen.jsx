@@ -1,4 +1,5 @@
 import pokeballImg from "../../assets/pokeball.png";
+import { motion } from "framer-motion";
 
 export default function LoadingScreen({ children = "loading..." }) {
 	return (
