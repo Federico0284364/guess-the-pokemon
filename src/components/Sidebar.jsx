@@ -3,7 +3,6 @@ import LeftSidebarContent from "./LeftSidebarContent";
 import RightSidebarContent from "./game/RightSidebarContent";
 import sidebarImg from "../assets/sidebar-wallpapers/vertical.jpg";
 import { selectRandomImage } from "../utils/selectImage";
-import { getColorByType, getInlineColorByType } from "../utils/functions";
 
 import { motion, AnimatePresence } from "motion/react";
 
@@ -11,7 +10,6 @@ export default function Sidebar({
 	isOver = false,
 	side = null,
 	hasAnswered = false,
-	pokemon = new Pokemon(),
 }) {
 	let isOverClass = "sm:h-117 ";
 	if (isOver) {

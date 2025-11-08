@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { DifficultyContext } from "../../context/difficulty";
 
 export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }) {
