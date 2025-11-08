@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useHover } from "../hooks/useHover";
 
 export default function PokemonSprite({ pokemonName, pokemonSprite, imgClassName, ...props }) {

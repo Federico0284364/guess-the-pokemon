@@ -1,5 +1,5 @@
 import { shuffle } from "../../utils/functions.js";
-import { useEffect, useContext, memo } from "react";
+import { useEffect, memo } from "react";
 import { removeDashes, capitalize } from "../../utils/functions.js";
 import { fetchAnswers } from "../../utils/fetchFunctions.js";
 import Answer from "./Answer.jsx";

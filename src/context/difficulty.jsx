@@ -1,5 +1,4 @@
 import {createContext, useState} from 'react';
-import { newGame } from '../store/gameSlice';
 
 const initialState =
 	JSON.parse(sessionStorage.getItem("difficulty")) || 'Easy';
