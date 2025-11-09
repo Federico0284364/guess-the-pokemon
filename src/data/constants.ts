@@ -1,0 +1,3 @@
+export const NUMBER_OF_EXISTING_POKEMON = 1025;
+export const NUMBER_OF_POKEMON_LIST = 10;
+export const NUMBER_OF_EASY_WRONG_ANSWERS = 3;

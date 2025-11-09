@@ -1,35 +1,35 @@
+import { NUMBER_OF_EASY_WRONG_ANSWERS, NUMBER_OF_POKEMON_LIST } from "../data/constants";
 import { capitalize } from "./functions";
+import { getListOfRandomPokemonIds } from "./getRandomPokemonId";
 import { POKEMON_LIST_MOCK, POKEMON_ANSWERS_MOCK } from "./pokemonApiMock";
 
-export async function fetchPokemonList(useMock, numberOfPokemon) {
+export async function fetchPokemonList(useMock, numberOfPokemon = NUMBER_OF_POKEMON_LIST) {
 	if (useMock) {
-		return [...POKEMON_LIST_MOCK]; // Restituisce i dati di test
+		return [...POKEMON_LIST_MOCK];
 	}
 
-	const uniqueNumbers = new Set();
-
-	while (uniqueNumbers.size < numberOfPokemon) {
-		uniqueNumbers.add(Math.floor(Math.random() * 1025) + 1);
-	}
-
-	const randomNumbers = [...uniqueNumbers];
+	const pokemonIdsList = getListOfRandomPokemonIds(numberOfPokemon);
 
 	try {
-		const responses = await Promise.all(
-			randomNumbers.map(async (num) => {
+		const pokemonList = await Promise.all(
+			pokemonIdsList.map(async (num) => {
 				const response = await fetch(
 					`https://pokeapi.co/api/v2/pokemon/${num}`
 				);
-				const data = await response.json();
 
-				return data;
+				if (!response.ok) {
+					throwErrorFromResponse(response, "Invalid response");
+				}
+
+				const pokemon = await response.json();
+				return pokemon;
 			})
 		);
 
-		return responses;
+		return pokemonList;
 	} catch (error) {
-		console.error("Errore nel fetch dei Pokémon:", error);
-		return [POKEMON_LIST_MOCK[0]];
+		console.error("Error while fetching pokemon list:", error);
+		return [...POKEMON_LIST_MOCK];
 	}
 }
 
@@ -43,14 +43,17 @@ export async function fetchPokemonSpecies(useMock, pokemonId) {
 			`https://pokeapi.co/api/v2/pokemon-species/${pokemonId}`
 		);
 		if (!response.ok) {
-			throw new Error("Network response was not ok");
+			throwErrorFromResponse(response, "Invalid response");
 		}
 
-		const data = await response.json();
-		data.name = capitalize(data.name);
-		return data;
+		const pokemon = await response.json();
+		pokemon.name = capitalize(pokemon.name);
+		return pokemon;
 	} catch (error) {
-		console.error("Errore nel fetch dei Pokémon:", error);
+		console.error(
+			`Error while fetching pokemon species (pokemon n.${pokemonId}):`,
+			error
+		);
 		return [];
 	}
 }
@@ -60,29 +63,34 @@ export async function fetchAnswers(useMock, pokemon) {
 		return [...POKEMON_ANSWERS_MOCK];
 	}
 
-	const uniqueNumbers = new Set();
-
-	while (uniqueNumbers.size < 3) {
-		let randomId = Math.floor(Math.random() * 1025) + 1;
-		if (randomId !== pokemon.id) {
-			uniqueNumbers.add(randomId);
-		}
-	}
-
-	const randomNumbers = [...uniqueNumbers];
+	const pokemonIdsList = getListOfRandomPokemonIds(3, [pokemon.id])
 
 	try {
-		const responses = await Promise.all(
-			randomNumbers.map((num) =>
-				fetch(`https://pokeapi.co/api/v2/pokemon-species/${num}`)
-					.then((response) => response.json())
-					.then((data) => data.name)
-			)
+		const pokemonNamesList = await Promise.all(
+			pokemonIdsList.map(async (num) => {
+				const response = await fetch(
+					`https://pokeapi.co/api/v2/pokemon-species/${num}`
+				);
+
+				if (!response.ok) {
+					throwErrorFromResponse(response, "Invalid response");
+				}
+
+				const data = await response.json();
+				return data.name;
+			})
 		);
 
-		return responses;
+		return pokemonNamesList;
 	} catch (error) {
-		console.error("Errore nel fetch delle risposte:", error);
+		console.error("Error while fetching possible answers:", error);
 		return [];
 	}
+}
+
+async function throwErrorFromResponse(response, message) {
+	const error = new Error(message);
+	error.code = response.code;
+	error.info = await response.json();
+	throw error;
 }
