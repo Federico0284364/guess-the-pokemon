@@ -13,7 +13,6 @@ import {
 	getCurrentPokemon,
 	getIsOver,
 	newGame,
-	NUMBER_OF_POKEMON,
 	setGuessedPokemonList,
 	setPokemonList
 } from "../store/gameSlice.js";

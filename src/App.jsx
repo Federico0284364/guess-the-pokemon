@@ -9,44 +9,43 @@ import DifficultyContextProvider from "./context/difficulty.jsx";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
-import {
-	createBrowserRouter,
-	RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { getIsOver } from "./store/gameSlice.js";
 import ScoreHistory from "./pages/ScoreHistory.jsx";
 import Error from "./components/UI/Error.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const router = createBrowserRouter(
 	[
 		{
 			path: "/",
-			errorElement: <Error />, 
+			errorElement: <Error />,
 			children: [
 				{
 					index: true,
-					element: <MainMenu />
+					element: <MainMenu />,
 				},
 				{
 					path: "game",
-					element: <PokemonGame />
+					element: <PokemonGame />,
 				},
 				{
 					path: "game/score",
-					element: <Scoreboard />
+					element: <Scoreboard />,
 				},
 				{
 					path: "score-history",
-					element: <ScoreHistory />
-				}
-			]
-		}
+					element: <ScoreHistory />,
+				},
+			],
+		},
 	],
 	{
 		basename: "/guess-the-pokemon/",
 	}
 );
-
 
 function App() {
 	const { score } = useSelector((state) => state.game);
@@ -62,9 +61,11 @@ function App() {
 
 	return (
 		<WindowSizeContextProvider>
-			<DifficultyContextProvider>
-				<RouterProvider router={router} />
-			</DifficultyContextProvider>
+			<QueryClientProvider client={queryClient}>
+				<DifficultyContextProvider>
+					<RouterProvider router={router} />
+				</DifficultyContextProvider>
+			</QueryClientProvider>
 		</WindowSizeContextProvider>
 	);
 }

@@ -7,7 +7,10 @@ import { POKEMON_LIST_MOCK } from "../utils/pokemonApiMock.js";
 import { HardAnswerOption } from "../models/answer.js";
 import { NUMBER_OF_POKEMON_LIST } from "../data/constants.js";
 
+export type StoreState = {game: GameState}
+
 type GameState = {
+	gameId: string,
 	hasAnswered: boolean,
 	selectedAnswer: string,
 	round: number,
@@ -23,6 +26,7 @@ type GameState = {
 }
 
 const standardState: GameState = {
+	gameId: new Date().toISOString(),
 	hasAnswered: false,
 	selectedAnswer: "",
 	round: 0,
@@ -58,6 +62,7 @@ const gameSlice = createSlice({
 	initialState,
 	reducers: {
 		newGame: (state) => {
+			state.gameId = new Date().toISOString(),
 			state.hasAnswered = false;
 			state.selectedAnswer = "";
 			state.round = 0;
@@ -110,11 +115,11 @@ const gameSlice = createSlice({
 	},
 });
 
-export function getCurrentPokemon(state: {game: GameState}) {
+export function getCurrentPokemon(state: StoreState) {
 	return state.game.pokemonList[state.game.round];
 }
 
-export function getIsOver(state: {game: GameState}) {
+export function getIsOver(state: StoreState) {
 	return state.game.round === NUMBER_OF_POKEMON_LIST;
 }
 

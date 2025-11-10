@@ -1,5 +1,5 @@
-export default function Error(){
+export default function Error({message}){
   return <h1 className="text-5xl">
-    Ooops! Something went wrong!
+    {message || 'Oops! something went wrong'}
   </h1>
 }

@@ -4,8 +4,8 @@ export function getRandomPokemonId(){
   return Math.floor(Math.random() * NUMBER_OF_EXISTING_POKEMON) + 1
 }
 
-export function getListOfRandomPokemonIds(numberOfIds: number, bannedIds: number[] = []){
-    const uniqueIds = new Set();
+export function getListOfRandomPokemonIds(numberOfIds: number, bannedIds: number[] = []): number[]{
+    const uniqueIds = new Set<number>();
   
     while (uniqueIds.size < numberOfIds) {
       let randomId = getRandomPokemonId();

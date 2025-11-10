@@ -7,17 +7,18 @@ import {
 import { WindowSizeContext } from "../../context/window-size.jsx";
 import { motion, useAnimate, AnimatePresence } from "framer-motion";
 import { useSelector} from 'react-redux';
+import { getCurrentPokemon } from "../../store/gameSlice.js";
 
 export default function MainWindow() {
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const [jumpScope, jump] = useAnimate();
 	const { pokemonList, hasAnswered, round } = useSelector(state => state.game);
 
-	const pokemon = pokemonList[round];
+	const pokemon = useSelector(getCurrentPokemon)
 
 	let type1Color;
 	let type2Color;
-	if (pokemon.types?.[0]) {
+	if (pokemon?.types?.[0]) {
 		type1Color = useMemo(() => {
 			return getInlineColorByType(pokemon.types?.[0]?.type?.name);
 		}, [pokemon.id]);
