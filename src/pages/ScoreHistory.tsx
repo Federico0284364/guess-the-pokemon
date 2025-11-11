@@ -6,7 +6,7 @@ import BackButton from "../components/UI/BackButton";
 import { useNavigate } from "react-router-dom";
 import type { Difficulty } from "../context/difficulty";
 
-type ScoreEntry = {
+export type ScoreEntry = {
 	date: string,
 	score: number,
 	difficulty: Difficulty
@@ -74,7 +74,6 @@ export default function ScoreRecord() {
 				difficulty={difficulty}
 				key={difficulty}
 				onToggle={() => handleToggleSection()}
-				onHide={() => handleHideSection(difficulty)}
 				device={device}
 				onGoToMenu={handleGoToMenu}
 				isVisible={

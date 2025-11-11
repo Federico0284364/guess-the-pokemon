@@ -4,6 +4,20 @@ import { motion } from "framer-motion";
 import changeSvg from "../assets/cycle-svgrepo-com.svg";
 import PokemonSprite from "./PokemonSprite";
 import BackButton from "./UI/BackButton";
+import type { ScoreEntry } from "../pages/ScoreHistory";
+import type { Difficulty } from "../context/difficulty";
+import { DeviceSize } from "../context/window-size";
+import { capitalize } from "../utils/functions";
+
+type Props = {
+	scoreHistory: ScoreEntry[],
+	difficulty: Difficulty,
+	device: DeviceSize,
+	isVisible: boolean,
+
+	onToggle: () => void;
+	onGoToMenu: () => void;
+}
 
 export default function ScoreHistorySection({
 	scoreHistory,
@@ -12,8 +26,8 @@ export default function ScoreHistorySection({
 	device,
 	isVisible,
 	onGoToMenu,
-}) {
-	const bestEntry = scoreHistory.reduce((best, entry) => {
+}: Props) {
+	const bestEntry = scoreHistory.reduce<ScoreEntry | null>((best, entry) => {
 		if (!best || entry.score > best.score) {
 			return entry;
 		}
@@ -40,7 +54,7 @@ export default function ScoreHistorySection({
 					/>}
 
 					<h1 className="font-bold bg-white p-2 rounded-xl text-neutral-800 text-5xl shadow-md shadow-black/50 border-4 border-orange-900">
-						{difficulty}
+						{capitalize(difficulty)}
 					</h1>
 
 					{device === "small" && (
@@ -94,7 +108,6 @@ export default function ScoreHistorySection({
 
 						<ScoreHistoryTable
 							scoreHistory={scoreHistory}
-							difficulty={difficulty}
 							bestEntry={bestEntry}
 						/>
 					</>
