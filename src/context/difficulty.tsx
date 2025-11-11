@@ -17,7 +17,7 @@ export default function DifficultyContextProvider({children}: Props) {
     const [difficulty, setDifficulty] = useState(initialState);
 
     function saveToStorage(value: Difficulty){
-        sessionStorage.setItem('difficulty', JSON.stringify(value))
+        sessionStorage.setItem('difficulty', value)
     }
 
     function handleSetEasy(){
