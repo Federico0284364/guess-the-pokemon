@@ -22,6 +22,7 @@ export async function fetchPokemonList(
 				}
 
 				const pokemon = await response.json();
+				pokemon.name = capitalize(pokemon.name)
 				return pokemon;
 			})
 		);
@@ -48,6 +49,7 @@ export async function fetchPokemonSpeciesList(
 				}
 
 				const pokemon = await response.json();
+				pokemon.name = capitalize(pokemon.name)
 				return pokemon;
 			})
 		);
@@ -76,35 +78,6 @@ export async function fetchPokemonSpecies(pokemonId: number) {
 			`Error while fetching pokemon species (pokemon n.${pokemonId}):`,
 			error
 		);
-		throw error;
-	}
-}
-
-export async function fetchAnswers(pokemonId: number) {
-	const pokemonIdsList = getListOfRandomPokemonIds(
-		NUMBER_OF_EASY_WRONG_ANSWERS,
-		[pokemonId]
-	);
-
-	try {
-		const pokemonNamesList = await Promise.all(
-			pokemonIdsList.map(async (num) => {
-				const response = await fetch(
-					`https://pokeapi.co/api/v2/pokemon-species/${num}`
-				);
-
-				if (!response.ok) {
-					throwErrorFromResponse(response, "Invalid response");
-				}
-
-				const data = await response.json();
-				return data.name;
-			})
-		);
-
-		return pokemonNamesList;
-	} catch (error) {
-		console.error("Error while fetching possible answers:", error);
 		throw error;
 	}
 }

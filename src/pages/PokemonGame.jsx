@@ -9,9 +9,9 @@ import {
 import GameHeader from "../components/game/GameHeader.jsx";
 import Answers from "../components/game/Answers.jsx";
 import Sidebar from "../components/game/Sidebar.jsx";
-import MainWindow from "../components/game/mainWindow.jsx";
+import MainWindow from "../components/Game/MainWindow.jsx";
 import InputArea from "../components/game/InputArea.jsx";
-import { replace, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import LoadingScreen from "../components/game/LoadingScreen.jsx";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,12 +31,11 @@ import { useOnlineStatus } from "../hooks/useOnlineStatus.js";
 import Error from "../components/UI/Error.jsx";
 import { getListOfRandomPokemonIds } from "../utils/getRandomPokemonId.js";
 
-const MOCK = false;
-
 export default function PokemonGame() {
+	//declarations
 	const { device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
-	const { hasAnswered, round, pokemonList, guessedPokemonList } = useSelector(
+	const { hasAnswered, round, pokemonList, guessedPokemonList, gameId } = useSelector(
 		(state) => state.game
 	);
 
@@ -49,7 +48,7 @@ export default function PokemonGame() {
 	//fetch
 	const { data: fetchedList, isPending, isError, error } = useQuery({
 		refetchOnWindowFocus: false,
-		queryKey: ["pokemonList"],
+		queryKey: ["pokemonList", gameId],
 		queryFn: async () => {
 			const randomIdsList = getListOfRandomPokemonIds(
 				NUMBER_OF_POKEMON_LIST
@@ -67,7 +66,7 @@ export default function PokemonGame() {
 		},
 	});
 
-	//aggiornamento stato
+	//updating redux store
 	useEffect(() => {
 		if (fetchedList) {
 			dispatch(setPokemonList(fetchedList));
@@ -93,6 +92,7 @@ export default function PokemonGame() {
 		hasAnswered: hasAnswered,
 	};
 
+	//functions
 	const handleEasyAnswer = useCallback(
 		(isCorrect, answer) => {
 			if (!hasAnswered) {
@@ -128,6 +128,7 @@ export default function PokemonGame() {
 		dispatch(wrongAnswer());
 	}
 
+	//rendering
 	if (isError || !isOnline) {
 		return <Error message={error?.message} />;
 	}
@@ -136,7 +137,7 @@ export default function PokemonGame() {
 		return <LoadingScreen />;
 	}
 
-	//render
+	
 	if (pokemon?.genera) {
 		return (
 			<motion.div>
