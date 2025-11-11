@@ -7,10 +7,10 @@ import {
 	fetchPokemonSpeciesList,
 } from "../utils/fetchFunctions.js";
 import GameHeader from "../components/game/GameHeader.jsx";
-import Answers from "../components/game/Answers.jsx";
+import Answers from "../components/game/Answers.js";
 import Sidebar from "../components/game/Sidebar.jsx";
 import MainWindow from "../components/Game/MainWindow.jsx";
-import InputArea from "../components/game/InputArea.jsx";
+import InputArea from "../components/Game/InputArea.tsx";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import LoadingScreen from "../components/game/LoadingScreen.jsx";
@@ -23,20 +23,22 @@ import {
 	nextQuestion,
 	setPokemonList,
 	setGuessedPokemonList,
-} from "../store/gameSlice";
-import { getCurrentPokemon, getIsOver } from "../store/gameSlice";
+	StoreState,
+} from "../store/gameSlice.js";
+import { getCurrentPokemon, getIsOver } from "../store/gameSlice.js";
 import { useQuery } from "@tanstack/react-query";
 import { NUMBER_OF_POKEMON_LIST } from "../data/constants.js";
 import { useOnlineStatus } from "../hooks/useOnlineStatus.js";
 import Error from "../components/UI/Error.jsx";
 import { getListOfRandomPokemonIds } from "../utils/getRandomPokemonId.js";
+import { EasyAnswerOption, HardAnswerOption } from "../models/answer.js";
 
 export default function PokemonGame() {
 	//declarations
 	const { device } = useContext(WindowSizeContext);
 	const { difficulty } = useContext(DifficultyContext);
 	const { hasAnswered, round, pokemonList, guessedPokemonList, gameId } = useSelector(
-		(state) => state.game
+		(state: StoreState) => state.game
 	);
 
 	const pokemon = useSelector(getCurrentPokemon);
@@ -94,7 +96,7 @@ export default function PokemonGame() {
 
 	//functions
 	const handleEasyAnswer = useCallback(
-		(isCorrect, answer) => {
+		(isCorrect: boolean, answer: EasyAnswerOption) => {
 			if (!hasAnswered) {
 				if (isCorrect) {
 					handleCorrectAnswer();
@@ -108,7 +110,7 @@ export default function PokemonGame() {
 		[round]
 	);
 
-	function handleHardAnswer(answer) {
+	function handleHardAnswer(answer: HardAnswerOption) {
 		dispatch(hardAnswer({ answer, pokemon }));
 	}
 
@@ -175,7 +177,6 @@ export default function PokemonGame() {
 								<InputArea
 									onAnswer={handleHardAnswer}
 									onNext={handleNextQuestion}
-									pokemon={pokemon}
 								/>
 							)}
 							{device === "small" && hasAnswered && (

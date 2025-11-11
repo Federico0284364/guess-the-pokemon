@@ -1,7 +1,6 @@
 import { shuffle } from "../../utils/functions.js";
-import { useEffect, memo, useMemo } from "react";
+import { memo, useMemo } from "react";
 import { removeDashes, capitalize } from "../../utils/functions.js";
-import { fetchAnswers } from "../../utils/fetchFunctions.js";
 import Answer from "./Answer.jsx";
 import NextButton from "./NextButton.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,12 +9,9 @@ import {
 	getCurrentPokemon,
 	StoreState,
 } from "../../store/gameSlice.js";
-import { useQuery } from "@tanstack/react-query";
 import { EasyAnswerOption } from "../../models/answer.js";
-import Error from "../UI/Error.jsx";
 import {
 	getListOfRandomPokemonIds,
-	getRandomPokemonId,
 } from "../../utils/getRandomPokemonId.js";
 import { NUMBER_OF_EASY_WRONG_ANSWERS } from "../../data/constants.js";
 import { pokemonNames } from "../../data/allPokemonNames.js";

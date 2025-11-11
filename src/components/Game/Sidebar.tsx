@@ -6,11 +6,17 @@ import { selectRandomImage } from "../../utils/selectImage";
 
 import { motion, AnimatePresence } from "motion/react";
 
+type Props = {
+	isOver: boolean,
+	side: 'right' | 'left' | null,
+	hasAnswered: boolean
+}
+
 export default function Sidebar({
 	isOver = false,
 	side = null,
 	hasAnswered = false,
-}) {
+}: Props) {
 	let isOverClass = "md:h-117 ";
 	if (isOver) {
 		isOverClass = "md:h-155 ";

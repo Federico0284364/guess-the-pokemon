@@ -1,9 +1,10 @@
 import { useRef } from "react";
-import SelectInput from "./SelectInput";
+import SelectInput from "./SelectInput.jsx";
 import Input from "./Input.jsx";
-import NextButton from "./NextButton";
+import NextButton from "./NextButton.jsx";
 import { useSelector } from 'react-redux';
-import { getCurrentPokemon} from '../../store/gameSlice.js';
+import { getCurrentPokemon, StoreState} from '../../store/gameSlice.js';
+import { HardAnswerOption } from "../../models/answer.js";
 
 const GENERATIONS = [
 		"I",
@@ -46,30 +47,35 @@ const GENERATIONS = [
 	];
 	const TYPES2 = ["no type", ...TYPES1];
 
-export default function InputArea({ onAnswer, onNext }) {
-	const { hasAnswered,score, round } = useSelector(state => state.game);
+	type Props = {
+		onAnswer: (answer: HardAnswerOption) => void,
+		onNext: () => void,
+	}
+
+export default function InputArea({ onAnswer, onNext }: Props) {
+	const { hasAnswered,score, round } = useSelector((state: StoreState) => state.game);
 	const pokemon = useSelector(getCurrentPokemon);
 
-	const nameInput = useRef();
-	const generationInput = useRef();
-	const type1Input = useRef();
-	const type2Input = useRef();
-	const statInput = useRef();
+	const nameInput = useRef<HTMLInputElement>(null);
+	const generationInput = useRef<HTMLSelectElement>(null);
+	const type1Input = useRef<HTMLSelectElement>(null);
+	const type2Input = useRef<HTMLSelectElement>(null);
+	const statInput = useRef<HTMLSelectElement>(null);
 
 	function handleConfirm() {
-		if(type1Input.current.value.toLowerCase() === 
-		type2Input.current.value.toLowerCase()){
+		if(type1Input.current?.value.toLowerCase() === 
+		type2Input.current?.value.toLowerCase()){
 			alert('Invalid input, choose two different types');
 			return;
 		}
 		const answer = {
-			name: nameInput.current.value,
-			generation: generationInput.current.value,
+			name: nameInput.current?.value ?? '',
+			generation: generationInput.current?.value ?? '',
 			types: [
-				type1Input.current.value.toLowerCase(),
-				type2Input.current.value.toLowerCase(),
+				type1Input.current?.value?.toLowerCase() ?? '' ,
+				type2Input.current?.value?.toLowerCase()?? '',
 			],
-			stat: statInput.current.value,
+			stat: statInput.current?.value ?? '',
 		};
 		onAnswer(answer);
 	}
