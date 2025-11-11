@@ -10,14 +10,14 @@ import { DeviceSize } from "../context/window-size";
 import { capitalize } from "../utils/functions";
 
 type Props = {
-	scoreHistory: ScoreEntry[],
-	difficulty: Difficulty,
-	device: DeviceSize,
-	isVisible: boolean,
+	scoreHistory: ScoreEntry[];
+	difficulty: Difficulty;
+	device: DeviceSize;
+	isVisible: boolean;
 
 	onToggle: () => void;
 	onGoToMenu: () => void;
-}
+};
 
 export default function ScoreHistorySection({
 	scoreHistory,
@@ -47,11 +47,19 @@ export default function ScoreHistorySection({
 				exit={{ x: 1000 }}
 				className=" flex flex-col items-center gap-0.5 text-center absolute md:static flex-1"
 			>
-				<div className="flex justify-center items-center relative gap-4 mb-4">
-					{device === 'small' && <BackButton
+				{device !== "small" && (
+					<BackButton
 						onClick={onGoToMenu}
-						className="z-1000 scale-110"
-					/>}
+						className="absolute top-5 left-5 scale-120"
+					/>
+				)}
+				<div className="flex justify-center items-center relative gap-4 mb-4">
+					{device === "small" && (
+						<BackButton
+							onClick={onGoToMenu}
+							className="z-1000 scale-110"
+						/>
+					)}
 
 					<h1 className="font-bold bg-white p-2 rounded-xl text-neutral-800 text-5xl shadow-md shadow-black/50 border-4 border-orange-900">
 						{capitalize(difficulty)}

@@ -3,14 +3,19 @@ import LeftSidebarContent from "./LeftSidebarContent";
 import RightSidebarContent from "./game/RightSidebarContent";
 import sidebarImg from "../assets/sidebar-wallpapers/vertical.jpg";
 import { selectRandomImage } from "../utils/selectImage";
-
 import { motion, AnimatePresence } from "motion/react";
+
+type Props = {
+	isOver: boolean,
+	side: 'right' | 'left' | null,
+	hasAnswered: boolean
+}
 
 export default function Sidebar({
 	isOver = false,
 	side = null,
 	hasAnswered = false,
-}) {
+}: Props) {
 	let isOverClass = "sm:h-117 ";
 	if (isOver) {
 		isOverClass = "sm:h-155 ";
