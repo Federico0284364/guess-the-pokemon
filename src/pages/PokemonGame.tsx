@@ -96,9 +96,9 @@ export default function PokemonGame() {
 
 	//functions
 	const handleEasyAnswer = useCallback(
-		(isCorrect: boolean, answer: EasyAnswerOption) => {
+		(answer: EasyAnswerOption) => {
 			if (!hasAnswered) {
-				if (isCorrect) {
+				if (answer.isCorrect) {
 					handleCorrectAnswer();
 				} else {
 					handleWrongAnswer();

@@ -11,10 +11,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { DifficultyContext } from "../context/difficulty.jsx";
 import {
 	getCurrentPokemon,
-	getIsOver,
 	newGame,
-	setGuessedPokemonList,
-	setPokemonList
 } from "../store/gameSlice.js";
 import Button from "../components/UI/Button.jsx";
 

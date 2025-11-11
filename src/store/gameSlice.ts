@@ -75,7 +75,7 @@ const gameSlice = createSlice({
 
 		easyAnswer: (state, action) => {
 			const { answer } = action.payload;
-			state.selectedAnswer = capitalize(answer.name);
+			state.selectedAnswer = capitalize(answer.text);
 			state.hasAnswered = true;
 		},
 

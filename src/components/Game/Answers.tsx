@@ -17,7 +17,7 @@ import { NUMBER_OF_EASY_WRONG_ANSWERS } from "../../data/constants.js";
 import { pokemonNames } from "../../data/allPokemonNames.js";
 
 type Props = {
-	onAnswer: (isCorrect: boolean, answer: EasyAnswerOption) => void;
+	onAnswer: (answer: EasyAnswerOption) => void;
 	onNext: () => void;
 };
 
