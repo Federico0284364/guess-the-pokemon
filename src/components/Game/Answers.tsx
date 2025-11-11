@@ -1,7 +1,7 @@
 import { shuffle } from "../../utils/functions.js";
 import { memo, useMemo } from "react";
 import { removeDashes, capitalize } from "../../utils/functions.js";
-import Answer from "./Answer.jsx";
+import Answer from "./Answer.tsx";
 import NextButton from "./NextButton.jsx";
 import { useSelector, useDispatch } from "react-redux";
 import {

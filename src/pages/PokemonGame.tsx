@@ -7,8 +7,8 @@ import {
 	fetchPokemonSpeciesList,
 } from "../utils/fetchFunctions.js";
 import GameHeader from "../components/game/GameHeader.jsx";
-import Answers from "../components/game/Answers.js";
-import Sidebar from "../components/game/Sidebar.jsx";
+import Answers from "../components/Game/Answers.js";
+import Sidebar from "../components/Game/Sidebar.jsx";
 import MainWindow from "../components/Game/MainWindow.jsx";
 import InputArea from "../components/Game/InputArea.tsx";
 import { useNavigate } from "react-router-dom";
