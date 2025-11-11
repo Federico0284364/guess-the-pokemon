@@ -6,13 +6,13 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function MainMenu() {
-	const [selectedDifficulty, setSelectedDifficulty] = useState('Easy');
+	const [selectedDifficulty, setSelectedDifficulty] = useState('easy');
 
 	function handleChangeDifficulty(value){
-		if (value === 'Easy'){
-			setSelectedDifficulty('Easy')
+		if (value === 'easy'){
+			setSelectedDifficulty('easy')
 		} else {
-			setSelectedDifficulty('Hard')
+			setSelectedDifficulty('hard')
 		}
 	}
 
@@ -45,8 +45,8 @@ export default function MainMenu() {
 
 				<div className="flex flex-col text-3xl pb-6 mt-4 sm:mt-1 ml-16 sm:ml-0">
 					Difficulty:
-					<DifficultyButton onSelect={handleChangeDifficulty} selectedDifficulty={selectedDifficulty} buttonDifficulty={"Easy"} />
-					<DifficultyButton onSelect={handleChangeDifficulty} selectedDifficulty={selectedDifficulty} buttonDifficulty={"Hard"} />
+					<DifficultyButton onSelect={handleChangeDifficulty} selectedDifficulty={selectedDifficulty} buttonDifficulty={"easy"} />
+					<DifficultyButton onSelect={handleChangeDifficulty} selectedDifficulty={selectedDifficulty} buttonDifficulty={"hard"} />
 				</div>
 			</div>
 		</>

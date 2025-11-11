@@ -4,6 +4,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { WindowSizeContext } from "../context/window-size";
 import BackButton from "../components/UI/BackButton";
 import { useNavigate } from "react-router-dom";
+import type { Difficulty } from "../context/difficulty";
+
+type ScoreEntry = {
+	date: string,
+	score: number,
+	difficulty: Difficulty
+	pokemon: {
+		name: string,
+		sprite: string,
+		score: number
+	}[]
+}
 
 export default function ScoreRecord() {
 	const { device } = useContext(WindowSizeContext);
@@ -11,7 +23,7 @@ export default function ScoreRecord() {
 	const [hardIsVisible, setHardIsVisible] = useState(true);
 	const navigate = useNavigate();
 
-	const scoreHistory = JSON.parse(localStorage.getItem("score-history"));
+	const scoreHistory: ScoreEntry[] = JSON.parse(localStorage.getItem("score-history") || '');
 
 	if (!scoreHistory) {
 		return <p>No score yet</p>;
@@ -31,8 +43,8 @@ export default function ScoreRecord() {
 			navigate("/");
 		}
 
-	function handleHideSection(difficulty) {
-		if (difficulty === "Easy") {
+	function handleHideSection(difficulty: Difficulty) {
+		if (difficulty === "easy") {
 			setEasyIsVisible(!easyIsVisible);
 		} else {
 			setHardIsVisible(!hardIsVisible);
@@ -49,14 +61,13 @@ export default function ScoreRecord() {
 		}
 	}
 
-	const difficulties = ["Easy", "Hard"];
 	const filteredHistory = {
-		Easy: scoreHistory.filter((entry) => entry.difficulty === "Easy"),
+		"easy": scoreHistory.filter((entry) => entry.difficulty === "easy"),
 
-		Hard: scoreHistory.filter((entry) => entry.difficulty === "Hard"),
+		"hard": scoreHistory.filter((entry) => entry.difficulty === "hard"),
 	};
 
-	function renderSection(difficulty) {
+	function renderSection(difficulty: Difficulty) {
 		return (
 			<ScoreHistorySection
 				scoreHistory={filteredHistory[difficulty]}
@@ -67,7 +78,7 @@ export default function ScoreRecord() {
 				device={device}
 				onGoToMenu={handleGoToMenu}
 				isVisible={
-					difficulty === "Easy" ? easyIsVisible : hardIsVisible
+					difficulty === "easy" ? easyIsVisible : hardIsVisible
 				}
 			/>
 		);
@@ -76,8 +87,8 @@ export default function ScoreRecord() {
 	return (
 		<motion.div className="flex gap-2 sm:gap-[6vw] h-[100vh] w-[100%] justify-center relative overflow-hidden">
 			<AnimatePresence>
-				{renderSection("Easy")}
-				{renderSection("Hard")}
+				{renderSection("easy")}
+				{renderSection("hard")}
 			</AnimatePresence>
 		</motion.div>
 	);

@@ -80,7 +80,7 @@ export default function ScoreHistorySection({
 													" text-shadow relative bottom-1 px-2 text-center text-white rounded-sm bg-opacity-10 text-sm"
 												}
 											>
-												{difficulty === "Hard"
+												{difficulty === "hard"
 													? entry.score
 													: entry.score == 50
 													? "\u2713"

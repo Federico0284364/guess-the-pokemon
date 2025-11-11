@@ -12,11 +12,13 @@ import { DifficultyContext } from "../context/difficulty.jsx";
 import {
 	getCurrentPokemon,
 	newGame,
+	StoreState,
 } from "../store/gameSlice.js";
 import Button from "../components/UI/Button.jsx";
+import { NUMBER_OF_POKEMON_LIST } from "../data/constants.js";
 
 export default function Scoreboard() {
-	const { score, pokemonList, round } = useSelector((state) => state.game);
+	const { score, pokemonList, round } = useSelector((state: StoreState) => state.game);
 	const pokemon = useSelector(getCurrentPokemon);
 	const { difficulty } = useContext(DifficultyContext);
 	const dispatch = useDispatch();
@@ -25,16 +27,16 @@ export default function Scoreboard() {
 	const date = new Date();
 	const totalScore = calculateTotalScore(score);
 
-	let bestScore = JSON.parse(localStorage.getItem("best-score")) || 0;
+	let bestScore = JSON.parse(localStorage.getItem("best-score") || '') || 0;
 
 	if (totalScore > bestScore) {
 		bestScore = totalScore;
 	}
 
 	useEffect(() => {
-		if (score.length === NUMBER_OF_POKEMON) {
+		if (score.length === NUMBER_OF_POKEMON_LIST) {
 			const scoreHistory =
-				JSON.parse(localStorage.getItem("score-history")) || [];
+				JSON.parse(localStorage.getItem("score-history") || '') || [];
 			scoreHistory.unshift({
 				date: date,
 				score: totalScore,
@@ -55,7 +57,7 @@ export default function Scoreboard() {
 
 	}, []);
 
-	if (score.length != NUMBER_OF_POKEMON) {
+	if (score.length != NUMBER_OF_POKEMON_LIST) {
 		return;
 	}
 
@@ -71,7 +73,7 @@ export default function Scoreboard() {
 		navigate("/game")
 	}
 
-	function calculatePokemonScore(index) {
+	function calculatePokemonScore(index: number) {
 		let pokemonScore = 0;
 		Object.values(score[index]).forEach((entry) => {
 			pokemonScore += entry;
@@ -105,7 +107,7 @@ export default function Scoreboard() {
 					</Button>
 				</div>
 				<table>
-					{difficulty === "Hard" && (
+					{difficulty === "hard" && (
 						<thead>
 							<tr className="max-h-1 text-xs">
 								<th className="w-9"></th>
@@ -139,7 +141,7 @@ export default function Scoreboard() {
 											)}
 										</p>
 									</td>
-									{difficulty === "Easy" && (
+									{difficulty === "easy" && (
 										<td className="w-10 text-center">
 											<p className="w-10">
 												{totalPokemonScore
@@ -148,7 +150,7 @@ export default function Scoreboard() {
 											</p>
 										</td>
 									)}
-									{difficulty === "Hard"
+									{difficulty === "hard"
 										? Object.values(score[index]).map(
 												(entry) => {
 													return (

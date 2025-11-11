@@ -13,7 +13,7 @@ export default function GameOption({selectedDifficulty}) {
 	function handleClick(){
 		dispatch(newGame());
 
-		if (selectedDifficulty === 'Easy'){
+		if (selectedDifficulty === 'easy'){
 			setEasy();
 		} else {
 			setHard();

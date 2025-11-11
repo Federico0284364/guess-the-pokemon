@@ -16,7 +16,7 @@ describe("DifficultyButton component", () => {
 )
 
 	test("renders an easy radio button", () => {
-		render(<DifficultyButton chosenDifficulty={"Easy"} />);
+		render(<DifficultyButton chosenDifficulty={"easy"} />);
 
 		const inputElement = screen.getByRole("radio", { name: /easy/i });
 
@@ -24,7 +24,7 @@ describe("DifficultyButton component", () => {
 	});
 
 	test("renders an hard radio button", () => {
-		render(<DifficultyButton chosenDifficulty={"Hard"} />);
+		render(<DifficultyButton chosenDifficulty={"hard"} />);
 
 		const inputElement = screen.getByRole("radio", { name: /hard/i });
 
@@ -35,12 +35,12 @@ describe("DifficultyButton component", () => {
 		render(
 			<DifficultyContext.Provider
 				value={{
-					difficulty: "Easy",
+					difficulty: "easy",
 					setEasy: mockSetEasy,
 					setHard: mockSetHard,
 				}}
 			>
-				<DifficultyButton chosenDifficulty="Easy" />
+				<DifficultyButton chosenDifficulty="easy" />
 			</DifficultyContext.Provider>
 		);
 		const text = screen.getByText(/Pokémon/i);
@@ -55,12 +55,12 @@ describe("DifficultyButton component", () => {
 		render(
 			<DifficultyContext.Provider
 				value={{
-					difficulty: "Hard",
+					difficulty: "hard",
 					setEasy: mockSetEasy,
 					setHard: mockSetHard,
 				}}
 			>
-				<DifficultyButton chosenDifficulty="Hard" />
+				<DifficultyButton chosenDifficulty="hard" />
 			</DifficultyContext.Provider>
 		);
 
@@ -74,12 +74,12 @@ describe("DifficultyButton component", () => {
 
 		render(<DifficultyContext.Provider
 				value={{
-					difficulty: "Easy",
+					difficulty: "easy",
 					setEasy: mockSetEasy,
 					setHard: mockSetHard,
 				}}
 			>
-				<DifficultyButton chosenDifficulty="Easy" />
+				<DifficultyButton chosenDifficulty="easy" />
 			</DifficultyContext.Provider>)
 
 		const inputElement = screen.getByRole("radio");
@@ -94,12 +94,12 @@ describe("DifficultyButton component", () => {
 
 		render(<DifficultyContext.Provider
 				value={{
-					difficulty: "Hard",
+					difficulty: "hard",
 					setEasy: mockSetEasy,
 					setHard: mockSetHard,
 				}}
 			>
-				<DifficultyButton chosenDifficulty="Easy" />
+				<DifficultyButton chosenDifficulty="easy" />
 			</DifficultyContext.Provider>)
 
 		const inputElement = screen.getByRole("radio");

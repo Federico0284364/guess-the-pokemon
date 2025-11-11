@@ -1,4 +1,4 @@
-import { DifficultyContext } from "../../context/difficulty";
+import { capitalize } from "../../utils/functions";
 
 export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }) {
 	const isChecked = selectedDifficulty === buttonDifficulty;
@@ -13,12 +13,12 @@ export default function DifficultyButton({ selectedDifficulty, buttonDifficulty,
 				checked={isChecked}
 				onChange={() => onSelect(buttonDifficulty)}
 			/>{" "}
-			{buttonDifficulty}
-			{isChecked && buttonDifficulty === "Easy" ? (
+			{capitalize(buttonDifficulty)}
+			{isChecked && buttonDifficulty === "easy" ? (
 				<p className="drop-shadow drop-shadow-black/40 text-sm font-light w-50 ml-4">
 					Can you pick the right Pokémon name from the given options?
 				</p>
-			) : isChecked && buttonDifficulty === "Hard" ? (
+			) : isChecked && buttonDifficulty === "hard" ? (
 				<>
 					<p className="drop-shadow-lg drop-shadow-black/40 font-light text-sm w-50 ml-4">
 						Can you identify the Pokémon’s name, type, and extra

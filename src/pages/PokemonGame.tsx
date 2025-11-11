@@ -168,7 +168,7 @@ export default function PokemonGame() {
 					<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
 						<>
 							<MainWindow key={round} />
-							{difficulty === "Easy" ? (
+							{difficulty === "easy" ? (
 								<Answers
 									onAnswer={handleEasyAnswer}
 									onNext={handleNextQuestion}

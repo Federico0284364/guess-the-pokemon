@@ -1,29 +1,34 @@
-import {createContext, useState} from 'react';
-import { newGame } from '../store/gameSlice';
+import {createContext, ReactNode, useState} from 'react';
+
+export type Difficulty = 'easy' | 'hard'
 
 const initialState =
-	JSON.parse(sessionStorage.getItem("difficulty")) || 'Easy';
+	(sessionStorage.getItem("difficulty") || '') || 'easy';
 
 export const DifficultyContext = createContext({
     difficulty: initialState,
 })
 
-export default function DifficultyContextProvider({children}) {
+type Props = {
+    children: ReactNode
+}
+
+export default function DifficultyContextProvider({children}: Props) {
     const [difficulty, setDifficulty] = useState(initialState);
 
-    function saveToStorage(value){
+    function saveToStorage(value: Difficulty){
         sessionStorage.setItem('difficulty', JSON.stringify(value))
     }
 
     function handleSetEasy(){
-        setDifficulty('Easy');
-        saveToStorage('Easy');
+        setDifficulty('easy');
+        saveToStorage('easy');
         
     }
 
     function handleSetHard(){
-        setDifficulty('Hard');
-        saveToStorage('Hard')
+        setDifficulty('hard');
+        saveToStorage('hard')
     }
 
     const context = {
