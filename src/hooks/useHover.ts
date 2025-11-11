@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, RefObject } from "react";
 
-export function useHover() {
+export function useHover<T extends HTMLElement>() {
 	const [isHovered, setIsHovered] = useState(false);
-	const ref = useRef();
+	const ref = useRef<T>(null);
 
 	useEffect(() => {
 		const node = ref.current;
@@ -14,9 +14,11 @@ export function useHover() {
 		node.addEventListener("mouseenter", handleMouseEnter);
 		node.addEventListener("mouseleave", handleMouseLeave);
 
-		// Cleanup
-		
+		return () => {
+			node.removeEventListener("mouseenter", handleMouseEnter);
+			node.removeEventListener("mouseleave", handleMouseLeave);
+		};
 	}, []);
 
-	return [ref, isHovered];
+	return [ref, isHovered] as [RefObject<T>, boolean];
 }
