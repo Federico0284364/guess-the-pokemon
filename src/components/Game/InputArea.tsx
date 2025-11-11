@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { HTMLAttributes, useRef } from "react";
 import SelectInput from "./SelectInput.jsx";
 import Input from "./Input.jsx";
 import NextButton from "./NextButton.jsx";
@@ -47,13 +47,13 @@ const GENERATIONS = [
 	];
 	const TYPES2 = ["no type", ...TYPES1];
 
-	type Props = {
+	type Props = HTMLAttributes<HTMLElement> & {
 		onAnswer: (answer: HardAnswerOption) => void,
 		onNext: () => void,
 	}
 
 export default function InputArea({ onAnswer, onNext }: Props) {
-	const { hasAnswered,score, round } = useSelector((state: StoreState) => state.game);
+	const { hasAnswered, score, round } = useSelector((state: StoreState) => state.game);
 	const pokemon = useSelector(getCurrentPokemon);
 
 	const nameInput = useRef<HTMLInputElement>(null);
@@ -87,6 +87,7 @@ export default function InputArea({ onAnswer, onNext }: Props) {
 				score={score}
 				round={round}
 				ref={nameInput}
+				key={round}
 				label="Name"
 				widthClass={"w-[70%]"}
 			/>

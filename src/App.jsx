@@ -2,7 +2,6 @@ import MainMenu from "./pages/MainMenu.jsx";
 import PokemonGame from "./pages/PokemonGame.jsx";
 import Scoreboard from "./pages/Scoreboard.jsx";
 import "./App.css";
-import store from "./store/gameSlice.js";
 
 import WindowSizeContextProvider from "./context/window-size.jsx";
 import DifficultyContextProvider from "./context/difficulty.jsx";

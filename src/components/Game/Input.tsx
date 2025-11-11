@@ -1,14 +1,29 @@
-import { useEffect } from "react";
+import { InputHTMLAttributes, RefObject, useEffect } from "react";
+import { twMerge } from "tailwind-merge";
+import { ScoreEntry } from "../../store/gameSlice";
 
-export default function Input({ hasAnswered, round, score, ref, label, widthClass }) {
+type Props = InputHTMLAttributes<HTMLInputElement> & {
+	hasAnswered: boolean;
+	round: number;
+	score: ScoreEntry[],
+	ref: RefObject<HTMLInputElement> | null,
+	label: string,
+	widthClass: string,
+};
+
+export default function Input({
+	hasAnswered,
+	round,
+	score,
+	ref,
+	label,
+	widthClass,
+	...props
+}: Props) {
 	let isCorrect = false;
 	let isAlmostCorrect = false;
 	let customClass = "bg-orange-400 ";
 	let textCustomClass = "";
-	
-	useEffect(() => {	
-			ref.current.value = '';
-	}, [round])
 
 	if (hasAnswered) {
 		if (score[round].nameScore === 100) {
@@ -32,10 +47,8 @@ export default function Input({ hasAnswered, round, score, ref, label, widthClas
 
 	return (
 		<div className={"flex flex-col items-center min-w-0 " + widthClass}>
-			<label className={textCustomClass + "text-sm"}>
-				{hasAnswered
-					? "+" + score[round].nameScore
-					: label}
+			<label className={twMerge(textCustomClass, "text-sm")}>
+				{hasAnswered ? "+" + score[round].nameScore : label}
 			</label>
 			<input
 				disabled={hasAnswered}
@@ -44,6 +57,7 @@ export default function Input({ hasAnswered, round, score, ref, label, widthClas
 					customClass +
 					" text-lg h-14 rounded-2xl w-full py-2 border-4 text-center border-neutral-700"
 				}
+				{...props}
 			/>
 		</div>
 	);

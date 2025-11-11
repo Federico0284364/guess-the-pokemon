@@ -167,7 +167,7 @@ export default function PokemonGame() {
 					)}
 					<div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
 						<>
-							<MainWindow key={round} />
+							<MainWindow key={'window' + round} />
 							{difficulty === "easy" ? (
 								<Answers
 									onAnswer={handleEasyAnswer}
@@ -175,6 +175,7 @@ export default function PokemonGame() {
 								/>
 							) : (
 								<InputArea
+								key={'input-area' + round}
 									onAnswer={handleHardAnswer}
 									onNext={handleNextQuestion}
 								/>

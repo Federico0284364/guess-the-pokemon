@@ -6,7 +6,7 @@ import BackButton from "../components/UI/BackButton";
 import { useNavigate } from "react-router-dom";
 import type { Difficulty } from "../context/difficulty";
 
-export type ScoreEntry = {
+export type SavedScoreEntry = {
 	date: string,
 	score: number,
 	difficulty: Difficulty
@@ -23,7 +23,7 @@ export default function ScoreRecord() {
 	const [hardIsVisible, setHardIsVisible] = useState(true);
 	const navigate = useNavigate();
 
-	const scoreHistory: ScoreEntry[] = JSON.parse(localStorage.getItem("score-history") || '');
+	const scoreHistory: SavedScoreEntry[] = JSON.parse(localStorage.getItem("score-history") || '');
 
 	if (!scoreHistory) {
 		return <p>No score yet</p>;

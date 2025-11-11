@@ -1,20 +1,27 @@
 import { useContext } from "react";
-import { WindowSizeContext } from "../../context/window-size.jsx";
+import { WindowSizeContext } from "../../context/window-size.js";
 import { capitalize, calculateTotalScore } from "../../utils/functions.js";
 import pokeballImg from "../../assets/pokeball.png";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { newGame } from "../../store/gameSlice.js";
-import Button from "../UI/Button.jsx";
+import { newGame, StoreState } from "../../store/gameSlice.js";
+import { Pokemon } from "../../models/pokemon.js";
 import BackButton from "../UI/BackButton.jsx";
+import { DifficultyContext } from "../../context/difficulty.js";
 
-export default function GameHeader({ pokemonList, guessedPokemonList }) {
+type Props = {
+	pokemonList: Pokemon[],
+	guessedPokemonList: boolean[]
+}
+
+export default function GameHeader({ pokemonList, guessedPokemonList }: Props) {
 	const { device } = useContext(WindowSizeContext);
+	const { difficulty } = useContext(DifficultyContext);
 
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const { score, round } = useSelector((state) => state.game);
+	const { score, round } = useSelector((state: StoreState) => state.game);
 	const totalScore = calculateTotalScore(score);
 
 	function handleGoToMenu() {
@@ -33,7 +40,7 @@ export default function GameHeader({ pokemonList, guessedPokemonList }) {
 					{round + 1 + "/10"}
 				</h1>
 			)}
-			{device != "small" && (
+			{device != "small" &&(
 				<ul className="flex justify-self-end items-center gap-0 lg:gap-2 ml-3">
 					{pokemonList
 						.slice(0, round)
@@ -41,7 +48,7 @@ export default function GameHeader({ pokemonList, guessedPokemonList }) {
 							let isCorrect = guessedPokemonList[index];
 							return (
 								<div
-									key={[pokemonList[index].id + "header"]}
+									key={pokemonList[index].id + "header"}
 									className="flex flex-col items-center relative w-13 lg:w-17"
 								>
 									<img
@@ -54,7 +61,7 @@ export default function GameHeader({ pokemonList, guessedPokemonList }) {
 										{capitalize(guessedPokemon.name)}
 									</p>
 
-									{!isCorrect && (
+									{!isCorrect && difficulty == 'easy' && (
 										<p className="pointer-events-none text-red-500 font-bold text-4xl lg:text-5xl absolute top-[10%] lg:top-[15%] lg:left-[30%] opacity-50">
 											X
 										</p>

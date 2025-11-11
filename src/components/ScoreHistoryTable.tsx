@@ -1,9 +1,9 @@
-import { ScoreEntry } from "../pages/ScoreHistory";
+import { SavedScoreEntry } from "../pages/ScoreHistory";
 import { twMerge } from "tailwind-merge";
 
 type Props = {
-	scoreHistory: ScoreEntry[];
-	bestEntry: ScoreEntry;
+	scoreHistory: SavedScoreEntry[];
+	bestEntry: SavedScoreEntry;
 };
 
 export default function ScoreHistoryTable({ scoreHistory, bestEntry }: Props) {

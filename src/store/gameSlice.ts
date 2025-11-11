@@ -7,23 +7,29 @@ import { POKEMON_LIST_MOCK } from "../utils/pokemonApiMock.js";
 import { HardAnswerOption } from "../models/answer.js";
 import { NUMBER_OF_POKEMON_LIST } from "../data/constants.js";
 
-export type StoreState = {game: GameState}
+export type StoreState = { game: GameState };
+
+export type ScoreEntry = {
+	nameScore: number;
+	typeScore?: number;
+	generationScore?: number;
+	statScore?: number;
+};
 
 type GameState = {
-	gameId: string,
-	hasAnswered: boolean,
-	selectedAnswer: string,
-	round: number,
-	score: object[],
+	gameId: string;
+	hasAnswered: boolean;
+	selectedAnswer: string;
+	round: number;
 
-	pokemonList: Pokemon[],
-	guessedPokemonList: boolean[], //indica se il pokemon i è stato indovinato oppure no
+	score: ScoreEntry[];
+	pokemonList: Pokemon[];
+	guessedPokemonList: boolean[]; //indica se il pokemon i è stato indovinato oppure no
 	answersList: {
-		text: string,
-		isCorrect: boolean
-	}[],
-
-}
+		text: string;
+		isCorrect: boolean;
+	}[];
+};
 
 const standardState: GameState = {
 	gameId: new Date().toISOString(),
@@ -38,7 +44,9 @@ const standardState: GameState = {
 };
 
 const savedState = sessionStorage.getItem("game-state");
-const initialState: GameState = savedState ? JSON.parse(savedState) : standardState;
+const initialState: GameState = savedState
+	? JSON.parse(savedState)
+	: standardState;
 
 function calculateHardGameScore(answer: HardAnswerOption, pokemon: Pokemon) {
 	let nameScore = calculateScore.name(answer.name, pokemon.name);
@@ -62,8 +70,8 @@ const gameSlice = createSlice({
 	initialState,
 	reducers: {
 		newGame: (state) => {
-			state.gameId = new Date().toISOString(),
-			state.hasAnswered = false;
+			(state.gameId = new Date().toISOString()),
+				(state.hasAnswered = false);
 			state.selectedAnswer = "";
 			state.round = 0;
 			state.score = [];
@@ -87,12 +95,12 @@ const gameSlice = createSlice({
 		},
 
 		correctAnswer: (state) => {
-			state.score.push({ gameScore: 50 });
+			state.score.push({ nameScore: 50 });
 			state.guessedPokemonList.push(true);
 		},
 
 		wrongAnswer: (state) => {
-			state.score.push({ gameScore: 0 });
+			state.score.push({ nameScore: 0 });
 			state.guessedPokemonList.push(false);
 		},
 

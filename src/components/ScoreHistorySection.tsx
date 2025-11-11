@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import changeSvg from "../assets/cycle-svgrepo-com.svg";
 import PokemonSprite from "./PokemonSprite";
 import BackButton from "./UI/BackButton";
-import type { ScoreEntry } from "../pages/ScoreHistory";
+import type { SavedScoreEntry } from "../pages/ScoreHistory";
 import type { Difficulty } from "../context/difficulty";
 import { DeviceSize } from "../context/window-size";
 import { capitalize } from "../utils/functions";
 
 type Props = {
-	scoreHistory: ScoreEntry[];
+	scoreHistory: SavedScoreEntry[];
 	difficulty: Difficulty;
 	device: DeviceSize;
 	isVisible: boolean;
@@ -27,7 +27,7 @@ export default function ScoreHistorySection({
 	isVisible,
 	onGoToMenu,
 }: Props) {
-	const bestEntry = scoreHistory.reduce<ScoreEntry | null>((best, entry) => {
+	const bestEntry = scoreHistory.reduce<SavedScoreEntry | null>((best, entry) => {
 		if (!best || entry.score > best.score) {
 			return entry;
 		}
