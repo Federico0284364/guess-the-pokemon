@@ -1,3 +1,4 @@
+import { StoreState } from "../../store/gameSlice";
 import {
 	capitalize,
 	removeDashes,
@@ -6,13 +7,13 @@ import {
 import { useSelector } from "react-redux";
 
 export default function RightSidebarContent() {
-	const { pokemonList, round } = useSelector(state => state.game);
+	const { pokemonList, round } = useSelector((state: StoreState) => state.game);
 	const pokemon = structuredClone(pokemonList[round]);
 
 	console.log(pokemon)
 
-	function getDescriptionByLanguage(language) {
-		let chosenEntry;
+	function getDescriptionByLanguage(language: string) {
+		let chosenEntry: (typeof pokemon.flavor_text_entries[0] | undefined);
 		pokemon.flavor_text_entries.forEach((entry) => {
 			if (entry.language.name === language) {
 				chosenEntry = entry;
@@ -22,15 +23,15 @@ export default function RightSidebarContent() {
 		return chosenEntry;
 	}
 
-	function getGeneraByLanguage(language) {
-		let chosenEntry;
+	function getGeneraByLanguage(language: string) {
+		let chosenEntry: (typeof pokemon.flavor_text_entries[0] | undefined);
 		pokemon.genera.forEach((entry) => {
 			if (entry.language.name === language) {
 				chosenEntry = entry;
 			}
 		});
 
-		return chosenEntry.genus;
+		return chosenEntry?.genus;
 	}
 
 	const dotSymbol = "- ";
@@ -67,10 +68,10 @@ export default function RightSidebarContent() {
 					{pokemon.abilities.map((ability) => {
 						return (
 							<>
-								<li key={ability.ability.name + "sidebar"}>
+								<li key={ability?.ability?.name + "sidebar"}>
 									{dotSymbol +
 										removeDashes(
-											capitalize(ability.ability.name)
+											capitalize(ability?.ability?.name || '')
 										)}
 								</li>
 							</>
@@ -84,7 +85,7 @@ export default function RightSidebarContent() {
 					Description:
 				</label>
 				<p className="flex-auto overflow-ellipsis">
-					{getDescriptionByLanguage("en").flavor_text}
+					{getDescriptionByLanguage("en")?.flavor_text}
 				</p>
 			</div>
 		</div>

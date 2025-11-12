@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 
-export default function NextButton({onClick}) {
+type Props = {
+	onClick: () => void;
+}
+
+export default function NextButton({onClick}: Props) {
 
 	return (
 		<motion.button

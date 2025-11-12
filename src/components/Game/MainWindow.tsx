@@ -1,20 +1,21 @@
 import { useContext, useEffect, useMemo } from "react";
+import React from "react";
 import {
 	getColorByType,
 	getInlineColorByType,
 	capitalize,
 } from "../../utils/functions.js";
-import { WindowSizeContext } from "../../context/window-size.jsx";
+import { WindowSizeContext } from "../../context/window-size.js";
 import { motion, useAnimate, AnimatePresence } from "framer-motion";
-import { useSelector} from 'react-redux';
-import { getCurrentPokemon } from "../../store/gameSlice.js";
+import { useSelector } from "react-redux";
+import { getCurrentPokemon, StoreState } from "../../store/gameSlice.js";
 
 export default function MainWindow() {
 	const { windowSize, device } = useContext(WindowSizeContext);
 	const [jumpScope, jump] = useAnimate();
-	const { pokemonList, hasAnswered, round } = useSelector(state => state.game);
+	const { hasAnswered } = useSelector((state: StoreState) => state.game);
 
-	const pokemon = useSelector(getCurrentPokemon)
+	const pokemon = useSelector(getCurrentPokemon);
 
 	let type1Color;
 	let type2Color;
@@ -36,23 +37,21 @@ export default function MainWindow() {
 		: `linear-gradient(45deg, ${type1Color}, ${type2Color || type1Color})`;
 */
 
-	function handleSpriteJump(event = null) {
-		if (event) {
-			jump(event.target, {
-				y: [0, -50, 0, -20, 0, -10, 0],
-				transition: { duration: 0.6, ease: "easeInOut" },
-			});
-		} else {
-			jump("img", {
-				y: [0, -15, 0, -10, 0, -5, 0],
-				transition: { duration: 0.6, ease: "easeInOut" },
-			});
-		}
-	}
-
-	function handleRenderSprite() {
-		jump("img", { scale: [0, 1], duration: 1 });
-	}
+	function handleSpriteJump(event?: React.MouseEvent<HTMLElement>): void {
+  if (event) {
+    jump(
+      event.currentTarget as HTMLElement,
+      { y: [0, -50, 0, -20, 0, -10, 0] },
+      { duration: 0.6, ease: "easeInOut" }
+    );
+  } else {
+    jump(
+      "img",
+      { y: [0, -15, 0, -10, 0, -5, 0] },
+      { duration: 0.6, ease: "easeInOut" }
+    );
+  }
+}
 
 	useEffect(() => {
 		if (!hasAnswered) {

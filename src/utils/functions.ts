@@ -1,4 +1,6 @@
-export function shuffle(list) {
+import { ScoreEntry } from "../store/gameSlice";
+
+export function shuffle(list: any[]): any[] {
 	const tempList = [...list];
 	let shuffledList = [];
 
@@ -12,7 +14,7 @@ export function shuffle(list) {
 	return shuffledList;
 }
 
-export function getColorByType(type) {
+export function getColorByType(type: string) {
 	switch (type.toLowerCase()) {
 		case "normal":
 			return " bg-gray-400";
@@ -55,7 +57,7 @@ export function getColorByType(type) {
 	}
 }
 
-export function getInlineColorByType(type) {
+export function getInlineColorByType(type: string) {
 	switch (type.toLowerCase()) {
 		case "normal":
 			return "#a3a3a3"; // bg-gray-400
@@ -98,7 +100,7 @@ export function getInlineColorByType(type) {
 	}
 }
 
-export function getColorByStat(stat) {
+export function getColorByStat(stat: string) {
 	switch (stat.toLowerCase()) {
 		case "hp":
 			return " bg-green-400"; // HP (PS) - Verde su Central Wiki, Rosso qui per miglior contrasto
@@ -117,7 +119,7 @@ export function getColorByStat(stat) {
 	}
 }
 
-export function capitalize(string) {
+export function capitalize(string: string): string {
 	if (string.length === 0) return "";
 
 	return string.length > 1
@@ -125,11 +127,11 @@ export function capitalize(string) {
 		: string.toUpperCase();
 }
 
-export function removeDashes(string) {
+export function removeDashes(string: string): string {
 	return string.replaceAll("-", " ");
 }
 
-export function extractRoman(string) {
+export function extractRoman(string: string): string {
 	let newString = "";
 	let isDash = false;
 	for (const char of string) {
@@ -145,7 +147,7 @@ export function extractRoman(string) {
 	return newString;
 }
 
-export function calculateTotalScore(score) {
+export function calculateTotalScore(score: ScoreEntry[]): number {
 	let totalScore = 0;
 	score.forEach((round) => {
 		Object.values(round).forEach((entry) => {
@@ -156,7 +158,7 @@ export function calculateTotalScore(score) {
 	return totalScore;
 }
 
-export function checkMispelling(string, correctString) {
+export function checkMispelling(string: string, correctString: string): boolean {
 	if (
 		string === correctString ||
 		Math.abs(string.length - correctString.length) > 1

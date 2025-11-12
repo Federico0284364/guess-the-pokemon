@@ -1,7 +1,11 @@
 import pokeballImg from "../../assets/pokeball.png";
 import { motion } from "framer-motion";
 
-export default function LoadingScreen({ children = "loading..." }) {
+type Props = {
+	children: string
+}
+
+export default function LoadingScreen({ children = "loading..." }: Props) {
 	return (
 		<div className="flex flex-col items-center gap-4 overflow-hidden">
 			<p className="mt-6 text-6xl">{children}</p>
