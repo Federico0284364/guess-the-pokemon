@@ -1,12 +1,12 @@
-import {
-	removeDashes,
-	extractRoman,
-	checkMispelling,
-} from "./functions";
+import { Stat, Type } from "../models/pokemonStats";
+import { removeDashes, extractRoman, checkMispelling } from "./functions";
 
 const calculateScore = {
-	name(answer, name) {
-		const isMispelled = checkMispelling(removeDashes(answer.toLowerCase()), removeDashes(name.toLowerCase()));
+	name(answer: string, name: string) {
+		const isMispelled = checkMispelling(
+			removeDashes(answer.toLowerCase()),
+			removeDashes(name.toLowerCase())
+		);
 		if (isMispelled) {
 			return 50;
 		}
@@ -19,13 +19,13 @@ const calculateScore = {
 		} else return 0;
 	},
 
-	generation(answer, generation) {
+	generation(answer: string, generation: string) {
 		if (answer.toUpperCase() === extractRoman(generation).toUpperCase()) {
 			return 20;
 		} else return 0;
 	},
 
-	type(answerTypes, types) {
+	type(answerTypes: string, types: Type[]) {
 		let tempTypeScore = 0;
 
 		types.forEach((type) => {
@@ -43,8 +43,11 @@ const calculateScore = {
 		return tempTypeScore;
 	},
 
-	stat(answerStat, stats) {
-		let highestStat = { names: [], number: 0 };
+	stat(answerStat: string, stats: Stat[]) {
+		let highestStat: { names: string[]; number: number } = {
+			names: [],
+			number: 0,
+		};
 		stats.forEach((stat) => {
 			if (
 				stat.base_stat === highestStat.number &&

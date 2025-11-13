@@ -1,14 +1,14 @@
-import GameOption from "../components/menu/GameOption.jsx";
+import GameOption from "../components/menu/GameOption.js";
 import { games } from "../games.js";
-import DifficultyButton from "../components/menu/Difficultybutton.jsx";
-import Button from "../components/UI/Button.jsx";
+import DifficultyButton from "../components/menu/Difficultybutton";
+import Button from "../components/UI/Button.js";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 export default function MainMenu() {
 	const [selectedDifficulty, setSelectedDifficulty] = useState('easy');
 
-	function handleChangeDifficulty(value){
+	function handleChangeDifficulty(value: string){
 		if (value === 'easy'){
 			setSelectedDifficulty('easy')
 		} else {
@@ -31,7 +31,7 @@ export default function MainMenu() {
 			<div className="flex flex-col sm:flex-row">
 				<div className="flex gap-4 flex-col w-80 pb-8 mt-2 m-auto items-center ">
 					{games.map((game) => {
-						return <GameOption key={game.name} game={game} selectedDifficulty={selectedDifficulty}/>;
+						return <GameOption key={game.name} selectedDifficulty={selectedDifficulty}/>;
 					})}
 
 					<Button

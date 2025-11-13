@@ -1,16 +1,16 @@
-import MainMenu from "./pages/MainMenu.jsx";
-import PokemonGame from "./pages/PokemonGame.jsx";
-import Scoreboard from "./pages/Scoreboard.jsx";
+import MainMenu from "./pages/MainMenu.js";
+import PokemonGame from "./pages/PokemonGame.js";
+import Scoreboard from "./pages/Scoreboard.js";
 import "./App.css";
 
-import WindowSizeContextProvider from "./context/window-size.jsx";
-import DifficultyContextProvider from "./context/difficulty.jsx";
+import WindowSizeContextProvider from "./context/window-size.js";
+import DifficultyContextProvider from "./context/difficulty.js";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { getIsOver } from "./store/gameSlice.js";
-import ScoreHistory from "./pages/ScoreHistory.jsx";
+import ScoreHistory from "./pages/ScoreHistory.js";
 import Error from "./components/UI/Error.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -20,7 +20,7 @@ const router = createBrowserRouter(
 	[
 		{
 			path: "/",
-			errorElement: <Error />,
+			errorElement: <Error message={'Oops! Something went wrong.'}/>,
 			children: [
 				{
 					index: true,
