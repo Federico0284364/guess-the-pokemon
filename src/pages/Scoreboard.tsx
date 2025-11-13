@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { DifficultyContext } from "../context/difficulty.jsx";
 import {
-	getCurrentPokemon,
 	newGame,
 	StoreState,
 } from "../store/gameSlice.js";
@@ -18,8 +17,7 @@ import Button from "../components/UI/Button.jsx";
 import { NUMBER_OF_POKEMON_LIST } from "../data/constants.js";
 
 export default function Scoreboard() {
-	const { score, pokemonList, round } = useSelector((state: StoreState) => state.game);
-	const pokemon = useSelector(getCurrentPokemon);
+	const { score, pokemonList, gameId } = useSelector((state: StoreState) => state.game);
 	const { difficulty } = useContext(DifficultyContext);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
@@ -36,8 +34,14 @@ export default function Scoreboard() {
 	useEffect(() => {
 		if (score.length === NUMBER_OF_POKEMON_LIST) {
 			const scoreHistory =
-				JSON.parse(localStorage.getItem("score-history") || '') || [];
+				JSON.parse(localStorage.getItem("score-history") || '[]') || [];
+
+			if (scoreHistory[0]?.gameId == gameId){
+				return;
+			}
+
 			scoreHistory.unshift({
+				gameId: gameId,
 				date: date,
 				score: totalScore,
 				difficulty: difficulty,
@@ -92,9 +96,9 @@ export default function Scoreboard() {
 				className=" shadow-xl shadow-black w-[90vw] max-w-100 min-h-155 h-[90dvh] z-50 flex flex-col items-center rounded-2xl bg-orange-400 border-7 border-neutral-700"
 			>
 				<h1 className="text-5xl uppercase mt-4">Your score:</h1>
-				<motion.h1 className=" text-8xl uppercase ">
+				<h1 className=" text-8xl uppercase ">
 					{totalScore}
-				</motion.h1>
+				</h1>
 				<p className="mb-4">
 					Your personal best: <span>{bestScore}</span>
 				</p>
@@ -161,6 +165,7 @@ export default function Scoreboard() {
 																	: "text-red-900"
 															}`}
 															key={entry}
+															
 														>
 															{entry}
 														</td>
