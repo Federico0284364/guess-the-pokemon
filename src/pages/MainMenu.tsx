@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { games } from "../games";
-
 import Button from "../components/UI/Button.js";
 import DifficultyButton from "../components/menu/Difficultybutton.js";
 import GameOption from "../components/menu/GameOption.js";
@@ -32,14 +30,7 @@ export default function MainMenu() {
       </header>
       <div className="flex flex-col sm:flex-row">
         <div className="flex gap-4 flex-col w-80 pb-8 mt-2 m-auto items-center ">
-          {games.map((game) => {
-            return (
-              <GameOption
-                key={game.name}
-                selectedDifficulty={selectedDifficulty}
-              />
-            );
-          })}
+          <GameOption key={"pokemon"} selectedDifficulty={selectedDifficulty} />
 
           <Button
             onClick={handleOpenHistory}
