@@ -5,7 +5,11 @@ import { newGame } from '../../store/gameSlice';
 import { useContext } from 'react';
 import { DifficultyContext } from '../../context/difficulty';
 
-export default function GameOption({selectedDifficulty}) {
+type Props = {
+	selectedDifficulty: string
+}
+
+export default function GameOption({selectedDifficulty}: Props) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 	const { setEasy, setHard } = useContext(DifficultyContext);

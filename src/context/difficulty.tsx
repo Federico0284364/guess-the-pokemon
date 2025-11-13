@@ -7,6 +7,8 @@ const initialState =
 
 export const DifficultyContext = createContext({
     difficulty: initialState,
+    setEasy: () => {},
+    setHard: () => {}
 })
 
 type Props = {

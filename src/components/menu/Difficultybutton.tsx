@@ -1,6 +1,13 @@
 import { capitalize } from "../../utils/functions";
 
-export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }) {
+
+type Props = {
+	selectedDifficulty: string,
+	buttonDifficulty: string,
+	onSelect: (difficulty: string) => void
+}
+
+export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }: Props) {
 	const isChecked = selectedDifficulty === buttonDifficulty;
 
 	return (
