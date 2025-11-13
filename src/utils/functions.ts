@@ -119,6 +119,27 @@ export function getColorByStat(stat: string) {
 	}
 }
 
+export function getColorByPoints(value: number, maxValue: number = 100): string {
+  const percent = Math.min(Math.max(value / maxValue, 0), 1); // 0..1
+
+  let r = 0, g = 0, b = 0;
+
+  if (percent < 0.4) {
+    // Rosso -> Giallo
+    r = 255;
+    g = Math.round(200 * (percent / 0.4) + 0.3);
+  } else if (percent < 1) {
+    // Giallo -> Verde
+    r = Math.round(255 * (1 - (percent) - 0.1));
+    g = 200;
+  } else {
+		b = 255
+		r = 80
+	}
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 export function capitalize(string: string): string {
 	if (string.length === 0) return "";
 
