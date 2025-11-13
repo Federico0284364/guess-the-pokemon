@@ -24,7 +24,7 @@ export default function RightSidebarContent() {
 	}
 
 	function getGeneraByLanguage(language: string) {
-		let chosenEntry: (typeof pokemon.flavor_text_entries[0] | undefined);
+		let chosenEntry: (typeof pokemon.genera[0] | undefined);
 		pokemon.genera.forEach((entry) => {
 			if (entry.language.name === language) {
 				chosenEntry = entry;

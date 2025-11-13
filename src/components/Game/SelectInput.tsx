@@ -1,5 +1,19 @@
-import { useEffect } from "react";
+import { RefObject, useEffect } from "react";
 import { capitalize } from "../../utils/functions";
+import { Pokemon } from "../../models/pokemon";
+import { ScoreEntry } from "../../store/gameSlice";
+
+
+type Props = {
+	pokemon: Pokemon,
+	hasAnswered: boolean,
+	round: number,
+	score: ScoreEntry[],
+	ref: RefObject<HTMLSelectElement>,
+	optionArray: string[],
+	label: string,
+	widthClass: string
+}
 
 export default function SelectInput({
 	pokemon,
@@ -10,7 +24,7 @@ export default function SelectInput({
 	optionArray,
 	label,
 	widthClass,
-}) {
+}: Props) {
 	useEffect(() => {
 		return () => {
 			if (ref.current && optionArray.length > 0) {
@@ -26,11 +40,11 @@ export default function SelectInput({
 	if (hasAnswered) {
 		switch (label) {
 			case "Generation":
-				totalScore = score[round].generationScore;
+				totalScore = score[round].generationScore || 0;
 				totalScore === 20 ? (isCorrect = true) : (isCorrect = false);
 				break;
 			case "Best stat":
-				totalScore = score[round].statScore;
+				totalScore = score[round].statScore || 0;
 				totalScore === 50 ? (isCorrect = true) : (isCorrect = false);
 				break;
 			case "Type 1":
