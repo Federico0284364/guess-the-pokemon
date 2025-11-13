@@ -1,17 +1,17 @@
-import MainMenu from "./pages/MainMenu.js";
-import PokemonGame from "./pages/PokemonGame.js";
+import MainMenu from "./pages/MainMenu";
+import PokemonGame from "./pages/PokemonGame";
 import Scoreboard from "./pages/Scoreboard.js";
 import "./App.css";
 
-import WindowSizeContextProvider from "./context/window-size.js";
-import DifficultyContextProvider from "./context/difficulty.js";
+import WindowSizeContextProvider from "./context/window-size";
+import DifficultyContextProvider from "./context/difficulty";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { getIsOver } from "./store/gameSlice.js";
-import ScoreHistory from "./pages/ScoreHistory.js";
-import Error from "./components/UI/Error.jsx";
+import { getIsOver } from "./store/gameSlice";
+import ScoreHistory from "./pages/ScoreHistory";
+import Error from "./components/UI/Error";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
