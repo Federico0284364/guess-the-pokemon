@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { pokemonNames } from "../../data/allPokemonNames";
@@ -26,7 +26,7 @@ function Answers({ onAnswer, onNext }: Props) {
   const pokemon = useSelector(getCurrentPokemon);
   const dispatch = useDispatch();
 
-  useMemo(() => {
+  useEffect(() => {
     const randomIdsList = getListOfRandomPokemonIds(
       NUMBER_OF_EASY_WRONG_ANSWERS,
     );
