@@ -1,37 +1,45 @@
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
-import { StoreState } from "../../store/gameSlice";
+import { twMerge } from "tailwind-merge";
+
+import { Stat } from "../../models/pokemonStats";
+import { getCurrentPokemon } from "../../store/gameSlice";
 import {
   capitalize,
   getColorByStat,
   removeDashes,
 } from "../../utils/functions";
+import { safeClone } from "../../utils/utilFunctions";
 
+//this sidebar show a list of the pokemon stats
 export default function LeftSidebarContent() {
-  const { pokemonList, round } = useSelector((state: StoreState) => state.game);
-  const pokemon = structuredClone(pokemonList[round]);
-
+  const pokemon = useSelector(getCurrentPokemon);
+  const stats = safeClone(pokemon.stats);
   let totalStats = 0;
-  pokemon.stats.forEach((stat) => {
-    totalStats += stat.base_stat;
-  });
-  if (pokemon.stats.length < 7) {
-    pokemon.stats.push({
-      base_stat: totalStats,
-      effort: 0,
-      stat: {
-        name: "total-base-stats",
-        url: "",
-      },
+
+  useMemo(() => {
+    stats.forEach((stat: Stat) => {
+      totalStats += stat.base_stat;
     });
-  }
+    if (stats.length < 7) {
+      stats.push({
+        base_stat: totalStats,
+        effort: 0,
+        stat: {
+          name: "total-base-stats",
+          url: "",
+        },
+      });
+    }
+  }, [pokemon]);
 
   return (
     <div className="ml-2 mt-4 flex flex-col h-full gap-y-2.5 overflow-hidden">
       <h1 className="font-semibold uppercase text-3xl self-center mt-[-6px]">
         Stats
       </h1>
-      {pokemon.stats.map((stat) => {
+      {stats.map((stat) => {
         const statClass = getColorByStat(stat.stat.name);
         const barLength = stat.base_stat / 2.5;
 
@@ -49,7 +57,10 @@ export default function LeftSidebarContent() {
                       ? { width: barLength + "%" }
                       : { width: barLength / 6 + "%" }
                   }
-                  className={`z-10 h-full rounded-sm left-0 m-0 ` + statClass}
+                  className={twMerge(
+                    `z-10 h-full rounded-sm left-0 m-0 `,
+                    statClass,
+                  )}
                 />
               </div>
             </div>

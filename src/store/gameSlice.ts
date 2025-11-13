@@ -3,7 +3,6 @@ import { createSlice, configureStore } from "@reduxjs/toolkit";
 import { capitalize } from "../utils/functions.js";
 import { calculateScore } from "../utils/gameFunctions.js";
 import { Pokemon } from "../models/pokemon.js";
-import { POKEMON_LIST_MOCK } from "../utils/pokemonApiMock.js";
 import { HardAnswerOption } from "../models/answer.js";
 import { NUMBER_OF_POKEMON_LIST } from "../data/constants.js";
 

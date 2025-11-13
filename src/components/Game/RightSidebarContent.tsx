@@ -7,8 +7,6 @@ export default function RightSidebarContent() {
   const { pokemonList, round } = useSelector((state: StoreState) => state.game);
   const pokemon = structuredClone(pokemonList[round]);
 
-  console.log(pokemon);
-
   function getDescriptionByLanguage(language: string) {
     let chosenEntry: (typeof pokemon.flavor_text_entries)[0] | undefined;
     pokemon.flavor_text_entries.forEach((entry) => {
@@ -41,14 +39,14 @@ export default function RightSidebarContent() {
 
       <div>
         <label className="font-semibold uppercase text-white">
-          {"Category:"}
+          Category:
         </label>
         <p className="text-md">{getGeneraByLanguage("en")}</p>
       </div>
 
       <div className="flex flex-wrap gap-1">
         <label className="font-semibold uppercase text-white">
-          {"Generation:"}
+          Generation:
         </label>
         <p className="uppercase text-md">
           {extractRoman(pokemon.generation.name)}

@@ -128,7 +128,7 @@ export function capitalize(string: string): string {
 }
 
 export function removeDashes(string: string): string {
-	return string.replaceAll("-", " ");
+	return string.replace(/-/g, " ");
 }
 
 export function extractRoman(string: string): string {

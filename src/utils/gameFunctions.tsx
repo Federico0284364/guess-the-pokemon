@@ -25,7 +25,7 @@ const calculateScore = {
 		} else return 0;
 	},
 
-	type(answerTypes: string, types: Type[]) {
+	type(answerTypes: string[], types: Type[]) {
 		let tempTypeScore = 0;
 
 		types.forEach((type) => {

@@ -125,7 +125,6 @@ export default function PokemonGame() {
   }
 
   //rendering
-
   function renderAnswers() {
     if (difficulty === "easy") {
       return (

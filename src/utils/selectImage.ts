@@ -4,7 +4,10 @@ import eevee from '../assets/sidebar-wallpapers/minimal-eevee.webp';
 import vertical from '../assets/sidebar-wallpapers/vertical.jpg';
 
 const images = [
-  vertical
+  vertical,
+  eevee,
+  bulbasaur,
+  alakazam
 ]
 
 export function selectRandomImage(){
