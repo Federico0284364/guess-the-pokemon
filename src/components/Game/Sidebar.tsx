@@ -13,9 +13,13 @@ type Props = {
 
 export default function Sidebar({
   isOver = false,
-  side = null,
+  side,
   hasAnswered = false,
 }: Props) {
+	if (!side){
+		return null;
+	}
+
   let isOverClass = "md:h-117 ";
   if (isOver) {
     isOverClass = "md:h-155 ";
@@ -24,7 +28,7 @@ export default function Sidebar({
   let initialX;
   if (side === "right") {
     initialX = 200;
-  } else {
+  } else if (side === 'left'){
     initialX = -200;
   }
 

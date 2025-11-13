@@ -88,16 +88,6 @@ export default function PokemonGame() {
     }
   }, [isOver, navigate]);
 
-  const leftSidebarProps = {
-    pokemon: pokemon,
-    hasAnswered: hasAnswered,
-  };
-
-  const rightSidebarProps = {
-    pokemon: pokemon,
-    hasAnswered: hasAnswered,
-  };
-
   //functions
   const handleEasyAnswer = useCallback(
     (answer: EasyAnswerOption) => {
@@ -135,6 +125,36 @@ export default function PokemonGame() {
   }
 
   //rendering
+
+  function renderAnswers() {
+    if (difficulty === "easy") {
+      return (
+        <Answers
+          key={"answers" + round}
+          onAnswer={handleEasyAnswer}
+          onNext={handleNextQuestion}
+        />
+      );
+    } else {
+      return (
+        <InputArea
+          key={"input-area" + round}
+          onAnswer={handleHardAnswer}
+          onNext={handleNextQuestion}
+        />
+      );
+    }
+  }
+
+  function renderSidebar(side: "right" | "left" | null) {
+    const sidebarProps = {
+      side: side,
+      isOver,
+      hasAnswered,
+    };
+    return <Sidebar {...sidebarProps} />;
+  }
+
   if (isError || !isOnline) {
     return <Error message={error?.message} />;
   }
@@ -143,60 +163,36 @@ export default function PokemonGame() {
     return <LoadingScreen />;
   }
 
-  if (pokemon?.genera) {
-    return (
-      <motion.div>
-        {!isOver && (
-          <GameHeader
-            pokemonList={pokemonList}
-            guessedPokemonList={guessedPokemonList}
-          />
-        )}
-
-        <motion.section
-          transition={{ duration: 0.2, type: "tween" }}
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          exit={{ scale: [1, 0] }}
-          key={"game"}
-          className="flex gap-8"
-        >
-          {(device === "medium" || device === "large") && (
-            <Sidebar isOver={isOver} {...leftSidebarProps} side="left" />
-          )}
-          <div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
-            <>
-              <MainWindow key={"window" + round} />
-              {difficulty === "easy" ? (
-                <Answers
-                  onAnswer={handleEasyAnswer}
-                  onNext={handleNextQuestion}
-                />
-              ) : (
-                <InputArea
-                  key={"input-area" + round}
-                  onAnswer={handleHardAnswer}
-                  onNext={handleNextQuestion}
-                />
-              )}
-              {device === "small" && hasAnswered && (
-                <>
-                  <Sidebar
-                    isOver={isOver}
-                    {...rightSidebarProps}
-                    side="right"
-                  />
-                  <Sidebar isOver={isOver} {...rightSidebarProps} side="left" />
-                </>
-              )}
-            </>
-          </div>
-          {(device === "medium" || device === "large") && (
-            <Sidebar {...rightSidebarProps} side="right" isOver={isOver} />
-          )}
-        </motion.section>
-      </motion.div>
-    );
+  if (isOver) {
+    return null;
   }
-  return null;
+
+  return (
+    <div>
+      <GameHeader
+        pokemonList={pokemonList}
+        guessedPokemonList={guessedPokemonList}
+      />
+
+      <motion.section
+        transition={{ duration: 0.2, type: "tween" }}
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        exit={{ scale: [1, 0] }}
+        key={"game" + gameId}
+        className="flex gap-8"
+      >
+        {renderSidebar(device !== "small" ? "left" : null)}
+        <div className="h-full relative items-center flex flex-col min-h-128 w-[99vw] max-w-[90vw] md:min-w-100 sm:max-w-120 md:w-100 ">
+          <>
+            <MainWindow key={"window" + round} />
+            {renderAnswers()}
+            {renderSidebar(device === "small" && hasAnswered ? "right" : null)}
+            {renderSidebar(device === "small" && hasAnswered ? "left" : null)}
+          </>
+        </div>
+        {renderSidebar(device !== "small" ? "right" : null)}
+      </motion.section>
+    </div>
+  );
 }
