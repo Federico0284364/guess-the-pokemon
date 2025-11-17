@@ -1,10 +1,9 @@
 import { capitalize } from "../../utils/functions";
 
-
 type Props = {
 	selectedDifficulty: string,
 	buttonDifficulty: string,
-	onSelect: (difficulty: string) => void
+	onSelect: () => void
 }
 
 export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }: Props) {
@@ -18,7 +17,7 @@ export default function DifficultyButton({ selectedDifficulty, buttonDifficulty,
 				name="difficulty"
 				value={buttonDifficulty}
 				checked={isChecked}
-				onChange={() => onSelect(buttonDifficulty)}
+				onChange={() => onSelect()}
 			/>{" "}
 			{capitalize(buttonDifficulty)}
 			{isChecked && buttonDifficulty === "easy" ? (

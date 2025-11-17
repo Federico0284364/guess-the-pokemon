@@ -30,7 +30,7 @@ type GameState = {
 	}[];
 };
 
-const standardState: GameState = {
+export const standardState: GameState = {
 	gameId: new Date().toISOString(),
 	hasAnswered: false,
 	selectedAnswer: "",
