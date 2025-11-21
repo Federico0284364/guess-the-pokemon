@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -16,36 +16,6 @@ import { StoreState, getIsOver } from "./store/gameSlice";
 import Error from "./components/UI/Error";
 
 const queryClient = new QueryClient();
-
-const router = createBrowserRouter(
-  [
-    {
-      path: "/",
-      errorElement: <Error message={"Oops! Something went wrong."} />,
-      children: [
-        {
-          index: true,
-          element: <MainMenu />,
-        },
-        {
-          path: "game",
-          element: <PokemonGame />,
-        },
-        {
-          path: "game/score",
-          element: <Scoreboard />,
-        },
-        {
-          path: "score-history",
-          element: <ScoreHistory />,
-        },
-      ],
-    },
-  ],
-  {
-    basename: "/guess-the-pokemon/",
-  },
-);
 
 function App() {
   const { score } = useSelector((state: StoreState) => state.game);
@@ -63,7 +33,15 @@ function App() {
     <WindowSizeContextProvider>
       <QueryClientProvider client={queryClient}>
         <DifficultyContextProvider>
-          <RouterProvider router={router} />
+          <Router>
+            <Routes>
+              <Route path="/" element={<MainMenu />} />
+              <Route path="/game" element={<PokemonGame />} />
+              <Route path="/game/score" element={<Scoreboard />} />
+              <Route path="/score-history" element={<ScoreHistory />} />
+              <Route path="*" element={<Error message="Oops! Something went wrong." />} />
+            </Routes>
+          </Router>
         </DifficultyContextProvider>
       </QueryClientProvider>
     </WindowSizeContextProvider>

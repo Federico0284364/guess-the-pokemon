@@ -1,0 +1,61 @@
+##############################
+# Node
+##############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+##############################
+# Vite
+##############################
+dist/
+.vite/
+*.local
+
+##############################
+# Capacitor (non ignorare android/ e ios/)
+##############################
+# Qui NON mettere android/ o ios/
+# perché vuoi fare un'app mobile reale.
+
+##############################
+# Build / Cache
+##############################
+build/
+.cache/
+*.log
+
+##############################
+# Environment variables
+##############################
+.env
+.env.*
+!.env.example
+
+##############################
+# OS files
+##############################
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+##############################
+# IDE / Editor files
+##############################
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+.idea/
+*.iml
+
+##############################
+# Misc
+##############################
+*.swp
+*.swo
