@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import Button from "../components/UI/Button.js";
 import DifficultyButton from "../components/menu/Difficultybutton.js";
 import GameOption from "../components/menu/GameOption.js";
+import { Difficulty } from "../context/difficulty.js";
 
 export default function MainMenu() {
-  const [selectedDifficulty, setSelectedDifficulty] = useState("easy");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>("easy");
 
-  function handleChangeDifficulty(value: string) {
+  function handleChangeDifficulty(value: Difficulty) {
     if (value === "easy") {
       setSelectedDifficulty("easy");
     } else {

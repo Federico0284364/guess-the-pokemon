@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, expect } from "vitest";
 
-import { DifficultyContext } from "../../context/difficulty";
+import { Difficulty, DifficultyContext } from "../../context/difficulty";
 import DifficultyButton from "./Difficultybutton";
 
 let mockSetEasy: () => void;
@@ -14,13 +14,19 @@ describe("DifficultyButton component", () => {
     mockSetHard = vi.fn();
   });
 
-  const easyProps = {
+  type InitialProps = {
+    selectedDifficulty: Difficulty,
+    buttonDifficulty: Difficulty,
+    onSelect: (difficulty: Difficulty) => void;
+  }
+
+  const easyProps: InitialProps = {
     selectedDifficulty: "easy",
     buttonDifficulty: "easy",
     onSelect: mockSetEasy,
   };
 
-  const hardProps = {
+  const hardProps: InitialProps = {
     selectedDifficulty: "easy",
     buttonDifficulty: "hard",
     onSelect: mockSetHard,

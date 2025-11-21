@@ -1,9 +1,10 @@
+import { Difficulty } from "../../context/difficulty";
 import { capitalize } from "../../utils/functions";
 
 type Props = {
-	selectedDifficulty: string,
-	buttonDifficulty: string,
-	onSelect: () => void
+	selectedDifficulty: Difficulty,
+	buttonDifficulty: Difficulty,
+	onSelect: (difficulty: Difficulty) => void;
 }
 
 export default function DifficultyButton({ selectedDifficulty, buttonDifficulty, onSelect }: Props) {
@@ -17,8 +18,8 @@ export default function DifficultyButton({ selectedDifficulty, buttonDifficulty,
 				name="difficulty"
 				value={buttonDifficulty}
 				checked={isChecked}
-				onChange={() => onSelect()}
-			/>{" "}
+				onClick={() => onSelect(buttonDifficulty)}
+			/>
 			{capitalize(buttonDifficulty)}
 			{isChecked && buttonDifficulty === "easy" ? (
 				<p className="drop-shadow drop-shadow-black/40 text-sm font-light w-50 ml-4">
